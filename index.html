@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>星际公民行政机库计时系统</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>星际公民行政机库计时</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 预连接关键域 -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://your-worker-name.your-subdomain.workers.dev" crossorigin>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -20,14 +19,16 @@
             --panel-bg: #f8f9fa;
             --text-dark: #2d3748;
             --text-light: #718096;
+            --notification-bg: #fff3cd;
+            --notification-border: #ffeeba;
         }
         
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
@@ -35,12 +36,11 @@
             color: var(--text-dark);
             line-height: 1.6;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
             transition: background-image 0.5s ease;
             background-size: cover;
             background-position: center;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            -webkit-text-size-adjust: 100%;
         }
         
         .container {
@@ -52,10 +52,10 @@
         header {
             background: rgba(255, 255, 255, 0.1);
             color: white;
-            padding: 1rem;
+            padding: 1.2rem;
             text-align: center;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -64,13 +64,13 @@
         .main-content {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 15px;
         }
         
         .timer-display {
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: center;
             display: flex;
@@ -89,9 +89,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
+            text-align: center;
             width: 100%;
-            word-break: break-word;
         }
         
         .phase-reset {
@@ -113,7 +113,7 @@
         }
         
         .countdown {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: bold;
             margin: 20px 0;
             color: var(--primary-color);
@@ -123,32 +123,14 @@
             word-break: break-word;
         }
         
-        @media (max-width: 768px) {
-            .countdown {
-                font-size: 2.5rem;
-            }
-            
-            .phase-indicator {
-                font-size: 1.2rem;
-            }
-        }
-        
         @media (max-width: 480px) {
             .countdown {
-                font-size: 2rem;
-            }
-            
-            body {
-                padding: 10px;
-            }
-            
-            header {
-                padding: 0.8rem;
+                font-size: 2.2rem;
             }
         }
         
         .phase-start-time {
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin-bottom: 15px;
             color: var(--text-dark);
             background: rgba(255, 255, 255, 0.8);
@@ -156,7 +138,7 @@
             border-radius: 8px;
             display: inline-block;
             width: 100%;
-            word-break: break-word;
+            text-align: center;
         }
         
         .lights-container {
@@ -174,7 +156,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
         }
         
@@ -187,7 +169,7 @@
         
         .light.active {
             transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
         }
         
         .light.red {
@@ -205,9 +187,9 @@
         .card-windows {
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .card-windows h2 {
@@ -217,7 +199,7 @@
             padding-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             font-size: 1.5rem;
         }
         
@@ -228,12 +210,6 @@
             gap: 12px;
         }
         
-        @media (max-width: 480px) {
-            .window-list {
-                grid-template-columns: 1fr;
-            }
-        }
-        
         .window-list li {
             background-color: var(--panel-bg);
             padding: 12px;
@@ -241,9 +217,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--card-color);
-            word-break: break-word;
         }
         
         .window-list li.previous {
@@ -281,13 +256,14 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
         
         .status-color {
             width: 16px;
             height: 16px;
             border-radius: 50%;
+            flex-shrink: 0;
         }
         
         .status-red {
@@ -304,8 +280,8 @@
         
         .admin-login-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 70px;
+            right: 15px;
             width: auto;
             padding: 10px 15px;
             background: rgba(52, 152, 219, 0.9);
@@ -325,6 +301,30 @@
             transform: translateY(-2px);
         }
         
+        .admin-logout-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: auto;
+            padding: 10px 15px;
+            background: rgba(231, 76, 60, 0.9);
+            z-index: 1000;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .admin-logout-btn:hover {
+            background: rgba(231, 76, 60, 1);
+            transform: translateY(-2px);
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -336,7 +336,7 @@
             z-index: 1001;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
         
         .modal-content {
@@ -348,6 +348,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             max-height: 90vh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .modal h2 {
@@ -378,9 +379,9 @@
             display: none;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .admin-section h2 {
@@ -390,7 +391,7 @@
             padding-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             font-size: 1.5rem;
         }
         
@@ -403,19 +404,26 @@
             margin-bottom: 6px;
             font-weight: bold;
             color: var(--text-dark);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
         
-        input[type="datetime-local"], select, input[type="password"], input[type="text"] {
+        input[type="datetime-local"], select, input[type="password"], input[type="text"], textarea {
             width: 100%;
             padding: 10px 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 1rem;
             transition: border-color 0.3s;
+            -webkit-appearance: none;
         }
         
-        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, input[type="text"]:focus {
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, 
+        input[type="text"]:focus, textarea:focus {
             border-color: var(--secondary-color);
             outline: none;
         }
@@ -456,13 +464,14 @@
             background: rgba(46, 204, 113, 0.1);
             border-radius: 8px;
             border-left: 4px solid var(--card-color);
-            word-break: break-word;
+            width: 100%;
+            text-align: center;
         }
         
         .calibration-time {
             position: absolute;
-            bottom: 12px;
-            left: 12px;
+            bottom: 10px;
+            left: 10px;
             font-size: 0.8rem;
             color: var(--text-light);
             background: rgba(255, 255, 255, 0.8);
@@ -471,7 +480,7 @@
         }
         
         .window-status {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--text-light);
             margin-top: 8px;
             text-align: center;
@@ -479,14 +488,14 @@
         
         .db-status {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: 15px;
+            left: 15px;
             background: rgba(255, 255, 255, 0.8);
             padding: 4px 8px;
             border-radius: 5px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-light);
-            z-index: 999;
+            z-index: 1000;
         }
         
         .loading {
@@ -505,62 +514,124 @@
         
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
+            left: 15px;
             padding: 12px;
-            border-radius: 5px;
-            color: white;
-            background-color: var(--secondary-color);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            color: #856404;
+            background-color: var(--notification-bg);
+            border: 1px solid var(--notification-border);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             z-index: 1002;
-            transition: opacity 0.3s;
-            max-width: 80%;
-            word-break: break-word;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(-100px);
+            opacity: 0;
         }
         
-        .browser-compatibility {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #ff9800;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            z-index: 2000;
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
         }
         
-        /* 兼容性修复 */
-        input, button, select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
+        .system-notification {
+            background-color: var(--notification-bg);
+            border: 1px solid var(--notification-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            color: #856404;
         }
         
-        /* 防止缩放 */
-        @media screen and (max-width: 480px) {
-            input, select, textarea {
-                font-size: 16px !important; /* 防止iOS缩放 */
+        .system-notification h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #856404;
+            font-size: 1.1rem;
+        }
+        
+        .system-notification-content {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
             }
+            
+            header {
+                padding: 1rem;
+            }
+            
+            .timer-display, .card-windows, .admin-section {
+                padding: 15px;
+            }
+            
+            .countdown {
+                font-size: 2.2rem;
+            }
+            
+            .phase-indicator {
+                font-size: 1.3rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .window-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .countdown {
+                font-size: 1.8rem;
+            }
+            
+            .phase-indicator {
+                font-size: 1.1rem;
+            }
+            
+            .card-phase-start {
+                font-size: 0.9rem;
+            }
+            
+            .admin-login-btn, .admin-logout-btn {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+        }
+        
+        /* 防止iOS缩放 */
+        input, select, textarea {
+            font-size: 16px !important;
+        }
+        
+        /* 改善移动端触摸体验 */
+        button, .light {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
 <body id="body">
-    <!-- 浏览器兼容性提示 -->
-    <div class="browser-compatibility" id="browser-compatibility">
-        您的浏览器可能不完全兼容本网站，建议使用Chrome、Firefox或Safari等现代浏览器
-    </div>
-    
     <div class="container">
         <header>
-            <h1><i class="fas fa-clock"></i> 星际公民行政机库计时系统</h1>
+            <h1><i class="fas fa-clock"></i> 星际公民行政机库计时</h1>
         </header>
         
         <div class="main-content">
             <div class="timer-display">
                 <div id="phase-indicator" class="phase-indicator phase-reset">
-                    <i class="fas fa-sync-alt"></i> 重置阶段
+                    <i class="fas fa-sync-alt"></i> <span>重置阶段</span>
                 </div>
                 <div id="countdown" class="countdown">02:00:00</div>
                 
@@ -597,18 +668,26 @@
             </div>
             
             <div class="card-windows">
-                <h2><i class="fas fa-calendar-check"></i>机库开启时间</h2>
+                <h2><i class="fas fa-calendar-check"></i> 机库开启时间</h2>
                 <p class="window-status" id="window-status">该时间段内可以插卡开启机库大门</p>
                 <ul class="window-list" id="window-list">
-                    <li class="previous"><i class="fas fa-chevron-left"></i> 上一个窗口期: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 下一个窗口期: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 窗口期 1: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 窗口期 2: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 窗口期 3: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 窗口期 4: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 窗口期 5: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 窗口期 6: 计算中...</li>
+                    <li class="previous"><i class="fas fa-chevron-left"></i> 上一个开启时间: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 下一个开启时间: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时间 1: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时间 2: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时间 3: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时间 4: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时间 5: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时间 6: 计算中...</li>
                 </ul>
+            </div>
+            
+            <!-- 系统通知显示区域 -->
+            <div class="system-notification" id="system-notification">
+                <h3><i class="fas fa-bullhorn"></i> 系统通知</h3>
+                <div class="system-notification-content" id="system-notification-content">
+                    暂无通知
+                </div>
             </div>
             
             <div class="admin-section" id="admin-section">
@@ -643,6 +722,10 @@
                     <button id="preview-bg">预览背景</button>
                     <div class="bg-preview" id="bg-preview"></div>
                 </div>
+                <div class="form-group">
+                    <label for="system-notification-input"><i class="fas fa-bullhorn"></i> 系统通知</label>
+                    <textarea id="system-notification-input" placeholder="输入系统通知内容"></textarea>
+                </div>
                 <button id="update-timer">
                     <i class="fas fa-sync"></i> 更新计时器
                 </button>
@@ -651,7 +734,7 @@
                 </button>
                 <div class="form-group">
                     <label><i class="fas fa-database"></i> 数据库操作</label>
-                    <div style="display: flex; gap: 10px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button id="export-data">
                             <i class="fas fa-download"></i> 导出数据
                         </button>
@@ -667,6 +750,10 @@
 
     <button class="admin-login-btn" id="admin-login-btn">
         <i class="fas fa-user-lock"></i> 管理员登录
+    </button>
+
+    <button class="admin-logout-btn" id="admin-logout-btn">
+        <i class="fas fa-sign-out-alt"></i> 退出管理员
     </button>
 
     <div class="db-status" id="db-status">
@@ -688,29 +775,6 @@
     </div>
 
     <script>
-        // 浏览器兼容性检查
-        function checkBrowserCompatibility() {
-            const isCompatible = 
-                'Promise' in window &&
-                'fetch' in window &&
-                'localStorage' in window &&
-                'CSS' in window && 
-                'supports' in CSS &&
-                CSS.supports('display', 'grid');
-            
-            if (!isCompatible) {
-                document.getElementById('browser-compatibility').style.display = 'block';
-            }
-            
-            return isCompatible;
-        }
-        
-        // 初始化检查
-        if (!checkBrowserCompatibility()) {
-            // 如果不兼容，显示提示但继续运行
-            console.warn('浏览器兼容性警告：某些功能可能无法正常工作');
-        }
-        
         // Cloudflare Workers API 配置
         const API_BASE = 'https://time.bcfx.dpdns.org'; // 请替换为您的Worker URL
         
@@ -724,13 +788,7 @@
             // 检查数据库连接
             async checkConnection() {
                 try {
-                    const response = await fetch(`${this.apiBase}/api/health`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
+                    const response = await fetch(`${this.apiBase}/api/health`);
                     if (response.ok) {
                         this.isConnected = true;
                         document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> 数据库: 已连接';
@@ -748,13 +806,7 @@
             // 获取设置
             async getSettings() {
                 try {
-                    const response = await fetch(`${this.apiBase}/api/settings`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
+                    const response = await fetch(`${this.apiBase}/api/settings`);
                     if (response.ok) {
                         return await response.json();
                     }
@@ -790,13 +842,7 @@
             // 获取历史记录
             async getHistory() {
                 try {
-                    const response = await fetch(`${this.apiBase}/api/history`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
+                    const response = await fetch(`${this.apiBase}/api/history`);
                     if (response.ok) {
                         return await response.json();
                     }
@@ -886,9 +932,15 @@
                 document.body.appendChild(notification);
                 
                 setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10);
+                
+                setTimeout(() => {
                     notification.style.opacity = '0';
                     setTimeout(() => {
-                        document.body.removeChild(notification);
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
                     }, 300);
                 }, 3000);
             }
@@ -964,6 +1016,14 @@
                         // 密码已设置，不需要处理
                     }
                     
+                    // 加载系统通知
+                    if (settings.notification) {
+                        document.getElementById('system-notification-input').value = settings.notification;
+                        document.getElementById('system-notification-content').textContent = settings.notification || "暂无通知";
+                    } else {
+                        document.getElementById('system-notification-content').textContent = "暂无通知";
+                    }
+                    
                     initializeTimer(settings.initialPhase || '5-green');
                     
                     // 添加历史记录
@@ -981,7 +1041,8 @@
             async function saveSettings() {
                 const settings = {
                     startTime: startTime.getTime(),
-                    initialPhase: document.getElementById('initial-phase').value
+                    initialPhase: document.getElementById('initial-phase').value,
+                    notification: document.getElementById('system-notification-input').value
                 };
                 
                 const newPassword = document.getElementById('admin-password').value;
@@ -1000,6 +1061,10 @@
                 const success = await database.saveSettings(settings);
                 
                 if (success) {
+                    // 更新通知显示
+                    document.getElementById('system-notification-content').textContent = 
+                        document.getElementById('system-notification-input').value || "暂无通知";
+                    
                     // 添加历史记录
                     await database.addHistoryRecord('设置保存', '管理员修改了系统设置');
                 }
@@ -1077,6 +1142,18 @@
                 document.getElementById('login-modal').style.display = 'flex';
             });
             
+            // 退出管理员按钮
+            document.getElementById('admin-logout-btn').addEventListener('click', function() {
+                isAdmin = false;
+                document.getElementById('admin-section').style.display = 'none';
+                document.getElementById('admin-logout-btn').style.display = 'none';
+                document.getElementById('admin-login-btn').style.display = 'block';
+                database.showNotification('已退出管理员模式', 'info');
+                
+                // 添加历史记录
+                database.addHistoryRecord('管理员退出', '管理员退出登录');
+            });
+            
             // 取消登录
             document.getElementById('cancel-login').addEventListener('click', function() {
                 document.getElementById('login-modal').style.display = 'none';
@@ -1095,6 +1172,8 @@
                     isAdmin = true;
                     document.getElementById('admin-section').style.display = 'block';
                     document.getElementById('login-modal').style.display = 'none';
+                    document.getElementById('admin-logout-btn').style.display = 'block';
+                    document.getElementById('admin-login-btn').style.display = 'none';
                     document.getElementById('login-password').value = '';
                     database.showNotification('管理员登录成功', 'success');
                     
@@ -1155,7 +1234,7 @@
                 // 更新显示
                 updateDisplay(adjustedStartTime);
                 
-                // 计算并显示插卡窗口期
+                // 计算并显示机库开启时间
                 calculateCardWindows(adjustedStartTime);
                 
                 // 启动计时器
@@ -1178,7 +1257,7 @@
                 let phaseName;
                 let phaseIcon;
                 
-                // 计算当前插卡阶段开始时间
+                // 计算机库开启时间
                 const currentCycleStart = new Date(now.getTime() - cycleElapsedMs);
                 const currentCardPhaseStart = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
                 document.getElementById('card-phase-start').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentCardPhaseStart)}`;
@@ -1228,7 +1307,7 @@
                 
                 // 更新阶段指示器
                 const phaseIndicator = document.getElementById('phase-indicator');
-                phaseIndicator.innerHTML = `<i class="${phaseIcon}"></i> ${phaseName}`;
+                phaseIndicator.innerHTML = `<i class="${phaseIcon}"></i> <span>${phaseName}</span>`;
                 phaseIndicator.className = 'phase-indicator';
                 phaseIndicator.classList.add(`phase-${currentPhase}`);
                 
@@ -1254,7 +1333,7 @@
                 }
             }
             
-            // 计算插卡窗口期
+            // 计算机库开启时间
             function calculateCardWindows(adjustedStartTime) {
                 const windowList = document.getElementById('window-list');
                 windowList.innerHTML = '';
@@ -1263,17 +1342,17 @@
                 const firstGreenTime = new Date(adjustedStartTime.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
                 const now = serverTime.now();
                 
-                // 计算上一个窗口期
+                // 计算上一个开启时间
                 let previousWindowTime = new Date(firstGreenTime.getTime());
                 while (previousWindowTime.getTime() + totalCycleMs < now.getTime()) {
                     previousWindowTime = new Date(previousWindowTime.getTime() + totalCycleMs);
                 }
                 
-                // 如果当前时间已经超过了第一个窗口期，则显示上一个窗口期
+                // 如果当前时间已经超过了第一个开启时间，则显示上一个开启时间
                 if (now.getTime() > firstGreenTime.getTime()) {
                     const prevItem = document.createElement('li');
                     prevItem.className = 'previous';
-                    prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个窗口期: ${formatDateTimeFull(previousWindowTime)}`;
+                    prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个开启时间: ${formatDateTimeFull(previousWindowTime)}`;
                     windowList.appendChild(prevItem);
                 }
                 
@@ -1283,9 +1362,9 @@
                     const listItem = document.createElement('li');
                     
                     if (i === 0) {
-                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个窗口期: ${formatDateTimeFull(windowTime)}`;
+                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个开启时间: ${formatDateTimeFull(windowTime)}`;
                     } else {
-                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 窗口期 ${i}: ${formatDateTimeFull(windowTime)}`;
+                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时间 ${i}: ${formatDateTimeFull(windowTime)}`;
                     }
                     
                     windowList.appendChild(listItem);
