@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>星际公民行政机库计时</title>
+    <title>行政机库计时系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -19,16 +17,16 @@
             --panel-bg: #f8f9fa;
             --text-dark: #2d3748;
             --text-light: #718096;
-            --notification-bg: #fff3cd;
-            --notification-border: #ffeeba;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
         
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -36,11 +34,11 @@
             color: var(--text-dark);
             line-height: 1.6;
             min-height: 100vh;
-            padding: 15px;
+            padding: 20px;
             transition: background-image 0.5s ease;
             background-size: cover;
             background-position: center;
-            -webkit-text-size-adjust: 100%;
+            overflow-x: hidden;
         }
         
         .container {
@@ -49,28 +47,43 @@
             position: relative;
         }
         
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            max-width: 120px;
+            max-height: 120px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+        
         header {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--glass-bg);
             color: white;
             padding: 1.2rem;
             text-align: center;
             border-radius: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--glass-border);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         .main-content {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
+            gap: 20px;
         }
         
         .timer-display {
-            background-color: rgba(255, 255, 255, 0.95);
+            background: var(--glass-bg);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: center;
             display: flex;
@@ -78,74 +91,74 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
         }
         
         .phase-indicator {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
-            margin-bottom: 15px;
-            padding: 12px;
+            margin-bottom: 20px;
+            padding: 15px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            text-align: center;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             width: 100%;
+            max-width: 400px;
         }
         
         .phase-reset {
-            background-color: rgba(231, 76, 60, 0.15);
             color: var(--reset-color);
-            border: 2px solid var(--reset-color);
         }
         
         .phase-card {
-            background-color: rgba(46, 204, 113, 0.15);
             color: var(--card-color);
-            border: 2px solid var(--card-color);
         }
         
         .phase-poweroff {
-            background-color: rgba(127, 140, 141, 0.15);
             color: var(--poweroff-color);
-            border: 2px solid var(--poweroff-color);
         }
         
         .countdown {
-            font-size: 2.8rem;
+            font-size: 3.5rem;
             font-weight: bold;
             margin: 20px 0;
-            color: var(--primary-color);
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             text-align: center;
             width: 100%;
-            word-break: break-word;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
         }
         
-        @media (max-width: 480px) {
-            .countdown {
-                font-size: 2.2rem;
-            }
-        }
-        
-        .phase-start-time {
+        .hanger-open-time {
             font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: var(--text-dark);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 12px;
+            margin: 15px 0;
+            padding: 12px;
             border-radius: 8px;
             display: inline-block;
+            backdrop-filter: blur(5px);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
             width: 100%;
-            text-align: center;
+            max-width: 500px;
         }
         
         .lights-container {
             display: flex;
             justify-content: center;
-            margin: 20px 0;
-            gap: 10px;
+            margin: 25px 0;
+            gap: 12px;
             flex-wrap: wrap;
         }
         
@@ -156,20 +169,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
-        }
-        
-        @media (max-width: 480px) {
-            .light {
-                width: 40px;
-                height: 40px;
-            }
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
         }
         
         .light.active {
             transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
         }
         
         .light.red {
@@ -184,23 +192,25 @@
             background-color: var(--poweroff-color);
         }
         
-        .card-windows {
-            background-color: rgba(255, 255, 255, 0.95);
+        .hanger-windows {
+            background: var(--glass-bg);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            margin-top: 15px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
         }
         
-        .card-windows h2 {
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 10px;
+        .hanger-windows h2 {
+            margin-bottom: 20px;
+            color: white;
+            padding-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1.5rem;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .window-list {
@@ -211,25 +221,27 @@
         }
         
         .window-list li {
-            background-color: var(--panel-bg);
-            padding: 12px;
+            background: var(--glass-bg);
+            padding: 15px;
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            gap: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--card-color);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .window-list li.previous {
             border-left: 4px solid var(--reset-color);
-            background-color: rgba(231, 76, 60, 0.1);
         }
         
         .window-list li i {
             color: var(--card-color);
             font-size: 1.1rem;
-            flex-shrink: 0;
         }
         
         .window-list li.previous i {
@@ -238,32 +250,38 @@
         
         .info-text {
             text-align: center;
-            margin-top: 12px;
-            color: var(--text-light);
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.8);
             font-style: italic;
-            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .status-indicators {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
         
         .status-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
         }
         
         .status-color {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            flex-shrink: 0;
         }
         
         .status-red {
@@ -280,8 +298,8 @@
         
         .admin-login-btn {
             position: fixed;
-            bottom: 70px;
-            right: 15px;
+            bottom: 20px;
+            right: 20px;
             width: auto;
             padding: 10px 15px;
             background: rgba(52, 152, 219, 0.9);
@@ -293,35 +311,12 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
-            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
         }
         
         .admin-login-btn:hover {
             background: rgba(52, 152, 219, 1);
-            transform: translateY(-2px);
-        }
-        
-        .admin-logout-btn {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            width: auto;
-            padding: 10px 15px;
-            background: rgba(231, 76, 60, 0.9);
-            z-index: 1000;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-            display: none;
-        }
-        
-        .admin-logout-btn:hover {
-            background: rgba(231, 76, 60, 1);
             transform: translateY(-2px);
         }
         
@@ -336,32 +331,33 @@
             z-index: 1001;
             justify-content: center;
             align-items: center;
-            padding: 15px;
+            padding: 20px;
         }
         
         .modal-content {
-            background-color: white;
+            background: var(--glass-bg);
             padding: 25px;
             border-radius: 12px;
             width: 100%;
             max-width: 500px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
             max-height: 90vh;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
         
         .modal h2 {
-            margin-bottom: 15px;
-            color: var(--primary-color);
+            margin-bottom: 20px;
+            color: white;
             text-align: center;
-            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .modal-buttons {
             display: flex;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 15px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
         
@@ -377,49 +373,48 @@
         
         .admin-section {
             display: none;
-            background-color: rgba(255, 255, 255, 0.95);
+            background: var(--glass-bg);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-top: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
         }
         
         .admin-section h2 {
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: white;
+            padding-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1.5rem;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: bold;
-            color: var(--text-dark);
-            font-size: 0.95rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         input[type="datetime-local"], select, input[type="password"], input[type="text"], textarea {
             width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #ddd;
+            padding: 12px 15px;
+            border: 1px solid var(--glass-border);
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
-            -webkit-appearance: none;
-        }
-        
-        textarea {
-            min-height: 100px;
-            resize: vertical;
+            background: var(--glass-bg);
+            color: white;
+            backdrop-filter: blur(5px);
         }
         
         input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, 
@@ -428,11 +423,16 @@
             outline: none;
         }
         
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
         button {
             background: linear-gradient(to right, var(--secondary-color), #2980b9);
             color: white;
             border: none;
-            padding: 12px 18px;
+            padding: 14px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
@@ -440,6 +440,7 @@
             transition: all 0.3s;
             width: 100%;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--glass-border);
         }
         
         button:hover {
@@ -447,118 +448,140 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
         
-        .bg-preview {
+        .bg-preview, .logo-preview {
             width: 100%;
-            height: 120px;
+            height: 150px;
             background-size: cover;
             background-position: center;
             border-radius: 8px;
-            margin-top: 8px;
-            border: 2px dashed #ddd;
-        }
-        
-        .card-phase-start {
-            font-size: 1rem;
-            margin: 12px 0;
-            padding: 8px;
-            background: rgba(46, 204, 113, 0.1);
-            border-radius: 8px;
-            border-left: 4px solid var(--card-color);
-            width: 100%;
-            text-align: center;
+            margin-top: 10px;
+            border: 2px dashed var(--glass-border);
+            backdrop-filter: blur(5px);
+            background-color: var(--glass-bg);
         }
         
         .calibration-time {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 4px 8px;
+            bottom: 15px;
+            left: 15px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            background: var(--glass-bg);
+            padding: 5px 10px;
             border-radius: 5px;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .window-status {
             font-size: 0.9rem;
-            color: var(--text-light);
-            margin-top: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
             text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .db-status {
             position: fixed;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 4px 8px;
+            bottom: 20px;
+            left: 20px;
+            background: var(--glass-bg);
+            padding: 5px 10px;
             border-radius: 5px;
-            font-size: 0.75rem;
-            color: var(--text-light);
-            z-index: 1000;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
-        .loading {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .notification {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            left: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            color: #856404;
-            background-color: var(--notification-bg);
-            border: 1px solid var(--notification-border);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 1002;
-            transition: opacity 0.3s, transform 0.3s;
-            transform: translateY(-100px);
-            opacity: 0;
-        }
-        
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .system-notification {
-            background-color: var(--notification-bg);
-            border: 1px solid var(--notification-border);
-            border-radius: 8px;
+        .notification-display {
+            margin-top: 20px;
             padding: 15px;
-            margin-top: 15px;
-            color: #856404;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
-        .system-notification h3 {
+        .notification-display h3 {
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 10px;
-            color: #856404;
-            font-size: 1.1rem;
+            color: var(--card-color);
         }
         
-        .system-notification-content {
-            font-size: 0.95rem;
+        .notification-content {
             line-height: 1.5;
+        }
+        
+        .admin-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-controls button {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
         }
         
         /* 移动端优化 */
         @media (max-width: 768px) {
+            .countdown {
+                font-size: 2.5rem;
+                padding: 10px;
+            }
+            
+            .phase-indicator {
+                font-size: 1.3rem;
+                padding: 12px;
+            }
+            
+            .lights-container {
+                gap: 8px;
+            }
+            
+            .light {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .window-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .status-indicators {
+                gap: 10px;
+            }
+            
+            .status-item {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
             body {
                 padding: 10px;
             }
@@ -567,45 +590,21 @@
                 padding: 1rem;
             }
             
-            .timer-display, .card-windows, .admin-section {
+            .timer-display, .hanger-windows, .admin-section {
                 padding: 15px;
             }
             
             .countdown {
-                font-size: 2.2rem;
-            }
-            
-            .phase-indicator {
-                font-size: 1.3rem;
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .window-list {
-                grid-template-columns: 1fr;
-            }
-            
-            .modal-content {
-                padding: 20px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .countdown {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
             .phase-indicator {
                 font-size: 1.1rem;
             }
             
-            .card-phase-start {
+            .hanger-open-time {
                 font-size: 0.9rem;
-            }
-            
-            .admin-login-btn, .admin-logout-btn {
-                font-size: 0.8rem;
-                padding: 8px 12px;
+                padding: 10px;
             }
         }
         
@@ -614,28 +613,30 @@
             font-size: 16px !important;
         }
         
-        /* 改善移动端触摸体验 */
-        button, .light {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
+        /* 移动端触摸反馈 */
+        button:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body id="body">
     <div class="container">
+        <div class="logo-container">
+            <img src="https://via.placeholder.com/120x120/3498db/ffffff?text=Logo" alt="机库系统Logo" class="logo" id="logo">
+        </div>
+        
         <header>
-            <h1><i class="fas fa-clock"></i> 星际公民行政机库计时</h1>
+            <h1 id="site-title">行政机库计时系统</h1>
         </header>
         
         <div class="main-content">
             <div class="timer-display">
                 <div id="phase-indicator" class="phase-indicator phase-reset">
-                    <i class="fas fa-sync-alt"></i> <span>重置阶段</span>
+                    <i class="fas fa-sync-alt"></i> <span id="phase-text">机库已关闭</span>
                 </div>
                 <div id="countdown" class="countdown">02:00:00</div>
                 
-                <div class="card-phase-start" id="card-phase-start">
+                <div class="hanger-open-time" id="hanger-open-time">
                     <i class="fas fa-play-circle"></i> 机库开启时间: 计算中...
                 </div>
                 
@@ -667,35 +668,47 @@
                 </div>
             </div>
             
-            <div class="card-windows">
+            <div class="hanger-windows">
                 <h2><i class="fas fa-calendar-check"></i> 机库开启时间</h2>
                 <p class="window-status" id="window-status">该时间段内可以插卡开启机库大门</p>
                 <ul class="window-list" id="window-list">
-                    <li class="previous"><i class="fas fa-chevron-left"></i> 上一个开启时间: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 下一个开启时间: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 开启时间 1: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 开启时间 2: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 开启时间 3: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 开启时间 4: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 开启时间 5: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 开启时间 6: 计算中...</li>
+                    <li class="previous"><i class="fas fa-chevron-left"></i> 上一个开启时段: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 下一个开启时段: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时段 1: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时段 2: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时段 3: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时段 4: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时段 5: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 开启时段 6: 计算中...</li>
                 </ul>
             </div>
             
-            <!-- 系统通知显示区域 -->
-            <div class="system-notification" id="system-notification">
+            <div class="notification-display">
                 <h3><i class="fas fa-bullhorn"></i> 系统通知</h3>
-                <div class="system-notification-content" id="system-notification-content">
+                <div class="notification-content" id="notification-content">
                     暂无通知
                 </div>
             </div>
             
             <div class="admin-section" id="admin-section">
                 <h2><i class="fas fa-cog"></i> 后台管理</h2>
+                
+                <div class="admin-controls">
+                    <button id="logout-admin" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> 退出管理员模式
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="api-url"><i class="fas fa-link"></i> API地址</label>
+                    <input type="text" id="api-url" placeholder="输入API地址">
+                </div>
+                
                 <div class="form-group">
                     <label for="start-time"><i class="fas fa-calendar-alt"></i> 开始时间</label>
                     <input type="datetime-local" id="start-time">
                 </div>
+                
                 <div class="form-group">
                     <label for="initial-phase"><i class="fas fa-list-alt"></i> 初始阶段</label>
                     <select id="initial-phase">
@@ -712,37 +725,44 @@
                         <option value="5-gray">5灰灯</option>
                     </select>
                 </div>
+                
+                <div class="form-group">
+                    <label for="notification-content"><i class="fas fa-bell"></i> 系统通知内容</label>
+                    <textarea id="admin-notification" placeholder="输入系统通知内容"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="site-title"><i class="fas fa-heading"></i> 网站标题</label>
+                    <input type="text" id="admin-site-title" placeholder="输入网站标题">
+                </div>
+                
+                <div class="form-group">
+                    <label for="logo-url"><i class="fas fa-image"></i> Logo URL</label>
+                    <input type="text" id="logo-url" placeholder="输入Logo图片URL">
+                    <button id="preview-logo">预览Logo</button>
+                    <div class="logo-preview" id="logo-preview"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bg-image"><i class="fas fa-image"></i> 背景图片URL</label>
+                    <input type="text" id="bg-image" placeholder="输入背景图片URL">
+                    <button id="preview-bg">预览背景</button>
+                    <div class="bg-preview" id="bg-preview"></div>
+                </div>
+                
                 <div class="form-group">
                     <label for="admin-password"><i class="fas fa-key"></i> 管理密码</label>
                     <input type="password" id="admin-password" placeholder="输入新密码">
                 </div>
-                <div class="form-group">
-                    <label for="bg-image"><i class="fas fa-image"></i> 背景图片URL</label>
-                    <input type="text" id="bg-image" placeholder="输入图片URL">
-                    <button id="preview-bg">预览背景</button>
-                    <div class="bg-preview" id="bg-preview"></div>
-                </div>
-                <div class="form-group">
-                    <label for="system-notification-input"><i class="fas fa-bullhorn"></i> 系统通知</label>
-                    <textarea id="system-notification-input" placeholder="输入系统通知内容"></textarea>
-                </div>
+                
                 <button id="update-timer">
                     <i class="fas fa-sync"></i> 更新计时器
                 </button>
+                
                 <button id="save-settings">
                     <i class="fas fa-save"></i> 保存设置
                 </button>
-                <div class="form-group">
-                    <label><i class="fas fa-database"></i> 数据库操作</label>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button id="export-data">
-                            <i class="fas fa-download"></i> 导出数据
-                        </button>
-                        <button id="clear-data" style="background: var(--reset-color);">
-                            <i class="fas fa-trash"></i> 清空数据
-                        </button>
-                    </div>
-                </div>
+                
                 <p class="info-text">修改设置后请点击"更新计时器"按钮应用更改</p>
             </div>
         </div>
@@ -750,10 +770,6 @@
 
     <button class="admin-login-btn" id="admin-login-btn">
         <i class="fas fa-user-lock"></i> 管理员登录
-    </button>
-
-    <button class="admin-logout-btn" id="admin-logout-btn">
-        <i class="fas fa-sign-out-alt"></i> 退出管理员
     </button>
 
     <div class="db-status" id="db-status">
@@ -776,7 +792,7 @@
 
     <script>
         // Cloudflare Workers API 配置
-        const API_BASE = 'https://time.bcfx.dpdns.org'; // 请替换为您的Worker URL
+        let API_BASE = 'https://your-worker-name.your-subdomain.workers.dev'; // 默认API地址
         
         // 数据库类 - 使用Cloudflare Workers API
         class TimerDatabase {
@@ -928,19 +944,25 @@
                 const notification = document.createElement('div');
                 notification.className = `notification ${type}`;
                 notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px;
+                    border-radius: 5px;
+                    color: white;
+                    background-color: ${type === 'error' ? '#e74c3c' : '#2ecc71'};
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                    z-index: 1002;
+                    transition: opacity 0.3s;
+                `;
                 
                 document.body.appendChild(notification);
                 
                 setTimeout(() => {
-                    notification.classList.add('show');
-                }, 10);
-                
-                setTimeout(() => {
                     notification.style.opacity = '0';
                     setTimeout(() => {
-                        if (document.body.contains(notification)) {
-                            document.body.removeChild(notification);
-                        }
+                        document.body.removeChild(notification);
                     }, 300);
                 }, 3000);
             }
@@ -977,6 +999,7 @@
             let currentLights = [];
             let countdownInterval;
             let isAdmin = false;
+            const DEFAULT_PASSWORD = 'admin'; // 修改默认密码为admin
             
             // 检查数据库连接
             database.checkConnection().then(async () => {
@@ -988,6 +1011,13 @@
             async function loadSettings() {
                 try {
                     const settings = await database.getSettings();
+                    
+                    // 加载API地址
+                    if (settings.apiUrl) {
+                        API_BASE = settings.apiUrl;
+                        database.apiBase = API_BASE;
+                        document.getElementById('api-url').value = API_BASE;
+                    }
                     
                     if (settings.startTime) {
                         startTime = new Date(parseInt(settings.startTime));
@@ -1008,20 +1038,24 @@
                         document.getElementById('bg-preview').style.backgroundImage = `url(${settings.bgImage})`;
                     }
                     
+                    if (settings.logoUrl) {
+                        document.getElementById('logo').src = settings.logoUrl;
+                        document.getElementById('logo-url').value = settings.logoUrl;
+                        document.getElementById('logo-preview').style.backgroundImage = `url(${settings.logoUrl})`;
+                    }
+                    
+                    if (settings.siteTitle) {
+                        document.getElementById('site-title').textContent = settings.siteTitle;
+                        document.getElementById('admin-site-title').value = settings.siteTitle;
+                    }
+                    
+                    if (settings.notification) {
+                        document.getElementById('notification-content').textContent = settings.notification;
+                        document.getElementById('admin-notification').value = settings.notification;
+                    }
+                    
                     if (settings.calibrationTime) {
                         document.getElementById('calibration-time').textContent = `校准时间: ${settings.calibrationTime}`;
-                    }
-                    
-                    if (settings.adminPassword) {
-                        // 密码已设置，不需要处理
-                    }
-                    
-                    // 加载系统通知
-                    if (settings.notification) {
-                        document.getElementById('system-notification-input').value = settings.notification;
-                        document.getElementById('system-notification-content').textContent = settings.notification || "暂无通知";
-                    } else {
-                        document.getElementById('system-notification-content').textContent = "暂无通知";
                     }
                     
                     initializeTimer(settings.initialPhase || '5-green');
@@ -1042,7 +1076,9 @@
                 const settings = {
                     startTime: startTime.getTime(),
                     initialPhase: document.getElementById('initial-phase').value,
-                    notification: document.getElementById('system-notification-input').value
+                    apiUrl: document.getElementById('api-url').value,
+                    siteTitle: document.getElementById('admin-site-title').value,
+                    notification: document.getElementById('admin-notification').value
                 };
                 
                 const newPassword = document.getElementById('admin-password').value;
@@ -1058,13 +1094,32 @@
                     document.getElementById('bg-preview').style.backgroundImage = `url(${bgImage})`;
                 }
                 
+                const logoUrl = document.getElementById('logo-url').value;
+                if (logoUrl) {
+                    settings.logoUrl = logoUrl;
+                    document.getElementById('logo').src = logoUrl;
+                    document.getElementById('logo-preview').style.backgroundImage = `url(${logoUrl})`;
+                }
+                
+                // 更新API地址
+                if (settings.apiUrl) {
+                    API_BASE = settings.apiUrl;
+                    database.apiBase = API_BASE;
+                }
+                
+                // 更新网站标题
+                if (settings.siteTitle) {
+                    document.getElementById('site-title').textContent = settings.siteTitle;
+                }
+                
+                // 更新通知
+                if (settings.notification) {
+                    document.getElementById('notification-content').textContent = settings.notification;
+                }
+                
                 const success = await database.saveSettings(settings);
                 
                 if (success) {
-                    // 更新通知显示
-                    document.getElementById('system-notification-content').textContent = 
-                        document.getElementById('system-notification-input').value || "暂无通知";
-                    
                     // 添加历史记录
                     await database.addHistoryRecord('设置保存', '管理员修改了系统设置');
                 }
@@ -1142,18 +1197,6 @@
                 document.getElementById('login-modal').style.display = 'flex';
             });
             
-            // 退出管理员按钮
-            document.getElementById('admin-logout-btn').addEventListener('click', function() {
-                isAdmin = false;
-                document.getElementById('admin-section').style.display = 'none';
-                document.getElementById('admin-logout-btn').style.display = 'none';
-                document.getElementById('admin-login-btn').style.display = 'block';
-                database.showNotification('已退出管理员模式', 'info');
-                
-                // 添加历史记录
-                database.addHistoryRecord('管理员退出', '管理员退出登录');
-            });
-            
             // 取消登录
             document.getElementById('cancel-login').addEventListener('click', function() {
                 document.getElementById('login-modal').style.display = 'none';
@@ -1166,14 +1209,12 @@
                 
                 // 从数据库获取密码
                 const settings = await database.getSettings();
-                const savedPassword = settings.adminPassword || 'Bcfxclub198511';
+                const savedPassword = settings.adminPassword || DEFAULT_PASSWORD;
                 
                 if (password === savedPassword) {
                     isAdmin = true;
                     document.getElementById('admin-section').style.display = 'block';
                     document.getElementById('login-modal').style.display = 'none';
-                    document.getElementById('admin-logout-btn').style.display = 'block';
-                    document.getElementById('admin-login-btn').style.display = 'none';
                     document.getElementById('login-password').value = '';
                     database.showNotification('管理员登录成功', 'success');
                     
@@ -1187,6 +1228,13 @@
                 }
             });
             
+            // 退出管理员
+            document.getElementById('logout-admin').addEventListener('click', function() {
+                isAdmin = false;
+                document.getElementById('admin-section').style.display = 'none';
+                database.showNotification('已退出管理员模式', 'success');
+            });
+            
             // 保存设置
             document.getElementById('save-settings').addEventListener('click', saveSettings);
             
@@ -1198,14 +1246,12 @@
                 }
             });
             
-            // 导出数据
-            document.getElementById('export-data').addEventListener('click', function() {
-                database.exportData();
-            });
-            
-            // 清空数据
-            document.getElementById('clear-data').addEventListener('click', function() {
-                database.clearData();
+            // 预览Logo
+            document.getElementById('preview-logo').addEventListener('click', function() {
+                const logoUrl = document.getElementById('logo-url').value;
+                if (logoUrl) {
+                    document.getElementById('logo-preview').style.backgroundImage = `url(${logoUrl})`;
+                }
             });
             
             // 初始化计时器
@@ -1235,7 +1281,7 @@
                 updateDisplay(adjustedStartTime);
                 
                 // 计算并显示机库开启时间
-                calculateCardWindows(adjustedStartTime);
+                calculateHangerWindows(adjustedStartTime);
                 
                 // 启动计时器
                 countdownInterval = setInterval(function() {
@@ -1257,15 +1303,15 @@
                 let phaseName;
                 let phaseIcon;
                 
-                // 计算机库开启时间
+                // 计算当前机库开启时间
                 const currentCycleStart = new Date(now.getTime() - cycleElapsedMs);
-                const currentCardPhaseStart = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
-                document.getElementById('card-phase-start').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentCardPhaseStart)}`;
+                const currentHangerOpenTime = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
+                document.getElementById('hanger-open-time').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentHangerOpenTime)}`;
                 
                 if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 1000) {
-                    // 重置阶段
+                    // 重置阶段 -> 机库已关闭
                     currentPhase = 'reset';
-                    phaseName = '重置阶段';
+                    phaseName = '机库已关闭';
                     phaseIcon = 'fas fa-sync-alt';
                     phaseTimeRemaining = PHASE_DURATIONS.reset * 60 * 1000 - cycleElapsedMs;
                     
@@ -1279,9 +1325,9 @@
                     }
                     
                 } else if (cycleElapsedMs < (PHASE_DURATIONS.reset + PHASE_DURATIONS.card) * 60 * 1000) {
-                    // 插卡阶段
+                    // 插卡阶段 -> 机库开启中可插卡
                     currentPhase = 'card';
-                    phaseName = '插卡阶段';
+                    phaseName = '机库开启中可插卡';
                     phaseIcon = 'fas fa-credit-card';
                     phaseTimeRemaining = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card) * 60 * 1000 - cycleElapsedMs;
                     
@@ -1296,9 +1342,9 @@
                     }
                     
                 } else {
-                    // 断电阶段
+                    // 断电阶段 -> 机库关闭倒计时
                     currentPhase = 'poweroff';
-                    phaseName = '断电阶段';
+                    phaseName = '机库关闭倒计时';
                     phaseIcon = 'fas fa-power-off';
                     phaseTimeRemaining = totalCycleMs - cycleElapsedMs;
                     
@@ -1307,7 +1353,7 @@
                 
                 // 更新阶段指示器
                 const phaseIndicator = document.getElementById('phase-indicator');
-                phaseIndicator.innerHTML = `<i class="${phaseIcon}"></i> <span>${phaseName}</span>`;
+                phaseIndicator.innerHTML = `<i class="${phaseIcon}"></i> <span id="phase-text">${phaseName}</span>`;
                 phaseIndicator.className = 'phase-indicator';
                 phaseIndicator.classList.add(`phase-${currentPhase}`);
                 
@@ -1334,7 +1380,7 @@
             }
             
             // 计算机库开启时间
-            function calculateCardWindows(adjustedStartTime) {
+            function calculateHangerWindows(adjustedStartTime) {
                 const windowList = document.getElementById('window-list');
                 windowList.innerHTML = '';
                 
@@ -1342,17 +1388,17 @@
                 const firstGreenTime = new Date(adjustedStartTime.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
                 const now = serverTime.now();
                 
-                // 计算上一个开启时间
+                // 计算上一个开启时段
                 let previousWindowTime = new Date(firstGreenTime.getTime());
                 while (previousWindowTime.getTime() + totalCycleMs < now.getTime()) {
                     previousWindowTime = new Date(previousWindowTime.getTime() + totalCycleMs);
                 }
                 
-                // 如果当前时间已经超过了第一个开启时间，则显示上一个开启时间
+                // 如果当前时间已经超过了第一个开启时段，则显示上一个开启时段
                 if (now.getTime() > firstGreenTime.getTime()) {
                     const prevItem = document.createElement('li');
                     prevItem.className = 'previous';
-                    prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个开启时间: ${formatDateTimeFull(previousWindowTime)}`;
+                    prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个开启时段: ${formatDateTimeFull(previousWindowTime)}`;
                     windowList.appendChild(prevItem);
                 }
                 
@@ -1362,9 +1408,9 @@
                     const listItem = document.createElement('li');
                     
                     if (i === 0) {
-                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个开启时间: ${formatDateTimeFull(windowTime)}`;
+                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个开启时段: ${formatDateTimeFull(windowTime)}`;
                     } else {
-                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时间 ${i}: ${formatDateTimeFull(windowTime)}`;
+                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时段 ${i}: ${formatDateTimeFull(windowTime)}`;
                     }
                     
                     windowList.appendChild(listItem);
@@ -1411,3 +1457,5 @@
     </script>
 </body>
 </html>
+
+
