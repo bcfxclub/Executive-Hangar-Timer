@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政机库计时器系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --reset-color: #e74c3c;
+            --card-color: #2ecc71;
+            --poweroff-color: #7f8c8d;
+            --light-off: #bdc3c7;
+            --light-on: #ffffff;
+            --panel-bg: #f8f9fa;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-image 0.5s ease;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1); /* 透明背景 */
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px); /* 毛玻璃效果 */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .timer-display {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .phase-indicator {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .phase-reset {
+            background-color: rgba(231, 76, 60, 0.15);
+            color: var(--reset-color);
+            border: 2px solid var(--reset-color);
+        }
+        
+        .phase-card {
+            background-color: rgba(46, 204, 113, 0.15);
+            color: var(--card-color);
+            border: 2px solid var(--card-color);
+        }
+        
+        .phase-poweroff {
+            background-color: rgba(127, 140, 141, 0.15);
+            color: var(--poweroff-color);
+            border: 2px solid var(--poweroff-color);
+        }
+        
+        .countdown {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 25px 0;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+        }
+        
+        .phase-start-time {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .lights-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 15px;
+        }
+        
+        .light {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .light.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+        
+        .light.red {
+            background-color: var(--reset-color);
+        }
+        
+        .light.green {
+            background-color: var(--card-color);
+        }
+        
+        .light.gray {
+            background-color: var(--poweroff-color);
+        }
+        
+        .card-windows {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .card-windows h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .window-list {
+            list-style-type: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .window-list li {
+            background-color: var(--panel-bg);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--card-color);
+        }
+        
+        .window-list li.previous {
+            border-left: 4px solid var(--reset-color);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .window-list li i {
+            color: var(--card-color);
+            font-size: 1.2rem;
+        }
+        
+        .window-list li.previous i {
+            color: var(--reset-color);
+        }
+        
+        .info-text {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        .status-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .status-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        .status-red {
+            background-color: var(--reset-color);
+        }
+        
+        .status-green {
+            background-color: var(--card-color);
+        }
+        
+        .status-gray {
+            background-color: var(--poweroff-color);
+        }
+        
+        .admin-login-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: auto;
+            padding: 10px 15px;
+            background: rgba(52, 152, 219, 0.9);
+            z-index: 1000;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .admin-login-btn:hover {
+            background: rgba(52, 152, 219, 1);
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .modal-buttons button {
+            width: auto;
+            flex: 1;
+        }
+        
+        .cancel-btn {
+            background: linear-gradient(to right, #95a5a6, #7f8c8d);
+        }
+        
+        .admin-section {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .admin-section h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+        
+        input[type="datetime-local"], select, input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, input[type="text"]:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--secondary-color), #2980b9);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .bg-preview {
+            width: 100%;
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 2px dashed #ddd;
+        }
+        
+        .card-phase-start {
+            font-size: 1.1rem;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(46, 204, 113, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--card-color);
+        }
+        
+        .calibration-time {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .window-status {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .db-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1002;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body id="body">
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-clock"></i> 行政机库计时器系统</h1>
+        </header>
+        
+        <div class="main-content">
+            <div class="timer-display">
+                <div id="phase-indicator" class="phase-indicator phase-reset">
+                    <i class="fas fa-sync-alt"></i> 重置阶段
+                </div>
+                <div id="countdown" class="countdown">02:00:00</div>
+                
+                <div class="card-phase-start" id="card-phase-start">
+                    <i class="fas fa-play-circle"></i> 当前插卡阶段开始时间: 计算中...
+                </div>
+                
+                <div class="lights-container" id="lights-container">
+                    <div class="light red active" id="light-0"></div>
+                    <div class="light red active" id="light-1"></div>
+                    <div class="light red active" id="light-2"></div>
+                    <div class="light red active" id="light-3"></div>
+                    <div class="light red active" id="light-4"></div>
+                </div>
+                
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <div class="status-color status-red"></div>
+                        <span>红灯</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-color status-green"></div>
+                        <span>绿灯</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-color status-gray"></div>
+                        <span>灰灯</span>
+                    </div>
+                </div>
+                
+                <div class="calibration-time" id="calibration-time">
+                    校准时间: 尚未校准
+                </div>
+            </div>
+            
+            <div class="card-windows">
+                <h2><i class="fas fa-calendar-check"></i> 插卡窗口期</h2>
+                <p class="window-status" id="window-status">显示上一个窗口期及后续5绿灯时间</p>
+                <ul class="window-list" id="window-list">
+                    <li class="previous"><i class="fas fa-chevron-left"></i> 上一个窗口期: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 下一个窗口期: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 窗口期 1: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 窗口期 2: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 窗口期 3: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 窗口期 4: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 窗口期 5: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 窗口期 6: 计算中...</li>
+                </ul>
+            </div>
+            
+            <div class="admin-section" id="admin-section">
+                <h2><i class="fas fa-cog"></i> 后台管理</h2>
+                <div class="form-group">
+                    <label for="start-time"><i class="fas fa-calendar-alt"></i> 开始时间</label>
+                    <input type="datetime-local" id="start-time">
+                </div>
+                <div class="form-group">
+                    <label for="initial-phase"><i class="fas fa-list-alt"></i> 初始阶段</label>
+                    <select id="initial-phase">
+                        <option value="5-red">5红灯</option>
+                        <option value="1-green-4-red">1绿灯4红灯</option>
+                        <option value="2-green-3-red">2绿灯3红灯</option>
+                        <option value="3-green-2-red">3绿灯2红灯</option>
+                        <option value="4-green-1-red">4绿灯1红灯</option>
+                        <option value="5-green" selected>5绿灯</option>
+                        <option value="1-gray-4-green">1灰灯4绿灯</option>
+                        <option value="2-gray-3-green">2灰灯3绿灯</option>
+                        <option value="3-gray-2-green">3灰灯2绿灯</option>
+                        <option value="4-gray-1-green">4灰灯1绿灯</option>
+                        <option value="5-gray">5灰灯</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password"><i class="fas fa-key"></i> 管理密码</label>
+                    <input type="password" id="admin-password" placeholder="输入新密码">
+                </div>
+                <div class="form-group">
+                    <label for="bg-image"><i class="fas fa-image"></i> 背景图片URL</label>
+                    <input type="text" id="bg-image" placeholder="输入图片URL">
+                    <button id="preview-bg">预览背景</button>
+                    <div class="bg-preview" id="bg-preview"></div>
+                </div>
+                <button id="update-timer">
+                    <i class="fas fa-sync"></i> 更新计时器
+                </button>
+                <button id="save-settings">
+                    <i class="fas fa-save"></i> 保存设置
+                </button>
+                <div class="form-group">
+                    <label><i class="fas fa-database"></i> 数据库操作</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="export-data">
+                            <i class="fas fa-download"></i> 导出数据
+                        </button>
+                        <button id="clear-data" style="background: var(--reset-color);">
+                            <i class="fas fa-trash"></i> 清空数据
+                        </button>
+                    </div>
+                </div>
+                <p class="info-text">修改设置后请点击"更新计时器"按钮应用更改</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="admin-login-btn" id="admin-login-btn">
+        <i class="fas fa-user-lock"></i> 管理员登录
+    </button>
+
+    <div class="db-status" id="db-status">
+        <i class="fas fa-database"></i> 数据库: 连接中...
+    </div>
+
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-lock"></i> 管理员登录</h2>
+            <div class="form-group">
+                <label for="login-password">密码</label>
+                <input type="password" id="login-password" placeholder="输入管理员密码">
+            </div>
+            <div class="modal-buttons">
+                <button id="login-btn">登录</button>
+                <button class="cancel-btn" id="cancel-login">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cloudflare Workers API 配置
+        const API_BASE = 'https://your-worker-name.your-subdomain.workers.dev'; // 请替换为您的Worker URL
+        
+        // 数据库类 - 使用Cloudflare Workers API
+        class TimerDatabase {
+            constructor() {
+                this.apiBase = API_BASE;
+                this.isConnected = false;
+            }
+            
+            // 检查数据库连接
+            async checkConnection() {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/health`);
+                    if (response.ok) {
+                        this.isConnected = true;
+                        document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> 数据库: 已连接';
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('数据库连接失败:', error);
+                }
+                
+                this.isConnected = false;
+                document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> 数据库: 连接失败';
+                return false;
+            }
+            
+            // 获取设置
+            async getSettings() {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/settings`);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (error) {
+                    console.error('获取设置失败:', error);
+                    this.showNotification('获取设置失败，请检查网络连接', 'error');
+                }
+                return {};
+            }
+            
+            // 保存设置
+            async saveSettings(settings) {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/settings`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(settings)
+                    });
+                    
+                    if (response.ok) {
+                        this.showNotification('设置已保存', 'success');
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('保存设置失败:', error);
+                    this.showNotification('保存设置失败，请检查网络连接', 'error');
+                }
+                return false;
+            }
+            
+            // 获取历史记录
+            async getHistory() {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/history`);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (error) {
+                    console.error('获取历史记录失败:', error);
+                }
+                return [];
+            }
+            
+            // 添加历史记录
+            async addHistoryRecord(action, details) {
+                try {
+                    await fetch(`${this.apiBase}/api/history`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ action, details })
+                    });
+                } catch (error) {
+                    console.error('添加历史记录失败:', error);
+                }
+            }
+            
+            // 导出数据
+            async exportData() {
+                try {
+                    const [settings, history] = await Promise.all([
+                        this.getSettings(),
+                        this.getHistory()
+                    ]);
+                    
+                    const data = {
+                        settings,
+                        history,
+                        exportedAt: new Date().toISOString()
+                    };
+                    
+                    const dataStr = JSON.stringify(data, null, 2);
+                    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                    
+                    const exportFileDefaultName = `timer-system-backup-${new Date().toISOString().slice(0,10)}.json`;
+                    
+                    const linkElement = document.createElement('a');
+                    linkElement.setAttribute('href', dataUri);
+                    linkElement.setAttribute('download', exportFileDefaultName);
+                    linkElement.click();
+                    
+                    await this.addHistoryRecord('数据导出', '导出了系统数据备份');
+                    this.showNotification('数据导出成功', 'success');
+                } catch (error) {
+                    console.error('导出数据失败:', error);
+                    this.showNotification('导出数据失败', 'error');
+                }
+            }
+            
+            // 清空数据
+            async clearData() {
+                if (!confirm('确定要清空所有数据吗？此操作不可恢复！')) {
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`${this.apiBase}/api/clear`, {
+                        method: 'POST'
+                    });
+                    
+                    if (response.ok) {
+                        await this.addHistoryRecord('数据清空', '清除了所有系统数据');
+                        this.showNotification('数据已清空', 'success');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    }
+                } catch (error) {
+                    console.error('清空数据失败:', error);
+                    this.showNotification('清空数据失败', 'error');
+                }
+            }
+            
+            // 显示通知
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+        }
+
+        // 模拟服务器时间
+        class ServerTime {
+            constructor() {
+                this.offset = 0;
+                this.initialized = false;
+            }
+            
+            // 获取当前服务器时间
+            now() {
+                return new Date(Date.now() + this.offset);
+            }
+            
+            // 设置服务器时间
+            setTime(date) {
+                this.offset = date.getTime() - Date.now();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化数据库
+            const database = new TimerDatabase();
+            
+            // 初始化服务器时间
+            const serverTime = new ServerTime();
+            
+            // 初始状态
+            let startTime = new Date();
+            let currentPhase = 'reset';
+            let currentLights = [];
+            let countdownInterval;
+            let isAdmin = false;
+            
+            // 检查数据库连接
+            database.checkConnection().then(async () => {
+                // 从数据库加载设置
+                await loadSettings();
+            });
+            
+            // 从数据库加载设置
+            async function loadSettings() {
+                try {
+                    const settings = await database.getSettings();
+                    
+                    if (settings.startTime) {
+                        startTime = new Date(parseInt(settings.startTime));
+                        document.getElementById('start-time').value = formatDateTime(startTime);
+                    } else {
+                        // 如果没有保存的时间，使用服务器时间
+                        startTime = serverTime.now();
+                        document.getElementById('start-time').value = formatDateTime(startTime);
+                    }
+                    
+                    if (settings.initialPhase) {
+                        document.getElementById('initial-phase').value = settings.initialPhase;
+                    }
+                    
+                    if (settings.bgImage) {
+                        document.body.style.backgroundImage = `url(${settings.bgImage})`;
+                        document.getElementById('bg-image').value = settings.bgImage;
+                        document.getElementById('bg-preview').style.backgroundImage = `url(${settings.bgImage})`;
+                    }
+                    
+                    if (settings.calibrationTime) {
+                        document.getElementById('calibration-time').textContent = `校准时间: ${settings.calibrationTime}`;
+                    }
+                    
+                    if (settings.adminPassword) {
+                        // 密码已设置，不需要处理
+                    }
+                    
+                    initializeTimer(settings.initialPhase || '5-green');
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('页面加载', '用户访问了计时器系统');
+                } catch (error) {
+                    console.error('加载设置失败:', error);
+                    // 使用默认设置
+                    startTime = new Date();
+                    document.getElementById('start-time').value = formatDateTime(startTime);
+                    initializeTimer('5-green');
+                }
+            }
+            
+            // 保存设置到数据库
+            async function saveSettings() {
+                const settings = {
+                    startTime: startTime.getTime(),
+                    initialPhase: document.getElementById('initial-phase').value
+                };
+                
+                const newPassword = document.getElementById('admin-password').value;
+                if (newPassword) {
+                    settings.adminPassword = newPassword;
+                    document.getElementById('admin-password').value = '';
+                }
+                
+                const bgImage = document.getElementById('bg-image').value;
+                if (bgImage) {
+                    settings.bgImage = bgImage;
+                    document.body.style.backgroundImage = `url(${bgImage})`;
+                    document.getElementById('bg-preview').style.backgroundImage = `url(${bgImage})`;
+                }
+                
+                const success = await database.saveSettings(settings);
+                
+                if (success) {
+                    // 添加历史记录
+                    await database.addHistoryRecord('设置保存', '管理员修改了系统设置');
+                }
+            }
+            
+            // 更新校准时间显示
+            async function updateCalibrationTime() {
+                const now = new Date();
+                const calibrationTime = formatDateTimeFull(now);
+                
+                const settings = await database.getSettings();
+                settings.calibrationTime = calibrationTime;
+                await database.saveSettings(settings);
+                
+                document.getElementById('calibration-time').textContent = `校准时间: ${calibrationTime}`;
+                
+                // 添加历史记录
+                await database.addHistoryRecord('时间校准', `校准时间为: ${calibrationTime}`);
+            }
+            
+            // 阶段持续时间（分钟）
+            const PHASE_DURATIONS = {
+                reset: 120,      // 2小时 = 120分钟
+                card: 60,        // 1小时 = 60分钟
+                poweroff: 5      // 5分钟
+            };
+            
+            // 阶段配置
+            const PHASE_CONFIG = {
+                '5-red': { phase: 'reset', lights: ['red', 'red', 'red', 'red', 'red'], offset: 0 },
+                '1-green-4-red': { phase: 'reset', lights: ['green', 'red', 'red', 'red', 'red'], offset: 24 },
+                '2-green-3-red': { phase: 'reset', lights: ['green', 'green', 'red', 'red', 'red'], offset: 48 },
+                '3-green-2-red': { phase: 'reset', lights: ['green', 'green', 'green', 'red', 'red'], offset: 72 },
+                '4-green-1-red': { phase: 'reset', lights: ['green', 'green', 'green', 'green', 'red'], offset: 96 },
+                '5-green': { phase: 'card', lights: ['green', 'green', 'green', 'green', 'green'], offset: 0 },
+                '1-gray-4-green': { phase: 'card', lights: ['gray', 'green', 'green', 'green', 'green'], offset: 12 },
+                '2-gray-3-green': { phase: 'card', lights: ['gray', 'gray', 'green', 'green', 'green'], offset: 24 },
+                '3-gray-2-green': { phase: 'card', lights: ['gray', 'gray', 'gray', 'green', 'green'], offset: 36 },
+                '4-gray-1-green': { phase: 'card', lights: ['gray', 'gray', 'gray', 'gray', 'green'], offset: 48 },
+                '5-gray': { phase: 'poweroff', lights: ['gray', 'gray', 'gray', 'gray', 'gray'], offset: 0 }
+            };
+            
+            // 设置初始时间
+            document.getElementById('start-time').value = formatDateTime(startTime);
+            
+            // 更新计时器
+            document.getElementById('update-timer').addEventListener('click', async function() {
+                const newStartTime = new Date(document.getElementById('start-time').value);
+                const initialPhase = document.getElementById('initial-phase').value;
+                
+                if (isNaN(newStartTime.getTime())) {
+                    database.showNotification('请输入有效的时间', 'error');
+                    return;
+                }
+                
+                startTime = newStartTime;
+                
+                // 保存到数据库
+                const settings = await database.getSettings();
+                settings.startTime = startTime.getTime();
+                settings.initialPhase = initialPhase;
+                await database.saveSettings(settings);
+                
+                // 更新校准时间
+                await updateCalibrationTime();
+                
+                initializeTimer(initialPhase);
+                
+                // 添加历史记录
+                await database.addHistoryRecord('计时器更新', `设置开始时间为: ${formatDateTimeFull(startTime)}, 阶段: ${initialPhase}`);
+            });
+            
+            // 管理员登录按钮
+            document.getElementById('admin-login-btn').addEventListener('click', function() {
+                document.getElementById('login-modal').style.display = 'flex';
+            });
+            
+            // 取消登录
+            document.getElementById('cancel-login').addEventListener('click', function() {
+                document.getElementById('login-modal').style.display = 'none';
+                document.getElementById('login-password').value = '';
+            });
+            
+            // 登录
+            document.getElementById('login-btn').addEventListener('click', async function() {
+                const password = document.getElementById('login-password').value;
+                
+                // 从数据库获取密码
+                const settings = await database.getSettings();
+                const savedPassword = settings.adminPassword || 'Bcfxclub198511';
+                
+                if (password === savedPassword) {
+                    isAdmin = true;
+                    document.getElementById('admin-section').style.display = 'block';
+                    document.getElementById('login-modal').style.display = 'none';
+                    document.getElementById('login-password').value = '';
+                    database.showNotification('管理员登录成功', 'success');
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('管理员登录', '管理员成功登录系统');
+                } else {
+                    database.showNotification('密码错误', 'error');
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('登录失败', '尝试登录管理员账户失败');
+                }
+            });
+            
+            // 保存设置
+            document.getElementById('save-settings').addEventListener('click', saveSettings);
+            
+            // 预览背景
+            document.getElementById('preview-bg').addEventListener('click', function() {
+                const bgImage = document.getElementById('bg-image').value;
+                if (bgImage) {
+                    document.getElementById('bg-preview').style.backgroundImage = `url(${bgImage})`;
+                }
+            });
+            
+            // 导出数据
+            document.getElementById('export-data').addEventListener('click', function() {
+                database.exportData();
+            });
+            
+            // 清空数据
+            document.getElementById('clear-data').addEventListener('click', function() {
+                database.clearData();
+            });
+            
+            // 初始化计时器
+            function initializeTimer(initialPhaseKey) {
+                clearInterval(countdownInterval);
+                
+                const config = PHASE_CONFIG[initialPhaseKey];
+                currentPhase = config.phase;
+                currentLights = [...config.lights];
+                
+                // 计算偏移时间（分钟）
+                let offsetMinutes = config.offset;
+                
+                // 根据阶段调整偏移
+                if (config.phase === 'reset') {
+                    offsetMinutes = config.offset;
+                } else if (config.phase === 'card') {
+                    offsetMinutes = PHASE_DURATIONS.reset + config.offset;
+                } else if (config.phase === 'poweroff') {
+                    offsetMinutes = PHASE_DURATIONS.reset + PHASE_DURATIONS.card + config.offset;
+                }
+                
+                // 调整开始时间
+                const adjustedStartTime = new Date(startTime.getTime() - offsetMinutes * 60 * 1000);
+                
+                // 更新显示
+                updateDisplay(adjustedStartTime);
+                
+                // 计算并显示插卡窗口期
+                calculateCardWindows(adjustedStartTime);
+                
+                // 启动计时器
+                countdownInterval = setInterval(function() {
+                    updateDisplay(adjustedStartTime);
+                }, 1000);
+            }
+            
+            // 更新显示
+            function updateDisplay(adjustedStartTime) {
+                const now = serverTime.now();
+                const elapsedMs = now.getTime() - adjustedStartTime.getTime();
+                const totalCycleMs = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card + PHASE_DURATIONS.poweroff) * 60 * 1000;
+                
+                // 计算当前周期内的经过时间
+                const cycleElapsedMs = elapsedMs % totalCycleMs;
+                
+                // 确定当前阶段和剩余时间
+                let phaseTimeRemaining;
+                let phaseName;
+                let phaseIcon;
+                
+                // 计算当前插卡阶段开始时间
+                const currentCycleStart = new Date(now.getTime() - cycleElapsedMs);
+                const currentCardPhaseStart = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
+                document.getElementById('card-phase-start').innerHTML = `<i class="fas fa-play-circle"></i> 当前插卡阶段开始时间: ${formatDateTimeFull(currentCardPhaseStart)}`;
+                
+                if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 1000) {
+                    // 重置阶段
+                    currentPhase = 'reset';
+                    phaseName = '重置阶段';
+                    phaseIcon = 'fas fa-sync-alt';
+                    phaseTimeRemaining = PHASE_DURATIONS.reset * 60 * 1000 - cycleElapsedMs;
+                    
+                    // 计算灯的状态（每24分钟变化一次）
+                    const lightChangeInterval = 24 * 60 * 1000;
+                    const lightsChanged = Math.floor(cycleElapsedMs / lightChangeInterval);
+                    
+                    currentLights = Array(5).fill('red');
+                    for (let i = 0; i < Math.min(lightsChanged, 5); i++) {
+                        currentLights[i] = 'green';
+                    }
+                    
+                } else if (cycleElapsedMs < (PHASE_DURATIONS.reset + PHASE_DURATIONS.card) * 60 * 1000) {
+                    // 插卡阶段
+                    currentPhase = 'card';
+                    phaseName = '插卡阶段';
+                    phaseIcon = 'fas fa-credit-card';
+                    phaseTimeRemaining = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card) * 60 * 1000 - cycleElapsedMs;
+                    
+                    // 计算灯的状态（每12分钟变化一次）
+                    const cardPhaseElapsed = cycleElapsedMs - PHASE_DURATIONS.reset * 60 * 1000;
+                    const lightChangeInterval = 12 * 60 * 1000;
+                    const lightsChanged = Math.floor(cardPhaseElapsed / lightChangeInterval);
+                    
+                    currentLights = Array(5).fill('green');
+                    for (let i = 0; i < Math.min(lightsChanged, 5); i++) {
+                        currentLights[i] = 'gray';
+                    }
+                    
+                } else {
+                    // 断电阶段
+                    currentPhase = 'poweroff';
+                    phaseName = '断电阶段';
+                    phaseIcon = 'fas fa-power-off';
+                    phaseTimeRemaining = totalCycleMs - cycleElapsedMs;
+                    
+                    currentLights = Array(5).fill('gray');
+                }
+                
+                // 更新阶段指示器
+                const phaseIndicator = document.getElementById('phase-indicator');
+                phaseIndicator.innerHTML = `<i class="${phaseIcon}"></i> ${phaseName}`;
+                phaseIndicator.className = 'phase-indicator';
+                phaseIndicator.classList.add(`phase-${currentPhase}`);
+                
+                // 更新倒计时显示
+                const countdownElement = document.getElementById('countdown');
+                countdownElement.textContent = formatTimeRemaining(phaseTimeRemaining);
+                
+                // 更新灯的状态
+                updateLightsDisplay();
+            }
+            
+            // 更新灯的状态显示
+            function updateLightsDisplay() {
+                for (let i = 0; i < 5; i++) {
+                    const lightElement = document.getElementById(`light-${i}`);
+                    lightElement.className = 'light';
+                    lightElement.classList.add(currentLights[i]);
+                    
+                    // 移除所有活动状态，然后为当前灯添加活动状态
+                    if (currentLights[i] !== 'gray') {
+                        lightElement.classList.add('active');
+                    }
+                }
+            }
+            
+            // 计算插卡窗口期
+            function calculateCardWindows(adjustedStartTime) {
+                const windowList = document.getElementById('window-list');
+                windowList.innerHTML = '';
+                
+                const totalCycleMs = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card + PHASE_DURATIONS.poweroff) * 60 * 1000;
+                const firstGreenTime = new Date(adjustedStartTime.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
+                const now = serverTime.now();
+                
+                // 计算上一个窗口期
+                let previousWindowTime = new Date(firstGreenTime.getTime());
+                while (previousWindowTime.getTime() + totalCycleMs < now.getTime()) {
+                    previousWindowTime = new Date(previousWindowTime.getTime() + totalCycleMs);
+                }
+                
+                // 如果当前时间已经超过了第一个窗口期，则显示上一个窗口期
+                if (now.getTime() > firstGreenTime.getTime()) {
+                    const prevItem = document.createElement('li');
+                    prevItem.className = 'previous';
+                    prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个窗口期: ${formatDateTimeFull(previousWindowTime)}`;
+                    windowList.appendChild(prevItem);
+                }
+                
+                // 生成后续的7个5绿灯时间节点
+                for (let i = 0; i < 7; i++) {
+                    const windowTime = new Date(previousWindowTime.getTime() + (i + 1) * totalCycleMs);
+                    const listItem = document.createElement('li');
+                    
+                    if (i === 0) {
+                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个窗口期: ${formatDateTimeFull(windowTime)}`;
+                    } else {
+                        listItem.innerHTML = `<i class="fas fa-window-restore"></i> 窗口期 ${i}: ${formatDateTimeFull(windowTime)}`;
+                    }
+                    
+                    windowList.appendChild(listItem);
+                }
+            }
+            
+            // 格式化剩余时间
+            function formatTimeRemaining(ms) {
+                const totalSeconds = Math.floor(ms / 1000);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                
+                return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+            }
+            
+            // 格式化日期时间（用于输入框）
+            function formatDateTime(date) {
+                const year = date.getFullYear();
+                const month = padZero(date.getMonth() + 1);
+                const day = padZero(date.getDate());
+                const hours = padZero(date.getHours());
+                const minutes = padZero(date.getMinutes());
+                
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+            
+            // 格式化完整日期时间（用于显示）
+            function formatDateTimeFull(date) {
+                const year = date.getFullYear();
+                const month = padZero(date.getMonth() + 1);
+                const day = padZero(date.getDate());
+                const hours = padZero(date.getHours());
+                const minutes = padZero(date.getMinutes());
+                
+                return `${year}-${month}-${day} ${hours}:${minutes}`;
+            }
+            
+            // 补零函数
+            function padZero(num) {
+                return num.toString().padStart(2, '0');
+            }
+        });
+    </script>
+</body>
+</html>
