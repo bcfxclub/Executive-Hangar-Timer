@@ -2,9 +2,12 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>行政机库计时器系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 预连接关键域 -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://your-worker-name.your-subdomain.workers.dev" crossorigin>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -24,6 +27,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -35,6 +39,8 @@
             transition: background-image 0.5s ease;
             background-size: cover;
             background-position: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .container {
@@ -44,13 +50,13 @@
         }
         
         header {
-            background: rgba(255, 255, 255, 0.1); /* 透明背景 */
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            padding: 1.5rem;
+            padding: 1rem;
             text-align: center;
             border-radius: 12px;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px); /* 毛玻璃效果 */
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
@@ -65,7 +71,7 @@
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -75,15 +81,17 @@
         }
         
         .phase-indicator {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: 15px;
+            padding: 12px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            width: 100%;
+            word-break: break-word;
         }
         
         .phase-reset {
@@ -105,41 +113,76 @@
         }
         
         .countdown {
-            font-size: 4rem;
+            font-size: 3rem;
             font-weight: bold;
-            margin: 25px 0;
+            margin: 20px 0;
             color: var(--primary-color);
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 100%;
+            word-break: break-word;
+        }
+        
+        @media (max-width: 768px) {
+            .countdown {
+                font-size: 2.5rem;
+            }
+            
+            .phase-indicator {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .countdown {
+                font-size: 2rem;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 0.8rem;
+            }
         }
         
         .phase-start-time {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 1rem;
+            margin-bottom: 15px;
             color: var(--text-dark);
             background: rgba(255, 255, 255, 0.8);
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
             display: inline-block;
+            width: 100%;
+            word-break: break-word;
         }
         
         .lights-container {
             display: flex;
             justify-content: center;
-            margin: 30px 0;
-            gap: 15px;
+            margin: 20px 0;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .light {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
+        }
+        
+        @media (max-width: 480px) {
+            .light {
+                width: 40px;
+                height: 40px;
+            }
         }
         
         .light.active {
@@ -163,36 +206,44 @@
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
+            padding: 20px;
             margin-top: 20px;
         }
         
         .card-windows h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: var(--primary-color);
             border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.5rem;
         }
         
         .window-list {
             list-style-type: none;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        
+        @media (max-width: 480px) {
+            .window-list {
+                grid-template-columns: 1fr;
+            }
         }
         
         .window-list li {
             background-color: var(--panel-bg);
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--card-color);
+            word-break: break-word;
         }
         
         .window-list li.previous {
@@ -202,7 +253,8 @@
         
         .window-list li i {
             color: var(--card-color);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            flex-shrink: 0;
         }
         
         .window-list li.previous i {
@@ -211,28 +263,30 @@
         
         .info-text {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 12px;
             color: var(--text-light);
             font-style: italic;
+            font-size: 0.9rem;
         }
         
         .status-indicators {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
         
         .status-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 6px;
+            font-size: 0.8rem;
         }
         
         .status-color {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
         }
         
@@ -263,6 +317,7 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
+            font-size: 0.9rem;
         }
         
         .admin-login-btn:hover {
@@ -281,32 +336,38 @@
             z-index: 1001;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
         
         .modal-content {
             background-color: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
-            width: 90%;
+            width: 100%;
             max-width: 500px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: var(--primary-color);
             text-align: center;
+            font-size: 1.5rem;
         }
         
         .modal-buttons {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
         
         .modal-buttons button {
             width: auto;
             flex: 1;
+            min-width: 120px;
         }
         
         .cancel-btn {
@@ -318,37 +379,39 @@
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
+            padding: 20px;
             margin-top: 20px;
         }
         
         .admin-section h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: var(--primary-color);
             border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.5rem;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
             color: var(--text-dark);
+            font-size: 0.9rem;
         }
         
         input[type="datetime-local"], select, input[type="password"], input[type="text"] {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             transition: border-color 0.3s;
         }
         
@@ -361,10 +424,10 @@
             background: linear-gradient(to right, var(--secondary-color), #2980b9);
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 12px 18px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s;
             width: 100%;
@@ -378,38 +441,39 @@
         
         .bg-preview {
             width: 100%;
-            height: 150px;
+            height: 120px;
             background-size: cover;
             background-position: center;
             border-radius: 8px;
-            margin-top: 10px;
+            margin-top: 8px;
             border: 2px dashed #ddd;
         }
         
         .card-phase-start {
-            font-size: 1.1rem;
-            margin: 15px 0;
-            padding: 10px;
+            font-size: 1rem;
+            margin: 12px 0;
+            padding: 8px;
             background: rgba(46, 204, 113, 0.1);
             border-radius: 8px;
             border-left: 4px solid var(--card-color);
+            word-break: break-word;
         }
         
         .calibration-time {
             position: absolute;
-            bottom: 15px;
-            left: 15px;
-            font-size: 0.9rem;
+            bottom: 12px;
+            left: 12px;
+            font-size: 0.8rem;
             color: var(--text-light);
             background: rgba(255, 255, 255, 0.8);
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 5px;
         }
         
         .window-status {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--text-light);
-            margin-top: 10px;
+            margin-top: 8px;
             text-align: center;
         }
         
@@ -418,16 +482,17 @@
             bottom: 20px;
             left: 20px;
             background: rgba(255, 255, 255, 0.8);
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 5px;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--text-light);
+            z-index: 999;
         }
         
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 3px solid rgba(255,255,255,.3);
             border-radius: 50%;
             border-top-color: #fff;
@@ -442,17 +507,51 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 15px;
+            padding: 12px;
             border-radius: 5px;
             color: white;
             background-color: var(--secondary-color);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             z-index: 1002;
             transition: opacity 0.3s;
+            max-width: 80%;
+            word-break: break-word;
+        }
+        
+        .browser-compatibility {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ff9800;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            z-index: 2000;
+        }
+        
+        /* 兼容性修复 */
+        input, button, select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        /* 防止缩放 */
+        @media screen and (max-width: 480px) {
+            input, select, textarea {
+                font-size: 16px !important; /* 防止iOS缩放 */
+            }
         }
     </style>
 </head>
 <body id="body">
+    <!-- 浏览器兼容性提示 -->
+    <div class="browser-compatibility" id="browser-compatibility">
+        您的浏览器可能不完全兼容本网站，建议使用Chrome、Firefox或Safari等现代浏览器
+    </div>
+    
     <div class="container">
         <header>
             <h1><i class="fas fa-clock"></i> 行政机库计时器系统</h1>
@@ -589,6 +688,29 @@
     </div>
 
     <script>
+        // 浏览器兼容性检查
+        function checkBrowserCompatibility() {
+            const isCompatible = 
+                'Promise' in window &&
+                'fetch' in window &&
+                'localStorage' in window &&
+                'CSS' in window && 
+                'supports' in CSS &&
+                CSS.supports('display', 'grid');
+            
+            if (!isCompatible) {
+                document.getElementById('browser-compatibility').style.display = 'block';
+            }
+            
+            return isCompatible;
+        }
+        
+        // 初始化检查
+        if (!checkBrowserCompatibility()) {
+            // 如果不兼容，显示提示但继续运行
+            console.warn('浏览器兼容性警告：某些功能可能无法正常工作');
+        }
+        
         // Cloudflare Workers API 配置
         const API_BASE = 'https://time.bcfx.dpdns.org'; // 请替换为您的Worker URL
         
@@ -602,7 +724,13 @@
             // 检查数据库连接
             async checkConnection() {
                 try {
-                    const response = await fetch(`${this.apiBase}/api/health`);
+                    const response = await fetch(`${this.apiBase}/api/health`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
                     if (response.ok) {
                         this.isConnected = true;
                         document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> 数据库: 已连接';
@@ -620,7 +748,13 @@
             // 获取设置
             async getSettings() {
                 try {
-                    const response = await fetch(`${this.apiBase}/api/settings`);
+                    const response = await fetch(`${this.apiBase}/api/settings`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
                     if (response.ok) {
                         return await response.json();
                     }
@@ -656,7 +790,13 @@
             // 获取历史记录
             async getHistory() {
                 try {
-                    const response = await fetch(`${this.apiBase}/api/history`);
+                    const response = await fetch(`${this.apiBase}/api/history`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
                     if (response.ok) {
                         return await response.json();
                     }
