@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>行政机库计时器系统</title>
+    <title>星际公民行政机库计时系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 预连接关键域 -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -554,7 +554,7 @@
     
     <div class="container">
         <header>
-            <h1><i class="fas fa-clock"></i> 行政机库计时器系统</h1>
+            <h1><i class="fas fa-clock"></i> 星际公民行政机库计时系统</h1>
         </header>
         
         <div class="main-content">
@@ -565,7 +565,7 @@
                 <div id="countdown" class="countdown">02:00:00</div>
                 
                 <div class="card-phase-start" id="card-phase-start">
-                    <i class="fas fa-play-circle"></i> 当前机库开启时间: 计算中...
+                    <i class="fas fa-play-circle"></i> 机库开启时间: 计算中...
                 </div>
                 
                 <div class="lights-container" id="lights-container">
@@ -1181,7 +1181,7 @@
                 // 计算当前插卡阶段开始时间
                 const currentCycleStart = new Date(now.getTime() - cycleElapsedMs);
                 const currentCardPhaseStart = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
-                document.getElementById('card-phase-start').innerHTML = `<i class="fas fa-play-circle"></i> 当前插卡阶段开始时间: ${formatDateTimeFull(currentCardPhaseStart)}`;
+                document.getElementById('card-phase-start').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentCardPhaseStart)}`;
                 
                 if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 1000) {
                     // 重置阶段
