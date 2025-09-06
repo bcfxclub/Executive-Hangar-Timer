@@ -2,41 +2,38 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>行政机库计时器系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
             --reset-color: #e74c3c;
             --card-color: #2ecc71;
             --poweroff-color: #7f8c8d;
             --light-off: #bdc3c7;
             --light-on: #ffffff;
-            --panel-bg: rgba(255, 255, 255, 0.95);
-            --text-dark: #2d3748;
-            --text-light: #718096;
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --panel-bg: rgba(255, 255, 255, 0.92);
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --notification-bg: rgba(255, 247, 200, 0.95);
         }
         
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: url('https://your-image-url/wallpaper.jpg') no-repeat center center fixed;
+            background: url('https://your-cloudflare-pages-url.pages.dev/wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
             color: var(--text-dark);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
-            background-color: #ffffff;
         }
         
         .container {
@@ -51,23 +48,25 @@
         }
         
         .logo {
-            max-width: 120px;
-            max-height: 120px;
-            border-radius: 50%;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 3px solid white;
+            width: 120px;
+            height: 120px;
+            border: 3px solid var(--primary-color);
+            border-radius: 10px;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         
         header {
-            background: var(--glass-bg);
-            color: white;
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--text-dark);
             padding: 1.2rem;
             text-align: center;
-            border-radius: 16px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .main-content {
@@ -77,8 +76,9 @@
         }
         
         .timer-display {
-            background: var(--glass-bg);
-            border-radius: 16px;
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             text-align: center;
             display: flex;
@@ -86,99 +86,64 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         
         .phase-indicator {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: bold;
             margin-bottom: 20px;
-            padding: 15px 20px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .phase-reset {
-            background: rgba(231, 76, 60, 0.7);
+            background-color: rgba(231, 76, 60, 0.15);
+            color: var(--reset-color);
+            border: 2px solid var(--reset-color);
         }
         
         .phase-card {
-            background: rgba(46, 204, 113, 0.7);
+            background-color: rgba(46, 204, 113, 0.15);
+            color: var(--card-color);
+            border: 2px solid var(--card-color);
         }
         
         .phase-poweroff {
-            background: rgba(127, 140, 141, 0.7);
+            background-color: rgba(127, 140, 141, 0.15);
+            color: var(--poweroff-color);
+            border: 2px solid var(--poweroff-color);
         }
         
         .countdown {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: bold;
-            margin: 20px 0;
-            color: white;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            margin: 25px 0;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 100%;
-        }
-        
-        @media (max-width: 768px) {
-            .countdown {
-                font-size: 2.8rem;
-            }
-            
-            .phase-indicator {
-                font-size: 1.4rem;
-            }
-        }
-        
-        .card-phase-start {
-            font-size: 1.1rem;
-            margin: 15px 0;
-            padding: 12px 20px;
-            background: var(--glass-bg);
-            border-radius: 12px;
-            border-left: 4px solid var(--card-color);
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
-            width: 100%;
-            text-align: center;
         }
         
         .lights-container {
             display: flex;
             justify-content: center;
-            margin: 25px 0;
-            gap: 12px;
-            flex-wrap: wrap;
+            margin: 30px 0;
+            gap: 15px;
         }
         
         .light {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-        }
-        
-        @media (max-width: 768px) {
-            .light {
-                width: 40px;
-                height: 40px;
-            }
         }
         
         .light.active {
@@ -199,52 +164,44 @@
         }
         
         .card-windows {
-            background: var(--glass-bg);
-            border-radius: 16px;
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-top: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         
         .card-windows h2 {
             margin-bottom: 20px;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
-            justify-content: center;
-            border-bottom: 1px solid var(--glass-border);
         }
         
         .window-list {
             list-style-type: none;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 15px;
         }
         
         .window-list li {
-            background: var(--glass-bg);
+            background-color: rgba(236, 240, 241, 0.8);
             padding: 15px;
-            border-radius: 12px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--card-color);
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
         }
         
         .window-list li.previous {
             border-left: 4px solid var(--reset-color);
-            background: rgba(231, 76, 60, 0.3);
+            background-color: rgba(231, 76, 60, 0.1);
         }
         
         .window-list li i {
@@ -256,34 +213,11 @@
             color: var(--reset-color);
         }
         
-        .notification-container {
-            background: var(--glass-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        .notification-container h2 {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 10px;
-        }
-        
-        .notification-content {
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            min-height: 100px;
-            line-height: 1.6;
+        .info-text {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--text-light);
+            font-style: italic;
         }
         
         .status-indicators {
@@ -291,7 +225,6 @@
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
-            flex-wrap: wrap;
         }
         
         .status-item {
@@ -299,18 +232,11 @@
             align-items: center;
             gap: 8px;
             font-size: 0.9rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            padding: 8px 15px;
-            border-radius: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
         }
         
         .status-color {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
         }
         
@@ -331,18 +257,16 @@
             bottom: 20px;
             right: 20px;
             width: auto;
-            padding: 12px 20px;
+            padding: 10px 15px;
             background: rgba(52, 152, 219, 0.9);
             z-index: 1000;
             border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             color: white;
             border: none;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
         }
         
         .admin-login-btn:hover {
@@ -361,18 +285,15 @@
             z-index: 1001;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
         
         .modal-content {
             background-color: white;
             padding: 30px;
-            border-radius: 16px;
-            width: 100%;
+            border-radius: 12px;
+            width: 90%;
             max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            max-height: 90vh;
-            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .modal h2 {
@@ -398,9 +319,9 @@
         
         .admin-section {
             display: none;
-            background: var(--panel-bg);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-top: 20px;
         }
@@ -419,14 +340,13 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin-bottom: 25px;
         }
         
         .admin-card {
-            background: white;
-            border-radius: 12px;
+            background: rgba(236, 240, 241, 0.8);
+            border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .admin-card h3 {
@@ -434,7 +354,7 @@
             color: var(--primary-color);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         
         .form-group {
@@ -457,13 +377,14 @@
             transition: border-color 0.3s;
         }
         
-        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, input[type="text"]:focus, textarea:focus {
+        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, 
+        input[type="text"]:focus, textarea:focus {
             border-color: var(--secondary-color);
             outline: none;
         }
         
         textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
         
@@ -471,10 +392,10 @@
             background: linear-gradient(to right, var(--secondary-color), #2980b9);
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 12px 18px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             transition: all 0.3s;
             width: 100%;
@@ -484,6 +405,11 @@
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        button.small {
+            padding: 8px 12px;
+            font-size: 0.9rem;
         }
         
         .bg-preview {
@@ -496,14 +422,13 @@
             border: 2px dashed #ddd;
         }
         
-        .logo-preview {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #ddd;
-            margin: 10px auto;
-            display: block;
+        .card-phase-start {
+            font-size: 1.1rem;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(46, 204, 113, 0.1);
+            border-radius: 8px;
+            display: inline-block;
         }
         
         .calibration-time {
@@ -511,19 +436,15 @@
             bottom: 15px;
             left: 15px;
             font-size: 0.9rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            background: var(--glass-bg);
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.8);
             padding: 5px 10px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
+            border-radius: 5px;
         }
         
         .window-status {
             font-size: 0.9rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            color: var(--text-light);
             margin-top: 10px;
             text-align: center;
         }
@@ -532,79 +453,87 @@
             position: fixed;
             bottom: 20px;
             left: 20px;
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.8);
             padding: 5px 10px;
-            border-radius: 20px;
+            border-radius: 5px;
             font-size: 0.8rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
+            color: var(--text-light);
         }
         
-        /* 移动设备优化 */
-        @media (max-width: 480px) {
-            body {
+        .notification {
+            background-color: var(--notification-bg);
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .notification h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #d35400;
+        }
+        
+        .notification-content {
+            line-height: 1.5;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .container {
                 padding: 10px;
-            }
-            
-            header {
-                padding: 1rem;
-            }
-            
-            .timer-display, .card-windows, .admin-section, .notification-container {
-                padding: 15px;
             }
             
             .countdown {
                 font-size: 2.5rem;
             }
             
-            .phase-indicator {
-                font-size: 1.2rem;
-                padding: 12px 15px;
+            .light {
+                width: 40px;
+                height: 40px;
             }
             
             .admin-cards {
                 grid-template-columns: 1fr;
             }
             
-            .admin-login-btn {
-                bottom: 10px;
-                right: 10px;
-                padding: 10px 16px;
-                font-size: 0.9rem;
+            .window-list {
+                grid-template-columns: 1fr;
             }
             
-            .db-status {
-                bottom: 10px;
-                left: 10px;
-                font-size: 0.7rem;
+            header {
+                padding: 1rem;
             }
-        }
-        
-        /* 防止iOS缩放 */
-        input, select, textarea {
-            font-size: 16px !important;
-        }
-        
-        /* 防止移动浏览器工具栏遮挡内容 */
-        .vh100 {
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
         }
     </style>
 </head>
-<body class="vh100">
-    <div class="container vh100">
+<body id="body">
+    <div class="container">
+        <!-- Logo -->
         <div class="logo-container">
-            <img id="logo-img" class="logo" src="" alt="系统Logo">
+            <img id="logo" class="logo" src="" alt="机库系统Logo">
         </div>
-        
+
         <header>
-            <h1 id="header-title">行政机库计时器系统</h1>
+            <h1 id="header-title"><i class="fas fa-clock"></i> 行政机库计时器系统</h1>
         </header>
         
+        <!-- 系统通知 -->
+        <div class="notification" id="notification">
+            <h3><i class="fas fa-bullhorn"></i> 系统通知</h3>
+            <div class="notification-content" id="notification-content">
+                通知加载中...
+            </div>
+        </div>
+
         <div class="main-content">
             <div class="timer-display">
                 <div id="phase-indicator" class="phase-indicator phase-reset">
@@ -659,25 +588,18 @@
                 </ul>
             </div>
             
-            <div class="notification-container">
-                <h2><i class="fas fa-bullhorn"></i> 系统通知</h2>
-                <div class="notification-content" id="notification-content">
-                    通知加载中...
-                </div>
-            </div>
-            
             <div class="admin-section" id="admin-section">
                 <h2><i class="fas fa-cog"></i> 后台管理</h2>
                 
                 <div class="admin-cards">
                     <div class="admin-card">
-                        <h3><i class="fas fa-calendar-alt"></i> 时间设置</h3>
+                        <h3><i class="fas fa-sliders-h"></i> 基本设置</h3>
                         <div class="form-group">
-                            <label for="start-time">开始时间</label>
+                            <label for="start-time"><i class="fas fa-calendar-alt"></i> 开始时间</label>
                             <input type="datetime-local" id="start-time">
                         </div>
                         <div class="form-group">
-                            <label for="initial-phase">初始阶段</label>
+                            <label for="initial-phase"><i class="fas fa-list-alt"></i> 初始阶段</label>
                             <select id="initial-phase">
                                 <option value="5-red">5红灯</option>
                                 <option value="1-green-4-red">1绿灯4红灯</option>
@@ -696,64 +618,60 @@
                             <i class="fas fa-sync"></i> 更新计时器
                         </button>
                     </div>
-                    
+
                     <div class="admin-card">
-                        <h3><i class="fas fa-bullhorn"></i> 通知管理</h3>
+                        <h3><i class="fas fa-bell"></i> 通知管理</h3>
                         <div class="form-group">
-                            <label for="notification">系统通知内容</label>
-                            <textarea id="notification" placeholder="输入系统通知内容"></textarea>
+                            <label for="notification-content"><i class="fas fa-comment"></i> 系统通知</label>
+                            <textarea id="notification-content" rows="4" placeholder="输入系统通知内容"></textarea>
                         </div>
-                        <button id="save-notification">
-                            <i class="fas fa-save"></i> 保存通知
+                        <button id="update-notification">
+                            <i class="fas fa-save"></i> 更新通知
                         </button>
                     </div>
-                    
+
                     <div class="admin-card">
-                        <h3><i class="fas fa-image"></i> 界面设置</h3>
+                        <h3><i class="fas fa-paint-brush"></i> 外观设置</h3>
                         <div class="form-group">
-                            <label for="header-title-input">系统标题</label>
+                            <label for="header-title-input"><i class="fas fa-heading"></i> 系统标题</label>
                             <input type="text" id="header-title-input" placeholder="输入系统标题">
                         </div>
                         <div class="form-group">
-                            <label for="logo-url">Logo URL</label>
-                            <input type="text" id="logo-url" placeholder="输入Logo图片URL">
-                            <img id="logo-preview" class="logo-preview" src="" alt="Logo预览">
+                            <label for="logo-upload"><i class="fas fa-upload"></i> 上传Logo</label>
+                            <input type="file" id="logo-upload" accept="image/*">
                         </div>
                         <div class="form-group">
-                            <label for="bg-image">背景图片URL</label>
-                            <input type="text" id="bg-image" placeholder="输入背景图片URL">
-                            <button id="preview-bg">预览背景</button>
+                            <label for="bg-image"><i class="fas fa-image"></i> 背景图片URL</label>
+                            <input type="text" id="bg-image" placeholder="输入图片URL">
+                            <button id="preview-bg" class="small">预览背景</button>
                             <div class="bg-preview" id="bg-preview"></div>
                         </div>
                         <button id="save-settings">
                             <i class="fas fa-save"></i> 保存设置
                         </button>
                     </div>
-                    
+
                     <div class="admin-card">
-                        <h3><i class="fas fa-key"></i> 安全管理</h3>
+                        <h3><i class="fas fa-database"></i> 数据管理</h3>
                         <div class="form-group">
-                            <label for="admin-password">管理密码</label>
+                            <label for="admin-password"><i class="fas fa-key"></i> 管理密码</label>
                             <input type="password" id="admin-password" placeholder="输入新密码">
                         </div>
-                        <div class="form-group">
-                            <label>数据库操作</label>
-                            <div style="display: flex; flex-direction: column; gap: 10px;">
-                                <button id="export-data">
-                                    <i class="fas fa-download"></i> 导出数据
-                                </button>
-                                <button id="import-data">
-                                    <i class="fas fa-upload"></i> 导入数据
-                                </button>
-                                <button id="clear-data" style="background: var(--reset-color);">
-                                    <i class="fas fa-trash"></i> 清空数据
-                                </button>
-                            </div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button id="export-data" class="small">
+                                <i class="fas fa-download"></i> 导出数据
+                            </button>
+                            <button id="import-data" class="small">
+                                <i class="fas fa-upload"></i> 导入数据
+                            </button>
+                            <button id="clear-data" class="small" style="background: var(--reset-color);">
+                                <i class="fas fa-trash"></i> 清空数据
+                            </button>
                         </div>
                     </div>
                 </div>
                 
-                <p class="info-text">修改设置后请点击相应按钮保存更改</p>
+                <p class="info-text">修改设置后请点击"更新计时器"按钮应用更改</p>
             </div>
         </div>
     </div>
@@ -763,7 +681,7 @@
     </button>
 
     <div class="db-status" id="db-status">
-        <i class="fas fa-database"></i> 数据库: 连接中...
+        <i class="fas fa-database"></i> 数据库: 已连接
     </div>
 
     <div class="modal" id="login-modal">
@@ -783,42 +701,21 @@
     <input type="file" id="import-file" style="display: none;" accept=".json">
 
     <script>
-        // API基础URL - 部署时需要修改为您的Cloudflare Worker URL
-        const API_BASE = 'https://time.bcfx.dpdns.org';
-        
+        // 全局配置
+        const API_BASE = 'https://time.bcfx.dpdns.org'; // 替换为您的Worker URL
+
         // 数据库类 - 使用Cloudflare Workers API
         class TimerDatabase {
             constructor() {
                 this.apiBase = API_BASE;
             }
             
-            // 通用API请求方法
-            async apiRequest(endpoint, options = {}) {
-                try {
-                    const url = `${this.apiBase}${endpoint}`;
-                    const response = await fetch(url, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            ...options.headers
-                        },
-                        ...options
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`API请求失败: ${response.status}`);
-                    }
-                    
-                    return await response.json();
-                } catch (error) {
-                    console.error('API请求错误:', error);
-                    throw error;
-                }
-            }
-            
             // 获取设置
             async getSettings() {
                 try {
-                    return await this.apiRequest('/api/settings');
+                    const response = await fetch(`${this.apiBase}/api/settings`);
+                    if (!response.ok) throw new Error('获取设置失败');
+                    return await response.json();
                 } catch (error) {
                     console.error('获取设置失败:', error);
                     return {};
@@ -828,22 +725,26 @@
             // 保存设置
             async saveSettings(settings) {
                 try {
-                    await this.apiRequest('/api/settings', {
+                    const response = await fetch(`${this.apiBase}/api/settings`, {
                         method: 'POST',
-                        body: JSON.stringify(settings)
+                        body: JSON.stringify(settings),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     });
-                    return true;
+                    if (!response.ok) throw new Error('保存设置失败');
                 } catch (error) {
                     console.error('保存设置失败:', error);
-                    return false;
+                    throw error;
                 }
             }
             
             // 获取通知
             async getNotification() {
                 try {
-                    const data = await this.apiRequest('/api/notification');
-                    return data.content || '';
+                    const response = await fetch(`${this.apiBase}/api/notification`);
+                    if (!response.ok) throw new Error('获取通知失败');
+                    return await response.text();
                 } catch (error) {
                     console.error('获取通知失败:', error);
                     return '';
@@ -851,23 +752,28 @@
             }
             
             // 保存通知
-            async saveNotification(content) {
+            async saveNotification(notification) {
                 try {
-                    await this.apiRequest('/api/notification', {
+                    const response = await fetch(`${this.apiBase}/api/notification`, {
                         method: 'POST',
-                        body: JSON.stringify({ content })
+                        body: notification,
+                        headers: {
+                            'Content-Type': 'text/plain'
+                        }
                     });
-                    return true;
+                    if (!response.ok) throw new Error('保存通知失败');
                 } catch (error) {
                     console.error('保存通知失败:', error);
-                    return false;
+                    throw error;
                 }
             }
             
             // 获取历史记录
             async getHistory() {
                 try {
-                    return await this.apiRequest('/api/history');
+                    const response = await fetch(`${this.apiBase}/api/history`);
+                    if (!response.ok) throw new Error('获取历史记录失败');
+                    return await response.json();
                 } catch (error) {
                     console.error('获取历史记录失败:', error);
                     return [];
@@ -877,21 +783,56 @@
             // 添加历史记录
             async addHistoryRecord(action, details) {
                 try {
-                    await this.apiRequest('/api/history', {
+                    const response = await fetch(`${this.apiBase}/api/history`, {
                         method: 'POST',
-                        body: JSON.stringify({ action, details })
+                        body: JSON.stringify({ action, details }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     });
-                    return true;
+                    if (!response.ok) throw new Error('添加历史记录失败');
                 } catch (error) {
                     console.error('添加历史记录失败:', error);
-                    return false;
+                }
+            }
+            
+            // 获取Logo
+            async getLogo() {
+                try {
+                    const response = await fetch(`${this.apiBase}/api/logo`);
+                    if (!response.ok) throw new Error('获取Logo失败');
+                    return await response.text();
+                } catch (error) {
+                    console.error('获取Logo失败:', error);
+                    return '';
+                }
+            }
+            
+            // 上传Logo
+            async uploadLogo(file) {
+                try {
+                    const formData = new FormData();
+                    formData.append('logo', file);
+                    
+                    const response = await fetch(`${this.apiBase}/api/logo`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (!response.ok) throw new Error('上传Logo失败');
+                    return await response.text();
+                } catch (error) {
+                    console.error('上传Logo失败:', error);
+                    throw error;
                 }
             }
             
             // 导出数据
             async exportData() {
                 try {
-                    const data = await this.apiRequest('/api/export');
+                    const response = await fetch(`${this.apiBase}/api/export`);
+                    if (!response.ok) throw new Error('导出数据失败');
+                    
+                    const data = await response.json();
                     const dataStr = JSON.stringify(data, null, 2);
                     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
                     
@@ -902,56 +843,44 @@
                     linkElement.setAttribute('download', exportFileDefaultName);
                     linkElement.click();
                     
-                    await this.addHistoryRecord('数据导出', '导出了系统数据备份');
                     return true;
                 } catch (error) {
                     console.error('导出数据失败:', error);
-                    alert('导出数据失败，请检查控制台获取详细信息');
-                    return false;
+                    throw error;
                 }
             }
             
             // 导入数据
             async importData(file) {
                 try {
-                    const reader = new FileReader();
-                    return new Promise((resolve) => {
-                        reader.onload = async (e) => {
-                            try {
-                                const data = JSON.parse(e.target.result);
-                                await this.apiRequest('/api/import', {
-                                    method: 'POST',
-                                    body: JSON.stringify(data)
-                                });
-                                
-                                await this.addHistoryRecord('数据导入', '导入了系统数据备份');
-                                alert('数据导入成功！页面将重新加载。');
-                                window.location.reload();
-                                resolve(true);
-                            } catch (error) {
-                                console.error('导入数据失败:', error);
-                                alert('导入失败：文件格式错误！');
-                                resolve(false);
-                            }
-                        };
-                        reader.readAsText(file);
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    const response = await fetch(`${this.apiBase}/api/import`, {
+                        method: 'POST',
+                        body: formData
                     });
+                    
+                    if (!response.ok) throw new Error('导入数据失败');
+                    return true;
                 } catch (error) {
                     console.error('导入数据失败:', error);
-                    alert('导入数据失败，请检查控制台获取详细信息');
-                    return false;
+                    throw error;
                 }
             }
             
-            // 检查数据库连接状态
-            async checkStatus() {
+            // 清空数据
+            async clearData() {
                 try {
-                    await this.apiRequest('/api/status');
-                    document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> 数据库: 已连接';
+                    const response = await fetch(`${this.apiBase}/api/clear`, {
+                        method: 'POST'
+                    });
+                    
+                    if (!response.ok) throw new Error('清空数据失败');
                     return true;
                 } catch (error) {
-                    document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> 数据库: 连接失败';
-                    return false;
+                    console.error('清空数据失败:', error);
+                    throw error;
                 }
             }
         }
@@ -961,6 +890,13 @@
             constructor() {
                 this.offset = 0;
                 this.initialized = false;
+                this.init();
+            }
+            
+            // 初始化服务器时间
+            init() {
+                // 从API获取服务器时间
+                this.initialized = true;
             }
             
             // 获取当前服务器时间
@@ -987,11 +923,9 @@
             let currentLights = [];
             let countdownInterval;
             let isAdmin = false;
+            const DEFAULT_PASSWORD = 'Bcfxclub198511';
             
-            // 检查数据库状态
-            database.checkStatus();
-            
-            // 从数据库加载设置
+            // 从API加载设置
             async function loadSettings() {
                 try {
                     const settings = await database.getSettings();
@@ -1023,17 +957,17 @@
                         document.getElementById('header-title-input').value = settings.headerTitle;
                     }
                     
-                    if (settings.logoUrl) {
-                        document.getElementById('logo-img').src = settings.logoUrl;
-                        document.getElementById('logo-preview').src = settings.logoUrl;
-                        document.getElementById('logo-url').value = settings.logoUrl;
-                    }
-                    
                     // 加载通知
                     const notification = await database.getNotification();
                     if (notification) {
                         document.getElementById('notification-content').textContent = notification;
-                        document.getElementById('notification').value = notification;
+                        document.getElementById('notification-content').value = notification;
+                    }
+                    
+                    // 加载Logo
+                    const logoUrl = await database.getLogo();
+                    if (logoUrl) {
+                        document.getElementById('logo').src = logoUrl;
                     }
                     
                     initializeTimer(settings.initialPhase || '5-green');
@@ -1042,75 +976,59 @@
                     await database.addHistoryRecord('页面加载', '用户访问了计时器系统');
                 } catch (error) {
                     console.error('加载设置失败:', error);
-                    alert('加载设置失败，使用默认设置');
-                    
-                    startTime = serverTime.now();
-                    document.getElementById('start-time').value = formatDateTime(startTime);
-                    initializeTimer('5-green');
+                    alert('加载设置失败，请刷新页面重试');
                 }
             }
             
-            // 保存设置到数据库
+            // 保存设置到API
             async function saveSettings() {
-                const settings = {
-                    startTime: startTime.getTime(),
-                    initialPhase: document.getElementById('initial-phase').value,
-                    bgImage: document.getElementById('bg-image').value,
-                    headerTitle: document.getElementById('header-title-input').value,
-                    logoUrl: document.getElementById('logo-url').value
-                };
-                
-                const newPassword = document.getElementById('admin-password').value;
-                if (newPassword) {
-                    settings.adminPassword = newPassword;
-                    document.getElementById('admin-password').value = '';
-                }
-                
-                const success = await database.saveSettings(settings);
-                if (success) {
+                try {
+                    const settings = {
+                        startTime: startTime.getTime(),
+                        initialPhase: document.getElementById('initial-phase').value,
+                        bgImage: document.getElementById('bg-image').value,
+                        headerTitle: document.getElementById('header-title-input').value
+                    };
+                    
+                    const newPassword = document.getElementById('admin-password').value;
+                    if (newPassword) {
+                        settings.adminPassword = newPassword;
+                        document.getElementById('admin-password').value = '';
+                    }
+                    
+                    await database.saveSettings(settings);
                     alert('设置已保存');
                     
                     // 更新界面
                     document.getElementById('header-title').textContent = settings.headerTitle;
-                    document.getElementById('logo-img').src = settings.logoUrl;
-                    document.getElementById('logo-preview').src = settings.logoUrl;
+                    document.body.style.backgroundImage = `url(${settings.bgImage})`;
+                    document.getElementById('bg-preview').style.backgroundImage = `url(${settings.bgImage})`;
                     
                     // 添加历史记录
                     await database.addHistoryRecord('设置保存', '管理员修改了系统设置');
-                } else {
-                    alert('保存设置失败');
-                }
-            }
-            
-            // 保存通知
-            async function saveNotification() {
-                const notification = document.getElementById('notification').value;
-                const success = await database.saveNotification(notification);
-                
-                if (success) {
-                    document.getElementById('notification-content').textContent = notification;
-                    alert('通知已保存');
-                    
-                    // 添加历史记录
-                    await database.addHistoryRecord('通知更新', '管理员更新了系统通知');
-                } else {
-                    alert('保存通知失败');
+                } catch (error) {
+                    console.error('保存设置失败:', error);
+                    alert('保存设置失败: ' + error.message);
                 }
             }
             
             // 更新校准时间显示
             async function updateCalibrationTime() {
-                const now = new Date();
-                const calibrationTime = formatDateTimeFull(now);
-                
-                const settings = await database.getSettings();
-                settings.calibrationTime = calibrationTime;
-                await database.saveSettings(settings);
-                
-                document.getElementById('calibration-time').textContent = `校准时间: ${calibrationTime}`;
-                
-                // 添加历史记录
-                await database.addHistoryRecord('时间校准', `校准时间为: ${calibrationTime}`);
+                try {
+                    const now = new Date();
+                    const calibrationTime = formatDateTimeFull(now);
+                    
+                    const settings = await database.getSettings();
+                    settings.calibrationTime = calibrationTime;
+                    await database.saveSettings(settings);
+                    
+                    document.getElementById('calibration-time').textContent = `校准时间: ${calibrationTime}`;
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('时间校准', `校准时间为: ${calibrationTime}`);
+                } catch (error) {
+                    console.error('更新校准时间失败:', error);
+                }
             }
             
             // 阶段持续时间（分钟）
@@ -1139,7 +1057,7 @@
             document.getElementById('start-time').value = formatDateTime(startTime);
             
             // 更新计时器
-            document.getElementById('update-timer').addEventListener('click', async function() {
+            document.getElementById('update-timer').addEventListener('click', function() {
                 const newStartTime = new Date(document.getElementById('start-time').value);
                 const initialPhase = document.getElementById('initial-phase').value;
                 
@@ -1149,35 +1067,33 @@
                 }
                 
                 startTime = newStartTime;
-                
-                const settings = await database.getSettings();
-                settings.startTime = startTime.getTime();
-                settings.initialPhase = initialPhase;
-                await database.saveSettings(settings);
-                
-                // 更新校准时间
-                await updateCalibrationTime();
+                updateCalibrationTime();
                 
                 initializeTimer(initialPhase);
                 
                 // 添加历史记录
-                await database.addHistoryRecord('计时器更新', `设置开始时间为: ${formatDateTimeFull(startTime)}, 阶段: ${initialPhase}`);
+                database.addHistoryRecord('计时器更新', `设置开始时间为: ${formatDateTimeFull(startTime)}, 阶段: ${initialPhase}`);
+            });
+            
+            // 更新通知
+            document.getElementById('update-notification').addEventListener('click', async function() {
+                try {
+                    const notification = document.getElementById('notification-content').value;
+                    await database.saveNotification(notification);
+                    document.getElementById('notification-content').textContent = notification;
+                    alert('通知已更新');
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('通知更新', '更新了系统通知');
+                } catch (error) {
+                    console.error('更新通知失败:', error);
+                    alert('更新通知失败: ' + error.message);
+                }
             });
             
             // 管理员登录按钮
             document.getElementById('admin-login-btn').addEventListener('click', function() {
-                if (isAdmin) {
-                    // 退出管理员模式
-                    isAdmin = false;
-                    document.getElementById('admin-section').style.display = 'none';
-                    document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-user-lock"></i> 管理员登录';
-                    document.getElementById('admin-login-btn').style.background = 'rgba(52, 152, 219, 0.9)';
-                    
-                    // 添加历史记录
-                    database.addHistoryRecord('管理员退出', '管理员退出登录');
-                } else {
-                    document.getElementById('login-modal').style.display = 'flex';
-                }
+                document.getElementById('login-modal').style.display = 'flex';
             });
             
             // 取消登录
@@ -1191,9 +1107,8 @@
                 const password = document.getElementById('login-password').value;
                 
                 try {
-                    // 验证密码
                     const settings = await database.getSettings();
-                    const savedPassword = settings.adminPassword || 'Bcfxclub198511';
+                    const savedPassword = settings.adminPassword || DEFAULT_PASSWORD;
                     
                     if (password === savedPassword) {
                         isAdmin = true;
@@ -1201,7 +1116,7 @@
                         document.getElementById('login-modal').style.display = 'none';
                         document.getElementById('login-password').value = '';
                         document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-sign-out-alt"></i> 退出管理员';
-                        document.getElementById('admin-login-btn').style.background = 'rgba(231, 76, 60, 0.9)';
+                        alert('管理员登录成功');
                         
                         // 添加历史记录
                         await database.addHistoryRecord('管理员登录', '管理员成功登录系统');
@@ -1212,16 +1127,26 @@
                         await database.addHistoryRecord('登录失败', '尝试登录管理员账户失败');
                     }
                 } catch (error) {
-                    console.error('登录错误:', error);
-                    alert('登录过程中发生错误');
+                    console.error('登录失败:', error);
+                    alert('登录失败: ' + error.message);
+                }
+            });
+            
+            // 退出管理员
+            document.getElementById('admin-login-btn').addEventListener('click', function() {
+                if (isAdmin) {
+                    isAdmin = false;
+                    document.getElementById('admin-section').style.display = 'none';
+                    document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-user-lock"></i> 管理员登录';
+                    alert('已退出管理员模式');
+                    
+                    // 添加历史记录
+                    database.addHistoryRecord('退出登录', '管理员退出登录');
                 }
             });
             
             // 保存设置
             document.getElementById('save-settings').addEventListener('click', saveSettings);
-            
-            // 保存通知
-            document.getElementById('save-notification').addEventListener('click', saveNotification);
             
             // 预览背景
             document.getElementById('preview-bg').addEventListener('click', function() {
@@ -1231,17 +1156,35 @@
                 }
             });
             
-            // 预览Logo
-            document.getElementById('logo-url').addEventListener('input', function() {
-                const logoUrl = this.value;
-                if (logoUrl) {
-                    document.getElementById('logo-preview').src = logoUrl;
+            // 上传Logo
+            document.getElementById('logo-upload').addEventListener('change', async function(e) {
+                if (e.target.files.length > 0) {
+                    try {
+                        const logoUrl = await database.uploadLogo(e.target.files[0]);
+                        document.getElementById('logo').src = logoUrl;
+                        alert('Logo上传成功');
+                        
+                        // 添加历史记录
+                        await database.addHistoryRecord('Logo上传', '上传了新的Logo');
+                    } catch (error) {
+                        console.error('Logo上传失败:', error);
+                        alert('Logo上传失败: ' + error.message);
+                    }
                 }
             });
             
             // 导出数据
-            document.getElementById('export-data').addEventListener('click', function() {
-                database.exportData();
+            document.getElementById('export-data').addEventListener('click', async function() {
+                try {
+                    await database.exportData();
+                    alert('数据导出成功');
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('数据导出', '导出了系统数据备份');
+                } catch (error) {
+                    console.error('导出数据失败:', error);
+                    alert('导出数据失败: ' + error.message);
+                }
             });
             
             // 导入数据
@@ -1249,9 +1192,16 @@
                 document.getElementById('import-file').click();
             });
             
-            document.getElementById('import-file').addEventListener('change', function(e) {
+            document.getElementById('import-file').addEventListener('change', async function(e) {
                 if (e.target.files.length > 0) {
-                    database.importData(e.target.files[0]);
+                    try {
+                        await database.importData(e.target.files[0]);
+                        alert('数据导入成功！页面将重新加载。');
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('导入数据失败:', error);
+                        alert('导入数据失败: ' + error.message);
+                    }
                 }
             });
             
@@ -1259,13 +1209,12 @@
             document.getElementById('clear-data').addEventListener('click', async function() {
                 if (confirm('确定要清空所有数据吗？此操作不可恢复！')) {
                     try {
-                        // 调用API清空数据
-                        await database.apiRequest('/api/clear', { method: 'POST' });
+                        await database.clearData();
                         alert('数据已清空！页面将重新加载。');
                         window.location.reload();
                     } catch (error) {
                         console.error('清空数据失败:', error);
-                        alert('清空数据失败');
+                        alert('清空数据失败: ' + error.message);
                     }
                 }
             });
@@ -1319,16 +1268,16 @@
                 let phaseName;
                 let phaseIcon;
                 
-                // 计算当前机库开启时间
+                // 计算机库开启时间
                 const currentCycleStart = new Date(now.getTime() - cycleElapsedMs);
                 const currentCardPhaseStart = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
                 document.getElementById('card-phase-start').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentCardPhaseStart)}`;
                 
                 if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 1000) {
-                    // 重置阶段 - 改为"机库已关闭"
+                    // 机库已关闭阶段
                     currentPhase = 'reset';
                     phaseName = '机库已关闭';
-                    phaseIcon = 'fas fa-sync-alt';
+                    phaseIcon = 'fas fa-door-closed';
                     phaseTimeRemaining = PHASE_DURATIONS.reset * 60 * 1000 - cycleElapsedMs;
                     
                     // 计算灯的状态（每24分钟变化一次）
@@ -1341,10 +1290,10 @@
                     }
                     
                 } else if (cycleElapsedMs < (PHASE_DURATIONS.reset + PHASE_DURATIONS.card) * 60 * 1000) {
-                    // 插卡阶段 - 改为"机库开启中可插卡"
+                    // 机库开启中可插卡阶段
                     currentPhase = 'card';
                     phaseName = '机库开启中可插卡';
-                    phaseIcon = 'fas fa-credit-card';
+                    phaseIcon = 'fas fa-door-open';
                     phaseTimeRemaining = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card) * 60 * 1000 - cycleElapsedMs;
                     
                     // 计算灯的状态（每12分钟变化一次）
@@ -1358,7 +1307,7 @@
                     }
                     
                 } else {
-                    // 断电阶段 - 改为"机库关闭倒计时"
+                    // 机库关闭倒计时阶段
                     currentPhase = 'poweroff';
                     phaseName = '机库关闭倒计时';
                     phaseIcon = 'fas fa-power-off';
