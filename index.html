@@ -14,10 +14,10 @@
             --poweroff-color: #7f8c8d;
             --light-off: #bdc3c7;
             --light-on: #ffffff;
-            --panel-bg: rgba(255, 255, 255, 0.92);
+            --panel-bg: rgba(255, 255, 255, 0.15);
             --text-dark: #2c3e50;
-            --text-light: #7f8c8d;
-            --notification-bg: rgba(255, 247, 200, 0.95);
+            --text-light: #ecf0f1;
+            --notification-bg: rgba(255, 247, 200, 0.2);
         }
         
         * {
@@ -30,7 +30,7 @@
         body {
             background: url('https://your-cloudflare-pages-url.pages.dev/wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
-            color: var(--text-dark);
+            color: var(--text-light);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
@@ -55,18 +55,20 @@
             object-fit: cover;
             margin: 0 auto;
             display: block;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
         }
         
         header {
-            background: rgba(255, 255, 255, 0.85);
-            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
             padding: 1.2rem;
             text-align: center;
             border-radius: 12px;
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
         }
         
         .main-content {
@@ -86,6 +88,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            backdrop-filter: blur(5px);
         }
         
         .phase-indicator {
@@ -98,6 +101,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            backdrop-filter: blur(5px);
         }
         
         .phase-reset {
@@ -122,8 +126,8 @@
             font-size: 4rem;
             font-weight: bold;
             margin: 25px 0;
-            color: var(--primary-color);
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            color: var(--text-light);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             text-align: center;
             width: 100%;
         }
@@ -131,7 +135,7 @@
         .lights-container {
             display: flex;
             justify-content: center;
-            margin: 30px 0;
+            margin: 30px 0 15px 0;
             gap: 15px;
         }
         
@@ -142,8 +146,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
         }
         
         .light.active {
@@ -163,17 +168,29 @@
             background-color: var(--poweroff-color);
         }
         
+        .card-phase-start {
+            font-size: 1.1rem;
+            margin: 15px 0;
+            padding: 10px 15px;
+            background: rgba(46, 204, 113, 0.1);
+            border-radius: 8px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+        
         .card-windows {
             background-color: var(--panel-bg);
             border-radius: 12px;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-top: 20px;
+            backdrop-filter: blur(5px);
         }
         
         .card-windows h2 {
             margin-bottom: 20px;
-            color: var(--primary-color);
+            color: var(--text-light);
             border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 12px;
             display: flex;
@@ -189,14 +206,15 @@
         }
         
         .window-list li {
-            background-color: rgba(236, 240, 241, 0.8);
+            background-color: rgba(236, 240, 241, 0.1);
             padding: 15px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border-left: 4px solid var(--card-color);
+            backdrop-filter: blur(5px);
         }
         
         .window-list li.previous {
@@ -267,6 +285,7 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
+            backdrop-filter: blur(5px);
         }
         
         .admin-login-btn:hover {
@@ -288,7 +307,7 @@
         }
         
         .modal-content {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 12px;
             width: 90%;
@@ -324,11 +343,12 @@
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-top: 20px;
+            backdrop-filter: blur(5px);
         }
         
         .admin-section h2 {
             margin-bottom: 20px;
-            color: var(--primary-color);
+            color: var(--text-light);
             border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 12px;
             display: flex;
@@ -343,15 +363,16 @@
         }
         
         .admin-card {
-            background: rgba(236, 240, 241, 0.8);
+            background: rgba(236, 240, 241, 0.1);
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
         }
         
         .admin-card h3 {
             margin-bottom: 15px;
-            color: var(--primary-color);
+            color: var(--text-light);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -365,22 +386,25 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: var(--text-dark);
+            color: var(--text-light);
         }
         
-        input[type="datetime-local"], select, input[type="password"], input[type="text"], textarea {
+        input[type="datetime-local"], select, input[type="password"], input[type="text"], input[type="url"], textarea {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #ddd;
+            border: 2px solid rgba(221, 221, 221, 0.3);
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
         }
         
         input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, 
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="url"]:focus, textarea:focus {
             border-color: var(--secondary-color);
             outline: none;
+            background: rgba(255, 255, 255, 0.2);
         }
         
         textarea {
@@ -419,16 +443,7 @@
             background-position: center;
             border-radius: 8px;
             margin-top: 10px;
-            border: 2px dashed #ddd;
-        }
-        
-        .card-phase-start {
-            font-size: 1.1rem;
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(46, 204, 113, 0.1);
-            border-radius: 8px;
-            display: inline-block;
+            border: 2px dashed rgba(221, 221, 221, 0.5);
         }
         
         .calibration-time {
@@ -437,9 +452,10 @@
             left: 15px;
             font-size: 0.9rem;
             color: var(--text-light);
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
             padding: 5px 10px;
             border-radius: 5px;
+            backdrop-filter: blur(5px);
         }
         
         .window-status {
@@ -453,11 +469,12 @@
             position: fixed;
             bottom: 20px;
             left: 20px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 0.8rem;
             color: var(--text-light);
+            backdrop-filter: blur(5px);
         }
         
         .notification {
@@ -467,6 +484,7 @@
             margin: 20px 0;
             border-radius: 4px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
         }
         
         .notification h3 {
@@ -474,11 +492,12 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 10px;
-            color: #d35400;
+            color: #f39c12;
         }
         
         .notification-content {
             line-height: 1.5;
+            color: var(--text-light);
         }
         
         /* 移动端优化 */
@@ -526,24 +545,12 @@
             <h1 id="header-title"><i class="fas fa-clock"></i> 行政机库计时器系统</h1>
         </header>
         
-        <!-- 系统通知 -->
-        <div class="notification" id="notification">
-            <h3><i class="fas fa-bullhorn"></i> 系统通知</h3>
-            <div class="notification-content" id="notification-content">
-                通知加载中...
-            </div>
-        </div>
-
         <div class="main-content">
             <div class="timer-display">
                 <div id="phase-indicator" class="phase-indicator phase-reset">
-                    <i class="fas fa-sync-alt"></i> 机库已关闭
+                    <i class="fas fa-door-closed"></i> 机库已关闭
                 </div>
                 <div id="countdown" class="countdown">02:00:00</div>
-                
-                <div class="card-phase-start" id="card-phase-start">
-                    <i class="fas fa-play-circle"></i> 机库开启时间: 计算中...
-                </div>
                 
                 <div class="lights-container" id="lights-container">
                     <div class="light red active" id="light-0"></div>
@@ -551,6 +558,10 @@
                     <div class="light red active" id="light-2"></div>
                     <div class="light red active" id="light-3"></div>
                     <div class="light red active" id="light-4"></div>
+                </div>
+                
+                <div class="card-phase-start" id="card-phase-start">
+                    <i class="fas fa-play-circle"></i> 机库开启时间: 计算中...
                 </div>
                 
                 <div class="status-indicators">
@@ -570,6 +581,14 @@
                 
                 <div class="calibration-time" id="calibration-time">
                     校准时间: 尚未校准
+                </div>
+            </div>
+            
+            <!-- 系统通知 -->
+            <div class="notification" id="notification">
+                <h3><i class="fas fa-bullhorn"></i> 系统通知</h3>
+                <div class="notification-content" id="notification-content">
+                    通知加载中...
                 </div>
             </div>
             
@@ -622,8 +641,8 @@
                     <div class="admin-card">
                         <h3><i class="fas fa-bell"></i> 通知管理</h3>
                         <div class="form-group">
-                            <label for="notification-content"><i class="fas fa-comment"></i> 系统通知</label>
-                            <textarea id="notification-content" rows="4" placeholder="输入系统通知内容"></textarea>
+                            <label for="notification-content-input"><i class="fas fa-comment"></i> 系统通知</label>
+                            <textarea id="notification-content-input" rows="4" placeholder="输入系统通知内容"></textarea>
                         </div>
                         <button id="update-notification">
                             <i class="fas fa-save"></i> 更新通知
@@ -635,6 +654,10 @@
                         <div class="form-group">
                             <label for="header-title-input"><i class="fas fa-heading"></i> 系统标题</label>
                             <input type="text" id="header-title-input" placeholder="输入系统标题">
+                        </div>
+                        <div class="form-group">
+                            <label for="logo-url"><i class="fas fa-link"></i> Logo URL</label>
+                            <input type="url" id="logo-url" placeholder="输入Logo图片URL">
                         </div>
                         <div class="form-group">
                             <label for="logo-upload"><i class="fas fa-upload"></i> 上传Logo</label>
@@ -796,36 +819,6 @@
                 }
             }
             
-            // 获取Logo
-            async getLogo() {
-                try {
-                    const response = await fetch(`${this.apiBase}/api/logo`);
-                    if (!response.ok) throw new Error('获取Logo失败');
-                    return await response.text();
-                } catch (error) {
-                    console.error('获取Logo失败:', error);
-                    return '';
-                }
-            }
-            
-            // 上传Logo
-            async uploadLogo(file) {
-                try {
-                    const formData = new FormData();
-                    formData.append('logo', file);
-                    
-                    const response = await fetch(`${this.apiBase}/api/logo`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    if (!response.ok) throw new Error('上传Logo失败');
-                    return await response.text();
-                } catch (error) {
-                    console.error('上传Logo失败:', error);
-                    throw error;
-                }
-            }
-            
             // 导出数据
             async exportData() {
                 try {
@@ -957,17 +950,16 @@
                         document.getElementById('header-title-input').value = settings.headerTitle;
                     }
                     
+                    if (settings.logoUrl) {
+                        document.getElementById('logo').src = settings.logoUrl;
+                        document.getElementById('logo-url').value = settings.logoUrl;
+                    }
+                    
                     // 加载通知
                     const notification = await database.getNotification();
                     if (notification) {
                         document.getElementById('notification-content').textContent = notification;
-                        document.getElementById('notification-content').value = notification;
-                    }
-                    
-                    // 加载Logo
-                    const logoUrl = await database.getLogo();
-                    if (logoUrl) {
-                        document.getElementById('logo').src = logoUrl;
+                        document.getElementById('notification-content-input').value = notification;
                     }
                     
                     initializeTimer(settings.initialPhase || '5-green');
@@ -987,7 +979,8 @@
                         startTime: startTime.getTime(),
                         initialPhase: document.getElementById('initial-phase').value,
                         bgImage: document.getElementById('bg-image').value,
-                        headerTitle: document.getElementById('header-title-input').value
+                        headerTitle: document.getElementById('header-title-input').value,
+                        logoUrl: document.getElementById('logo-url').value
                     };
                     
                     const newPassword = document.getElementById('admin-password').value;
@@ -1003,6 +996,7 @@
                     document.getElementById('header-title').textContent = settings.headerTitle;
                     document.body.style.backgroundImage = `url(${settings.bgImage})`;
                     document.getElementById('bg-preview').style.backgroundImage = `url(${settings.bgImage})`;
+                    document.getElementById('logo').src = settings.logoUrl;
                     
                     // 添加历史记录
                     await database.addHistoryRecord('设置保存', '管理员修改了系统设置');
@@ -1078,7 +1072,7 @@
             // 更新通知
             document.getElementById('update-notification').addEventListener('click', async function() {
                 try {
-                    const notification = document.getElementById('notification-content').value;
+                    const notification = document.getElementById('notification-content-input').value;
                     await database.saveNotification(notification);
                     document.getElementById('notification-content').textContent = notification;
                     alert('通知已更新');
@@ -1156,20 +1150,11 @@
                 }
             });
             
-            // 上传Logo
-            document.getElementById('logo-upload').addEventListener('change', async function(e) {
-                if (e.target.files.length > 0) {
-                    try {
-                        const logoUrl = await database.uploadLogo(e.target.files[0]);
-                        document.getElementById('logo').src = logoUrl;
-                        alert('Logo上传成功');
-                        
-                        // 添加历史记录
-                        await database.addHistoryRecord('Logo上传', '上传了新的Logo');
-                    } catch (error) {
-                        console.error('Logo上传失败:', error);
-                        alert('Logo上传失败: ' + error.message);
-                    }
+            // 预览Logo URL
+            document.getElementById('logo-url').addEventListener('change', function() {
+                const logoUrl = this.value;
+                if (logoUrl) {
+                    document.getElementById('logo').src = logoUrl;
                 }
             });
             
