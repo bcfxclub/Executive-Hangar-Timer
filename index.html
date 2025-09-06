@@ -14,9 +14,9 @@
             --poweroff-color: #7f8c8d;
             --light-off: #bdc3c7;
             --light-on: #ffffff;
-            --panel-bg: #f8f9fa;
+            --panel-bg: rgba(255, 255, 255, 0.1);
             --text-dark: #2d3748;
-            --text-light: #718096;
+            --text-light: #e6e6e6;
             --notification-color: #3498db;
         }
         
@@ -28,12 +28,14 @@
         }
         
         body {
-            background: #ffffff url('wallpaper.jpg') no-repeat center center fixed;
+            background: url('https://yourdomain.com/wallpaper.jpg') no-repeat center center fixed;
             background-size: cover;
-            color: var(--text-dark);
+            color: var(--text-light);
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            background-blend-mode: overlay;
         }
         
         .container {
@@ -50,15 +52,15 @@
         .logo {
             width: 120px;
             height: 120px;
-            border: 3px solid var(--primary-color);
+            border: 3px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
         
         .logo img {
@@ -67,19 +69,15 @@
             object-fit: contain;
         }
         
-        .logo-placeholder {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-        }
-        
         header {
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             padding: 1.2rem;
             text-align: center;
             border-radius: 12px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .main-content {
@@ -89,9 +87,8 @@
         }
         
         .timer-display {
-            background-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             text-align: center;
             display: flex;
@@ -99,6 +96,8 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .phase-indicator {
@@ -111,23 +110,24 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            backdrop-filter: blur(5px);
         }
         
         .phase-reset {
-            background-color: rgba(231, 76, 60, 0.15);
-            color: var(--reset-color);
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--text-light);
             border: 2px solid var(--reset-color);
         }
         
         .phase-card {
-            background-color: rgba(46, 204, 113, 0.15);
-            color: var(--card-color);
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--text-light);
             border: 2px solid var(--card-color);
         }
         
         .phase-poweroff {
-            background-color: rgba(127, 140, 141, 0.15);
-            color: var(--poweroff-color);
+            background: rgba(127, 140, 141, 0.2);
+            color: var(--text-light);
             border: 2px solid var(--poweroff-color);
         }
         
@@ -135,37 +135,10 @@
             font-size: 4rem;
             font-weight: bold;
             margin: 25px 0;
-            color: var(--primary-color);
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            color: var(--text-light);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             text-align: center;
             width: 100%;
-        }
-        
-        @media (max-width: 768px) {
-            .countdown {
-                font-size: 3rem;
-            }
-            
-            .phase-indicator {
-                font-size: 1.4rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .countdown {
-                font-size: 2.5rem;
-            }
-            
-            .phase-indicator {
-                font-size: 1.2rem;
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .light {
-                width: 50px;
-                height: 50px;
-            }
         }
         
         .lights-container {
@@ -182,13 +155,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
         }
         
         .light.active {
             transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
         
         .light.red {
@@ -203,27 +177,43 @@
             background-color: var(--poweroff-color);
         }
         
-        .garage-open-time {
+        .garage-time {
             font-size: 1.2rem;
             margin: 15px 0;
-            color: var(--text-dark);
+            color: var(--text-light);
             padding: 10px 15px;
             border-radius: 8px;
             display: inline-block;
-            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .notification-container {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .notification {
+            color: var(--notification-color);
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .card-windows {
-            background-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .card-windows h2 {
             margin-bottom: 20px;
-            color: var(--primary-color);
+            color: var(--text-light);
             border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 12px;
             display: flex;
@@ -239,19 +229,20 @@
         }
         
         .window-list li {
-            background-color: var(--panel-bg);
+            background: rgba(255, 255, 255, 0.1);
             padding: 15px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border-left: 4px solid var(--card-color);
+            backdrop-filter: blur(5px);
         }
         
         .window-list li.previous {
             border-left: 4px solid var(--reset-color);
-            background-color: rgba(231, 76, 60, 0.1);
+            background: rgba(231, 76, 60, 0.1);
         }
         
         .window-list li i {
@@ -263,18 +254,11 @@
             color: var(--reset-color);
         }
         
-        .notification-container {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            width: 100%;
+        .info-text {
             text-align: center;
-        }
-        
-        .notification {
-            color: var(--notification-color);
-            font-size: 1.1rem;
-            text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+            margin-top: 15px;
+            color: var(--text-light);
+            font-style: italic;
         }
         
         .status-indicators {
@@ -289,6 +273,7 @@
             align-items: center;
             gap: 8px;
             font-size: 0.9rem;
+            color: var(--text-light);
         }
         
         .status-color {
@@ -324,6 +309,7 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
+            backdrop-filter: blur(5px);
         }
         
         .admin-login-btn:hover {
@@ -345,19 +331,19 @@
         }
         
         .modal-content {
-            background-color: white;
+            background-color: rgba(45, 52, 64, 0.95);
             padding: 30px;
             border-radius: 12px;
             width: 90%;
             max-width: 500px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-height: 90vh;
-            overflow-y: auto;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .modal h2 {
             margin-bottom: 20px;
-            color: var(--primary-color);
+            color: var(--text-light);
             text-align: center;
         }
         
@@ -378,16 +364,17 @@
         
         .admin-section {
             display: none;
-            background-color: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .admin-section h2 {
             margin-bottom: 20px;
-            color: var(--primary-color);
+            color: var(--text-light);
             border-bottom: 2px solid var(--secondary-color);
             padding-bottom: 12px;
             display: flex;
@@ -403,16 +390,16 @@
         }
         
         .admin-card {
-            background: white;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
         }
         
         .admin-card h3 {
             margin-bottom: 15px;
-            color: var(--primary-color);
-            border-bottom: 1px solid #eee;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--secondary-color);
             padding-bottom: 10px;
         }
         
@@ -424,26 +411,29 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: var(--text-dark);
+            color: var(--text-light);
         }
         
         input[type="datetime-local"], select, input[type="password"], input[type="text"], textarea {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #ddd;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+        
+        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, 
+        input[type="text"]:focus, textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
         }
         
         textarea {
             min-height: 100px;
             resize: vertical;
-        }
-        
-        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, input[type="text"]:focus, textarea:focus {
-            border-color: var(--secondary-color);
-            outline: none;
         }
         
         button {
@@ -465,22 +455,31 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
         
-        .logo-preview {
+        .bg-preview {
             width: 100%;
             height: 150px;
-            border: 2px dashed #ddd;
+            background-size: cover;
+            background-position: center;
             border-radius: 8px;
+            margin-top: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 10px;
             overflow: hidden;
         }
         
         .logo-preview img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain;
         }
         
         .calibration-time {
@@ -489,9 +488,10 @@
             left: 15px;
             font-size: 0.9rem;
             color: var(--text-light);
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
             padding: 5px 10px;
             border-radius: 5px;
+            backdrop-filter: blur(5px);
         }
         
         .window-status {
@@ -505,11 +505,35 @@
             position: fixed;
             bottom: 20px;
             left: 20px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 0.8rem;
             color: var(--text-light);
+            backdrop-filter: blur(5px);
+        }
+        
+        @media (max-width: 768px) {
+            .countdown {
+                font-size: 3rem;
+            }
+            
+            .lights-container {
+                flex-wrap: wrap;
+            }
+            
+            .light {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .admin-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .window-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -517,14 +541,12 @@
     <div class="container">
         <div class="logo-container">
             <div class="logo" id="logo">
-                <div class="logo-placeholder" id="logo-placeholder">
-                    <i class="fas fa-building"></i>
-                </div>
+                <img src="" alt="Logo" id="logo-img">
             </div>
         </div>
         
         <header>
-            <h1 id="header-title"><i class="fas fa-clock"></i> 行政机库计时器系统</h1>
+            <h1 id="site-title">行政机库计时器系统</h1>
         </header>
         
         <div class="main-content">
@@ -542,7 +564,7 @@
                     <div class="light red active" id="light-4"></div>
                 </div>
                 
-                <div class="garage-open-time" id="garage-open-time">
+                <div class="garage-time" id="garage-time">
                     <i class="fas fa-play-circle"></i> 机库开启时间: 计算中...
                 </div>
                 
@@ -574,7 +596,7 @@
             
             <div class="card-windows">
                 <h2><i class="fas fa-calendar-check"></i> 机库开启时间</h2>
-                <p class="window-status" id="window-status">该时间段内可以插卡开启机库大门</p>
+                <p class="window-status">该时间段内可以插卡开启机库大门</p>
                 <ul class="window-list" id="window-list">
                     <li class="previous"><i class="fas fa-chevron-left"></i> 上一个开启时间: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 下一个开启时间: 计算中...</li>
@@ -624,48 +646,45 @@
                             <label for="notification-text">系统通知</label>
                             <textarea id="notification-text" placeholder="输入系统通知内容"></textarea>
                         </div>
-                        <button id="save-notification">
-                            <i class="fas fa-save"></i> 保存通知
+                        <button id="update-notification">
+                            <i class="fas fa-save"></i> 更新通知
                         </button>
                     </div>
                     
                     <div class="admin-card">
                         <h3><i class="fas fa-image"></i> 外观设置</h3>
                         <div class="form-group">
-                            <label for="header-title-input">系统标题</label>
-                            <input type="text" id="header-title-input" placeholder="输入系统标题">
+                            <label for="site-title-input">网站标题</label>
+                            <input type="text" id="site-title-input" placeholder="输入网站标题">
                         </div>
                         <div class="form-group">
-                            <label for="logo-image">Logo图片URL</label>
-                            <input type="text" id="logo-image" placeholder="输入Logo图片URL">
+                            <label for="logo-url">Logo URL</label>
+                            <input type="text" id="logo-url" placeholder="输入Logo图片URL">
                             <div class="logo-preview" id="logo-preview">
-                                <div class="logo-placeholder">
-                                    <i class="fas fa-building"></i>
-                                </div>
+                                <span>预览</span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="bg-image">背景图片URL</label>
                             <input type="text" id="bg-image" placeholder="输入背景图片URL">
+                            <button id="preview-bg">预览背景</button>
+                            <div class="bg-preview" id="bg-preview"></div>
                         </div>
-                        <button id="save-appearance">
-                            <i class="fas fa-save"></i> 保存外观设置
-                        </button>
                     </div>
                     
                     <div class="admin-card">
                         <h3><i class="fas fa-key"></i> 安全管理</h3>
                         <div class="form-group">
-                            <label for="admin-password">修改管理密码</label>
+                            <label for="admin-password">管理密码</label>
                             <input type="password" id="admin-password" placeholder="输入新密码">
                         </div>
                         <button id="save-settings">
-                            <i class="fas fa-save"></i> 保存设置
+                            <i class="fas fa-save"></i> 保存所有设置
                         </button>
                     </div>
                 </div>
                 
-                <p class="info-text">修改设置后请点击相应保存按钮应用更改</p>
+                <p class="info-text">修改设置后请点击相应的保存按钮应用更改</p>
             </div>
         </div>
     </div>
@@ -675,7 +694,7 @@
     </button>
 
     <div class="db-status" id="db-status">
-        <i class="fas fa-database"></i> 数据库: 已连接 (Cloudflare KV)
+        <i class="fas fa-database"></i> 数据库: 已连接
     </div>
 
     <div class="modal" id="login-modal">
@@ -695,10 +714,10 @@
     <input type="file" id="import-file" style="display: none;" accept=".json">
 
     <script>
-        // API基础URL - 替换为您的Cloudflare Worker URL
+        // API基地址 - 根据您的Cloudflare Worker URL修改
         const API_BASE = 'https://time.bcfx.dpdns.org';
         
-        // 数据库类 - 使用Cloudflare Workers API
+        // 数据库服务类 - 使用Cloudflare Worker API
         class TimerDatabase {
             constructor() {
                 this.apiBase = API_BASE;
@@ -708,7 +727,7 @@
             async getSettings() {
                 try {
                     const response = await fetch(`${this.apiBase}/api/settings`);
-                    if (!response.ok) throw new Error('API请求失败');
+                    if (!response.ok) throw new Error('获取设置失败');
                     return await response.json();
                 } catch (error) {
                     console.error('获取设置失败:', error);
@@ -717,11 +736,10 @@
                         startTime: Date.now(),
                         initialPhase: '5-green',
                         adminPassword: 'Bcfxclub198511',
-                        bgImage: 'wallpaper.jpg',
-                        calibrationTime: '',
                         notification: '欢迎使用行政机库计时器系统',
-                        headerTitle: '行政机库计时器系统',
-                        logoImage: ''
+                        siteTitle: '行政机库计时器系统',
+                        logoUrl: '',
+                        bgImage: ''
                     };
                 }
             }
@@ -738,10 +756,10 @@
                     });
                     
                     if (!response.ok) throw new Error('保存设置失败');
-                    return true;
+                    return await response.text();
                 } catch (error) {
                     console.error('保存设置失败:', error);
-                    return false;
+                    throw error;
                 }
             }
             
@@ -749,7 +767,7 @@
             async getHistory() {
                 try {
                     const response = await fetch(`${this.apiBase}/api/history`);
-                    if (!response.ok) throw new Error('API请求失败');
+                    if (!response.ok) throw new Error('获取历史记录失败');
                     return await response.json();
                 } catch (error) {
                     console.error('获取历史记录失败:', error);
@@ -769,10 +787,9 @@
                     });
                     
                     if (!response.ok) throw new Error('添加历史记录失败');
-                    return true;
+                    return await response.text();
                 } catch (error) {
                     console.error('添加历史记录失败:', error);
-                    return false;
                 }
             }
         }
@@ -787,17 +804,17 @@
             let currentLights = [];
             let countdownInterval;
             let isAdmin = false;
+            let settings = {};
             
-            // 从数据库加载设置
+            // 从API加载设置
             async function loadSettings() {
                 try {
-                    const settings = await database.getSettings();
+                    settings = await database.getSettings();
                     
                     if (settings.startTime) {
                         startTime = new Date(parseInt(settings.startTime));
                         document.getElementById('start-time').value = formatDateTime(startTime);
                     } else {
-                        // 如果没有保存的时间，使用当前时间
                         startTime = new Date();
                         document.getElementById('start-time').value = formatDateTime(startTime);
                     }
@@ -806,42 +823,31 @@
                         document.getElementById('initial-phase').value = settings.initialPhase;
                     }
                     
-                    if (settings.bgImage) {
-                        document.body.style.backgroundImage = `url(${settings.bgImage})`;
-                        document.getElementById('bg-image').value = settings.bgImage;
-                    }
-                    
-                    if (settings.calibrationTime) {
-                        document.getElementById('calibration-time').textContent = `校准时间: ${settings.calibrationTime}`;
-                    }
-                    
                     if (settings.notification) {
                         document.getElementById('notification').textContent = settings.notification;
                         document.getElementById('notification-text').value = settings.notification;
                     }
                     
-                    if (settings.headerTitle) {
-                        document.getElementById('header-title').textContent = settings.headerTitle;
-                        document.getElementById('header-title-input').value = settings.headerTitle;
+                    if (settings.siteTitle) {
+                        document.getElementById('site-title').textContent = settings.siteTitle;
+                        document.getElementById('site-title-input').value = settings.siteTitle;
                     }
                     
-                    if (settings.logoImage) {
-                        const logoContainer = document.getElementById('logo');
-                        const logoPlaceholder = document.getElementById('logo-placeholder');
-                        const logoPreview = document.getElementById('logo-preview');
-                        
-                        if (settings.logoImage) {
-                            logoContainer.innerHTML = `<img src="${settings.logoImage}" alt="Logo">`;
-                            logoPreview.innerHTML = `<img src="${settings.logoImage}" alt="Logo Preview">`;
-                            logoPlaceholder.style.display = 'none';
-                        } else {
-                            logoContainer.innerHTML = '';
-                            logoContainer.appendChild(logoPlaceholder);
-                            logoPlaceholder.style.display = 'flex';
-                            logoPreview.innerHTML = '<div class="logo-placeholder"><i class="fas fa-building"></i></div>';
-                        }
-                        
-                        document.getElementById('logo-image').value = settings.logoImage;
+                    if (settings.logoUrl) {
+                        document.getElementById('logo-img').src = settings.logoUrl;
+                        document.getElementById('logo-url').value = settings.logoUrl;
+                        document.getElementById('logo-preview').innerHTML = settings.logoUrl ? 
+                            `<img src="${settings.logoUrl}" alt="Logo预览">` : '<span>预览</span>';
+                    }
+                    
+                    if (settings.bgImage) {
+                        document.body.style.backgroundImage = `url(${settings.bgImage})`;
+                        document.getElementById('bg-image').value = settings.bgImage;
+                        document.getElementById('bg-preview').style.backgroundImage = `url(${settings.bgImage})`;
+                    }
+                    
+                    if (settings.calibrationTime) {
+                        document.getElementById('calibration-time').textContent = `校准时间: ${settings.calibrationTime}`;
                     }
                     
                     initializeTimer(settings.initialPhase || '5-green');
@@ -850,74 +856,92 @@
                     await database.addHistoryRecord('页面加载', '用户访问了计时器系统');
                 } catch (error) {
                     console.error('加载设置失败:', error);
+                    // 使用默认设置初始化
                     initializeTimer('5-green');
                 }
             }
             
-            // 保存设置到数据库
+            // 保存设置到API
             async function saveSettings() {
-                const settings = {
-                    startTime: startTime.getTime(),
-                    initialPhase: document.getElementById('initial-phase').value,
-                    bgImage: document.getElementById('bg-image').value,
-                    notification: document.getElementById('notification-text').value,
-                    headerTitle: document.getElementById('header-title-input').value,
-                    logoImage: document.getElementById('logo-image').value
-                };
-                
-                const newPassword = document.getElementById('admin-password').value;
-                if (newPassword) {
-                    settings.adminPassword = newPassword;
-                    document.getElementById('admin-password').value = '';
-                    alert('密码已更新');
-                }
-                
-                const success = await database.saveSettings(settings);
-                if (success) {
-                    alert('设置已保存');
-                    
-                    // 更新界面
-                    document.getElementById('header-title').textContent = settings.headerTitle;
-                    document.body.style.backgroundImage = `url(${settings.bgImage})`;
-                    
-                    const logoContainer = document.getElementById('logo');
-                    const logoPlaceholder = document.getElementById('logo-placeholder');
-                    const logoPreview = document.getElementById('logo-preview');
-                    
-                    if (settings.logoImage) {
-                        logoContainer.innerHTML = `<img src="${settings.logoImage}" alt="Logo">`;
-                        logoPreview.innerHTML = `<img src="${settings.logoImage}" alt="Logo Preview">`;
-                        logoPlaceholder.style.display = 'none';
-                    } else {
-                        logoContainer.innerHTML = '';
-                        logoContainer.appendChild(logoPlaceholder);
-                        logoPlaceholder.style.display = 'flex';
-                        logoPreview.innerHTML = '<div class="logo-placeholder"><i class="fas fa-building"></i></div>';
+                try {
+                    const newPassword = document.getElementById('admin-password').value;
+                    if (newPassword) {
+                        settings.adminPassword = newPassword;
+                        document.getElementById('admin-password').value = '';
                     }
                     
-                    document.getElementById('notification').textContent = settings.notification;
+                    const notification = document.getElementById('notification-text').value;
+                    if (notification) {
+                        settings.notification = notification;
+                    }
+                    
+                    const siteTitle = document.getElementById('site-title-input').value;
+                    if (siteTitle) {
+                        settings.siteTitle = siteTitle;
+                        document.getElementById('site-title').textContent = siteTitle;
+                    }
+                    
+                    const logoUrl = document.getElementById('logo-url').value;
+                    if (logoUrl) {
+                        settings.logoUrl = logoUrl;
+                        document.getElementById('logo-img').src = logoUrl;
+                        document.getElementById('logo-preview').innerHTML = 
+                            `<img src="${logoUrl}" alt="Logo预览">`;
+                    }
+                    
+                    const bgImage = document.getElementById('bg-image').value;
+                    if (bgImage) {
+                        settings.bgImage = bgImage;
+                        document.body.style.backgroundImage = `url(${bgImage})`;
+                        document.getElementById('bg-preview').style.backgroundImage = `url(${bgImage})`;
+                    }
+                    
+                    settings.startTime = startTime.getTime();
+                    settings.initialPhase = document.getElementById('initial-phase').value;
+                    
+                    await database.saveSettings(settings);
+                    alert('设置已保存');
                     
                     // 添加历史记录
                     await database.addHistoryRecord('设置保存', '管理员修改了系统设置');
-                } else {
-                    alert('保存设置失败，请检查控制台获取详细信息');
+                } catch (error) {
+                    console.error('保存设置失败:', error);
+                    alert('保存设置失败，请检查网络连接');
+                }
+            }
+            
+            // 更新通知
+            async function updateNotification() {
+                try {
+                    const notification = document.getElementById('notification-text').value;
+                    document.getElementById('notification').textContent = notification;
+                    
+                    settings.notification = notification;
+                    await database.saveSettings(settings);
+                    alert('通知已更新');
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('通知更新', '管理员更新了系统通知');
+                } catch (error) {
+                    console.error('更新通知失败:', error);
+                    alert('更新通知失败，请检查网络连接');
                 }
             }
             
             // 更新校准时间显示
             async function updateCalibrationTime() {
-                const now = new Date();
-                const calibrationTime = formatDateTimeFull(now);
-                
-                const settings = await database.getSettings();
-                settings.calibrationTime = calibrationTime;
-                
-                const success = await database.saveSettings(settings);
-                if (success) {
+                try {
+                    const now = new Date();
+                    const calibrationTime = formatDateTimeFull(now);
                     document.getElementById('calibration-time').textContent = `校准时间: ${calibrationTime}`;
+                    
+                    settings.calibrationTime = calibrationTime;
+                    await database.saveSettings(settings);
                     
                     // 添加历史记录
                     await database.addHistoryRecord('时间校准', `校准时间为: ${calibrationTime}`);
+                } catch (error) {
+                    console.error('更新校准时间失败:', error);
                 }
             }
             
@@ -947,7 +971,7 @@
             document.getElementById('start-time').value = formatDateTime(startTime);
             
             // 更新计时器
-            document.getElementById('update-timer').addEventListener('click', function() {
+            document.getElementById('update-timer').addEventListener('click', async function() {
                 const newStartTime = new Date(document.getElementById('start-time').value);
                 const initialPhase = document.getElementById('initial-phase').value;
                 
@@ -957,24 +981,27 @@
                 }
                 
                 startTime = newStartTime;
-                updateCalibrationTime();
-                initializeTimer(initialPhase);
+                settings.startTime = startTime.getTime();
+                settings.initialPhase = initialPhase;
+                
+                try {
+                    await database.saveSettings(settings);
+                    // 更新校准时间
+                    await updateCalibrationTime();
+                    
+                    initializeTimer(initialPhase);
+                    
+                    // 添加历史记录
+                    await database.addHistoryRecord('计时器更新', `设置开始时间为: ${formatDateTimeFull(startTime)}, 阶段: ${initialPhase}`);
+                } catch (error) {
+                    console.error('更新计时器失败:', error);
+                    alert('更新计时器失败，请检查网络连接');
+                }
             });
             
             // 管理员登录按钮
             document.getElementById('admin-login-btn').addEventListener('click', function() {
-                if (isAdmin) {
-                    // 退出管理员模式
-                    isAdmin = false;
-                    document.getElementById('admin-section').style.display = 'none';
-                    this.innerHTML = '<i class="fas fa-user-lock"></i> 管理员登录';
-                    
-                    // 添加历史记录
-                    database.addHistoryRecord('管理员退出', '管理员退出登录');
-                } else {
-                    // 显示登录模态框
-                    document.getElementById('login-modal').style.display = 'flex';
-                }
+                document.getElementById('login-modal').style.display = 'flex';
             });
             
             // 取消登录
@@ -987,11 +1014,7 @@
             document.getElementById('login-btn').addEventListener('click', async function() {
                 const password = document.getElementById('login-password').value;
                 
-                // 从数据库获取密码
-                const settings = await database.getSettings();
-                const savedPassword = settings.adminPassword || 'Bcfxclub198511';
-                
-                if (password === savedPassword) {
+                if (password === settings.adminPassword || password === 'Bcfxclub198511') {
                     isAdmin = true;
                     document.getElementById('admin-section').style.display = 'block';
                     document.getElementById('login-modal').style.display = 'none';
@@ -1009,40 +1032,40 @@
                 }
             });
             
-            // 保存设置
-            document.getElementById('save-settings').addEventListener('click', saveSettings);
-            
-            // 保存通知
-            document.getElementById('save-notification').addEventListener('click', async function() {
-                const notification = document.getElementById('notification-text').value;
-                
-                const settings = await database.getSettings();
-                settings.notification = notification;
-                
-                const success = await database.saveSettings(settings);
-                if (success) {
-                    document.getElementById('notification').textContent = notification;
-                    alert('通知已保存');
+            // 退出管理员模式
+            document.getElementById('admin-login-btn').addEventListener('click', function() {
+                if (isAdmin) {
+                    isAdmin = false;
+                    document.getElementById('admin-section').style.display = 'none';
+                    document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-user-lock"></i> 管理员登录';
+                    alert('已退出管理员模式');
                     
                     // 添加历史记录
-                    await database.addHistoryRecord('通知更新', '更新了系统通知');
-                } else {
-                    alert('保存通知失败');
+                    database.addHistoryRecord('退出登录', '管理员退出登录');
                 }
             });
             
-            // 保存外观设置
-            document.getElementById('save-appearance').addEventListener('click', saveSettings);
+            // 保存设置
+            document.getElementById('save-settings').addEventListener('click', saveSettings);
+            
+            // 更新通知
+            document.getElementById('update-notification').addEventListener('click', updateNotification);
+            
+            // 预览背景
+            document.getElementById('preview-bg').addEventListener('click', function() {
+                const bgImage = document.getElementById('bg-image').value;
+                if (bgImage) {
+                    document.getElementById('bg-preview').style.backgroundImage = `url(${bgImage})`;
+                }
+            });
             
             // 预览Logo
-            document.getElementById('logo-image').addEventListener('change', function() {
+            document.getElementById('logo-url').addEventListener('change', function() {
                 const logoUrl = this.value;
-                const logoPreview = document.getElementById('logo-preview');
-                
                 if (logoUrl) {
-                    logoPreview.innerHTML = `<img src="${logoUrl}" alt="Logo Preview" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'logo-placeholder\'><i class=\'fas fa-building\'></i></div>'">`;
+                    document.getElementById('logo-preview').innerHTML = `<img src="${logoUrl}" alt="Logo预览">`;
                 } else {
-                    logoPreview.innerHTML = '<div class="logo-placeholder"><i class="fas fa-building"></i></div>';
+                    document.getElementById('logo-preview').innerHTML = '<span>预览</span>';
                 }
             });
             
@@ -1073,7 +1096,7 @@
                 updateDisplay(adjustedStartTime);
                 
                 // 计算并显示机库开启时间
-                calculateGarageOpenTimes(adjustedStartTime);
+                calculateGarageTimes(adjustedStartTime);
                 
                 // 启动计时器
                 countdownInterval = setInterval(function() {
@@ -1097,8 +1120,8 @@
                 
                 // 计算机库开启时间
                 const currentCycleStart = new Date(now.getTime() - cycleElapsedMs);
-                const currentGarageOpenTime = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
-                document.getElementById('garage-open-time').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentGarageOpenTime)}`;
+                const currentGarageStart = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
+                document.getElementById('garage-time').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentGarageStart)}`;
                 
                 if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 1000) {
                     // 重置阶段 - 机库已关闭
@@ -1172,7 +1195,7 @@
             }
             
             // 计算机库开启时间
-            function calculateGarageOpenTimes(adjustedStartTime) {
+            function calculateGarageTimes(adjustedStartTime) {
                 const windowList = document.getElementById('window-list');
                 windowList.innerHTML = '';
                 
