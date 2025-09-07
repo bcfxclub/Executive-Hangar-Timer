@@ -410,6 +410,13 @@
             color: var(--primary-color);
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-card h3 i {
+            font-size: 1.2rem;
         }
         
         .form-group {
@@ -504,6 +511,35 @@
             background: rgba(255, 255, 255, 0.8);
             padding: 5px 10px;
             border-radius: 5px;
+            z-index: 1000;
+        }
+        
+        .api-setup-guide {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .api-setup-guide h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .api-setup-guide ol {
+            padding-left: 20px;
+        }
+        
+        .api-setup-guide li {
+            margin-bottom: 10px;
+        }
+        
+        .api-setup-guide code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
         }
         
         /* 手机端优化 */
@@ -717,7 +753,7 @@
                             </div>
                         </div>
                         <button id="reset-db" style="background: linear-gradient(to right, #e74c3c, #c0392b);">
-                            <i class="fas fa-trash"></i> 重置数据库
+                            <i class="fas fa-trash"></i> 重置数据
                         </button>
                     </div>
                     
@@ -730,6 +766,25 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <div class="api-setup-guide">
+                    <h3><i class="fas fa-info-circle"></i> API设置指南</h3>
+                    <p>要启用跨设备数据同步功能，请按照以下步骤设置Cloudflare Worker：</p>
+                    <ol>
+                        <li>在Cloudflare Dashboard中创建KV存储，命名为<code>HANGAR_TIMER</code></li>
+                        <li>创建Worker并将提供的API代码粘贴进去</li>
+                        <li>在Worker设置中绑定KV存储</li>
+                        <li>将下面的API端点设置为您的Worker地址</li>
+                        <li>点击"测试API连接"按钮验证设置</li>
+                    </ol>
+                    <div class="form-group">
+                        <label for="api-endpoint">API端点</label>
+                        <input type="text" id="api-endpoint" placeholder="https://your-worker.your-subdomain.workers.dev">
+                    </div>
+                    <button id="test-api">
+                        <i class="fas fa-plug"></i> 测试API连接
+                    </button>
                 </div>
                 
                 <p class="info-text">修改设置后请点击相应按钮保存更改</p>
@@ -747,7 +802,7 @@
     </div>
 
     <div class="db-status" id="db-status">
-        <i class="fas fa-database"></i> 数据库状态: 离线
+        <i class="fas fa-database"></i> 数据库状态: 离线 (使用本地存储)
     </div>
 
     <div class="modal" id="login-modal">
@@ -783,13 +838,13 @@
     </div>
 
     <script>
-        // API端点配置
-        const API_BASE = 'https://time.bcfx.dpdns.org/api';
+        // API端点配置 - 初始为空，用户可设置
+        let API_BASE = '';
         const API_ENDPOINTS = {
-            CONFIG: `${API_BASE}/config`,
-            NOTIFICATION: `${API_BASE}/notification`,
-            FEEDBACK: `${API_BASE}/feedback`,
-            DATA: `${API_BASE}/data`
+            CONFIG: `${API_BASE}/api/config`,
+            NOTIFICATION: `${API_BASE}/api/notification`,
+            FEEDBACK: `${API_BASE}/api/feedback`,
+            DATA: `${API_BASE}/api/data`
         };
 
         // 全局状态
@@ -804,7 +859,8 @@
                 bgOpacity: 80,
                 notification: '欢迎使用行政机库计时器系统'
             },
-            feedback: []
+            feedback: [],
+            useLocalStorage: true // 默认使用本地存储
         };
 
         // 初始化函数
@@ -815,36 +871,132 @@
 
         // 初始化应用
         async function initializeApp() {
-            // 尝试从API加载配置
-            try {
-                const response = await fetch(API_ENDPOINTS.CONFIG);
-                if (response.ok) {
-                    const data = await response.json();
-                    state.config = { ...state.config, ...data };
-                    updateDbStatus(true);
-                } else {
-                    console.warn('无法从API加载配置，使用默认配置');
+            // 首先尝试从本地存储加载配置
+            loadFromLocalStorage();
+            
+            // 如果配置了API端点，尝试从API加载配置
+            const savedApiEndpoint = localStorage.getItem('apiEndpoint');
+            if (savedApiEndpoint) {
+                document.getElementById('api-endpoint').value = savedApiEndpoint;
+                API_BASE = savedApiEndpoint;
+                updateApiEndpoints();
+                
+                try {
+                    await tryLoadFromAPI();
+                } catch (error) {
+                    console.error('从API加载配置失败:', error);
+                    state.useLocalStorage = true;
                     updateDbStatus(false);
                 }
-            } catch (error) {
-                console.error('加载配置时出错:', error);
+            } else {
+                state.useLocalStorage = true;
                 updateDbStatus(false);
-            }
-
-            // 尝试从API加载反馈
-            try {
-                const response = await fetch(API_ENDPOINTS.FEEDBACK);
-                if (response.ok) {
-                    state.feedback = await response.json();
-                    updateFeedbackList();
-                }
-            } catch (error) {
-                console.error('加载反馈时出错:', error);
             }
 
             // 更新UI
             updateUI();
             initializeTimer(state.config.initialPhase);
+        }
+
+        // 从本地存储加载数据
+        function loadFromLocalStorage() {
+            const savedConfig = localStorage.getItem('hangarTimerConfig');
+            const savedFeedback = localStorage.getItem('hangarTimerFeedback');
+            
+            if (savedConfig) {
+                state.config = {...state.config, ...JSON.parse(savedConfig)};
+            }
+            
+            if (savedFeedback) {
+                state.feedback = JSON.parse(savedFeedback);
+            }
+        }
+
+        // 尝试从API加载数据
+        async function tryLoadFromAPI() {
+            try {
+                const response = await fetch(API_ENDPOINTS.CONFIG);
+                if (response.ok) {
+                    const data = await response.json();
+                    state.config = { ...state.config, ...data };
+                    state.useLocalStorage = false;
+                    updateDbStatus(true);
+                    
+                    // 尝试加载反馈
+                    try {
+                        const feedbackResponse = await fetch(API_ENDPOINTS.FEEDBACK);
+                        if (feedbackResponse.ok) {
+                            state.feedback = await feedbackResponse.json();
+                        }
+                    } catch (error) {
+                        console.error('从API加载反馈失败:', error);
+                    }
+                    
+                    return true;
+                }
+            } catch (error) {
+                console.error('API请求失败:', error);
+                throw error;
+            }
+            return false;
+        }
+
+        // 更新API端点
+        function updateApiEndpoints() {
+            API_ENDPOINTS.CONFIG = `${API_BASE}/api/config`;
+            API_ENDPOINTS.NOTIFICATION = `${API_BASE}/api/notification`;
+            API_ENDPOINTS.FEEDBACK = `${API_BASE}/api/feedback`;
+            API_ENDPOINTS.DATA = `${API_BASE}/api/data`;
+        }
+
+        // 保存数据到适当的位置（本地或API）
+        async function saveData() {
+            if (state.useLocalStorage) {
+                // 保存到本地存储
+                localStorage.setItem('hangarTimerConfig', JSON.stringify(state.config));
+                localStorage.setItem('hangarTimerFeedback', JSON.stringify(state.feedback));
+                return true;
+            } else {
+                // 尝试保存到API
+                try {
+                    // 保存配置
+                    const configResponse = await fetch(API_ENDPOINTS.CONFIG, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(state.config)
+                    });
+                    
+                    if (!configResponse.ok) {
+                        throw new Error('保存配置到API失败');
+                    }
+                    
+                    // 保存反馈
+                    if (state.feedback.length > 0) {
+                        const feedbackResponse = await fetch(API_ENDPOINTS.FEEDBACK, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(state.feedback)
+                        });
+                        
+                        if (!feedbackResponse.ok) {
+                            console.warn('保存反馈到API失败');
+                        }
+                    }
+                    
+                    return true;
+                } catch (error) {
+                    console.error('保存到API失败，回退到本地存储:', error);
+                    state.useLocalStorage = true;
+                    updateDbStatus(false);
+                    localStorage.setItem('hangarTimerConfig', JSON.stringify(state.config));
+                    localStorage.setItem('hangarTimerFeedback', JSON.stringify(state.feedback));
+                    return false;
+                }
+            }
         }
 
         // 设置事件监听器
@@ -867,7 +1019,7 @@
             // 登录
             document.getElementById('login-btn').addEventListener('click', function() {
                 const password = document.getElementById('login-password').value;
-                // 这里应该有密码验证逻辑
+                // 默认密码
                 if (password === 'Bcfxclub198511') {
                     state.isAdmin = true;
                     document.getElementById('admin-section').style.display = 'block';
@@ -907,33 +1059,18 @@
                     timestamp: new Date().toISOString()
                 };
 
-                try {
-                    const response = await fetch(API_ENDPOINTS.FEEDBACK, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(feedback)
-                    });
-
-                    if (response.ok) {
-                        state.feedback.unshift(feedback);
-                        updateFeedbackList();
-                        document.getElementById('feedback-modal').style.display = 'none';
-                        document.getElementById('feedback-content').value = '';
-                        document.getElementById('contact-info').value = '';
-                        alert('反馈提交成功');
-                    } else {
-                        alert('反馈提交失败');
-                    }
-                } catch (error) {
-                    console.error('提交反馈时出错:', error);
-                    alert('反馈提交失败');
-                }
+                state.feedback.unshift(feedback);
+                await saveData();
+                updateFeedbackList();
+                
+                document.getElementById('feedback-modal').style.display = 'none';
+                document.getElementById('feedback-content').value = '';
+                document.getElementById('contact-info').value = '';
+                alert('反馈提交成功');
             });
 
             // 更新计时器
-            document.getElementById('update-timer').addEventListener('click', function() {
+            document.getElementById('update-timer').addEventListener('click', async function() {
                 const newStartTime = new Date(document.getElementById('start-time').value);
                 const initialPhase = document.getElementById('initial-phase').value;
                 
@@ -948,28 +1085,29 @@
                 // 更新校准时间
                 updateCalibrationTime();
                 
-                // 保存配置到API
-                saveConfig();
+                // 保存数据
+                await saveData();
                 
                 initializeTimer(initialPhase);
+                alert('计时器已更新');
             });
 
             // 更新通知
-            document.getElementById('update-notification').addEventListener('click', function() {
+            document.getElementById('update-notification').addEventListener('click', async function() {
                 const notification = document.getElementById('notification').value;
                 state.config.notification = notification;
                 
                 // 更新通知显示
                 document.getElementById('notification-content').textContent = notification;
                 
-                // 保存配置到API
-                saveConfig();
+                // 保存数据
+                await saveData();
                 
                 alert('通知已更新');
             });
 
             // 保存外观设置
-            document.getElementById('save-appearance').addEventListener('click', function() {
+            document.getElementById('save-appearance').addEventListener('click', async function() {
                 const title = document.getElementById('header-title-input').value;
                 const logoUrl = document.getElementById('logo-url').value;
                 const bgImage = document.getElementById('bg-image').value;
@@ -985,8 +1123,8 @@
                 document.body.style.backgroundImage = `url(${bgImage})`;
                 document.getElementById('bg-preview').style.backgroundImage = `url(${bgImage})`;
                 
-                // 保存配置到API
-                saveConfig();
+                // 保存数据
+                await saveData();
                 
                 alert('外观设置已保存');
             });
@@ -998,8 +1136,8 @@
                 document.documentElement.style.setProperty('--bg-opacity', opacity / 100);
                 state.config.bgOpacity = opacity;
                 
-                // 保存配置到API
-                saveConfig();
+                // 自动保存
+                saveData();
             });
 
             // 导出数据
@@ -1021,11 +1159,11 @@
                 input.type = 'file';
                 input.accept = '.json';
                 
-                input.onchange = function(e) {
+                input.onchange = async function(e) {
                     const file = e.target.files[0];
                     const reader = new FileReader();
                     
-                    reader.onload = function(e) {
+                    reader.onload = async function(e) {
                         try {
                             const data = JSON.parse(e.target.result);
                             state = data;
@@ -1034,8 +1172,8 @@
                             updateUI();
                             initializeTimer(state.config.initialPhase);
                             
-                            // 保存到API
-                            saveConfig();
+                            // 保存数据
+                            await saveData();
                             
                             alert('数据导入成功');
                         } catch (error) {
@@ -1049,9 +1187,9 @@
                 input.click();
             });
 
-            // 重置数据库
-            document.getElementById('reset-db').addEventListener('click', function() {
-                if (confirm('确定要重置数据库吗？这将清除所有数据！')) {
+            // 重置数据
+            document.getElementById('reset-db').addEventListener('click', async function() {
+                if (confirm('确定要重置所有数据吗？这将清除所有设置和反馈！')) {
                     // 重置状态
                     state = {
                         isAdmin: true,
@@ -1064,18 +1202,45 @@
                             bgOpacity: 80,
                             notification: '欢迎使用行政机库计时器系统'
                         },
-                        feedback: []
+                        feedback: [],
+                        useLocalStorage: true
                     };
+                    
+                    // 清除本地存储
+                    localStorage.removeItem('hangarTimerConfig');
+                    localStorage.removeItem('hangarTimerFeedback');
                     
                     // 更新UI
                     updateUI();
                     initializeTimer(state.config.initialPhase);
                     
-                    // 保存到API
-                    saveConfig();
-                    updateFeedbackList();
-                    
-                    alert('数据库已重置');
+                    alert('数据已重置');
+                }
+            });
+
+            // 测试API连接
+            document.getElementById('test-api').addEventListener('click', async function() {
+                const apiEndpoint = document.getElementById('api-endpoint').value;
+                if (!apiEndpoint) {
+                    alert('请输入API端点');
+                    return;
+                }
+                
+                // 更新API配置
+                API_BASE = apiEndpoint;
+                updateApiEndpoints();
+                localStorage.setItem('apiEndpoint', apiEndpoint);
+                
+                try {
+                    const connected = await tryLoadFromAPI();
+                    if (connected) {
+                        alert('API连接成功！数据将同步到云端。');
+                        updateUI();
+                    } else {
+                        alert('API连接失败，请检查端点设置');
+                    }
+                } catch (error) {
+                    alert('API连接失败: ' + error.message);
                 }
             });
         }
@@ -1100,6 +1265,9 @@
             document.getElementById('bg-preview').style.backgroundImage = `url(${state.config.bgImage})`;
             document.documentElement.style.setProperty('--bg-opacity', state.config.bgOpacity / 100);
             document.getElementById('notification-content').textContent = state.config.notification;
+            
+            // 更新反馈列表
+            updateFeedbackList();
         }
 
         // 更新数据库状态显示
@@ -1109,7 +1277,7 @@
                 statusElement.innerHTML = '<i class="fas fa-database"></i> 数据库状态: 在线';
                 statusElement.style.color = '#2ecc71';
             } else {
-                statusElement.innerHTML = '<i class="fas fa-database"></i> 数据库状态: 离线';
+                statusElement.innerHTML = '<i class="fas fa-database"></i> 数据库状态: 离线 (使用本地存储)';
                 statusElement.style.color = '#e74c3c';
             }
         }
@@ -1132,7 +1300,7 @@
                     <strong>反馈 #${index + 1}</strong>
                     <p>${fb.content}</p>
                     <small>${fb.contact ? `联系方式: ${fb.contact} | ` : ''}${new Date(fb.timestamp).toLocaleString()}</small>
-                    <button class="delete-feedback" data-index="${index}" style="background: #e74c3c; padding: 2px 5px; font-size: 0.8rem;">删除</button>
+                    <button class="delete-feedback" data-index="${index}" style="background: #e74c3c; padding: 2px 5px; font-size: 0.8rem; margin-top: 5px;">删除</button>
                 `;
                 feedbackList.appendChild(div);
             });
@@ -1149,43 +1317,10 @@
         // 删除反馈
         async function deleteFeedback(index) {
             if (confirm('确定要删除这条反馈吗？')) {
-                try {
-                    const response = await fetch(`${API_ENDPOINTS.FEEDBACK}/${index}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    if (response.ok) {
-                        state.feedback.splice(index, 1);
-                        updateFeedbackList();
-                        alert('反馈已删除');
-                    } else {
-                        alert('删除失败');
-                    }
-                } catch (error) {
-                    console.error('删除反馈时出错:', error);
-                    alert('删除失败');
-                }
-            }
-        }
-
-        // 保存配置到API
-        async function saveConfig() {
-            try {
-                const response = await fetch(API_ENDPOINTS.CONFIG, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(state.config)
-                });
-                
-                if (response.ok) {
-                    console.log('配置已保存');
-                } else {
-                    console.error('保存配置失败');
-                }
-            } catch (error) {
-                console.error('保存配置时出错:', error);
+                state.feedback.splice(index, 1);
+                await saveData();
+                updateFeedbackList();
+                alert('反馈已删除');
             }
         }
 
