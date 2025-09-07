@@ -410,13 +410,6 @@
             color: var(--primary-color);
             border-bottom: 1px solid #eee;
             padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .admin-card h3 i {
-            font-size: 1.2rem;
         }
         
         .form-group {
@@ -497,7 +490,7 @@
         
         .window-status {
             font-size: 0.9rem;
-            color: var(--text-light;
+            color: var(--text-light);
             margin-top: 10px;
             text-align: center;
         }
@@ -511,45 +504,6 @@
             background: rgba(255, 255, 255, 0.8);
             padding: 5px 10px;
             border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .db-status.online {
-            color: #27ae60;
-        }
-        
-        .db-status.offline {
-            color: #e74c3c;
-        }
-        
-        .feedback-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 10px;
-        }
-        
-        .feedback-content {
-            margin-bottom: 5px;
-        }
-        
-        .feedback-meta {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .delete-feedback {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 3px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
         }
         
         /* 手机端优化 */
@@ -584,11 +538,6 @@
                 padding: 8px 12px;
                 font-size: 0.9rem;
             }
-            
-            .db-status {
-                bottom: 70px;
-                right: 10px;
-            }
         }
         
         @media (max-width: 480px) {
@@ -607,10 +556,6 @@
             
             .status-indicators {
                 gap: 10px;
-            }
-            
-            .admin-card h3 {
-                font-size: 1.1rem;
             }
         }
     </style>
@@ -801,7 +746,7 @@
         </button>
     </div>
 
-    <div class="db-status offline" id="db-status">
+    <div class="db-status" id="db-status">
         <i class="fas fa-database"></i> 数据库状态: 离线
     </div>
 
@@ -838,13 +783,13 @@
     </div>
 
     <script>
-        // API端点配置 - 修改为您的Cloudflare Worker地址
-        const API_BASE = 'https://time.bcfx.dpdns.org';
+        // API端点配置
+        const API_BASE = 'https://time.bcfx.dpdns.org/api';
         const API_ENDPOINTS = {
-            CONFIG: `${API_BASE}/api/config`,
-            NOTIFICATION: `${API_BASE}/api/notification`,
-            FEEDBACK: `${API_BASE}/api/feedback`,
-            DATA: `${API_BASE}/api/data`
+            CONFIG: `${API_BASE}/config`,
+            NOTIFICATION: `${API_BASE}/notification`,
+            FEEDBACK: `${API_BASE}/feedback`,
+            DATA: `${API_BASE}/data`
         };
 
         // 全局状态
@@ -1162,10 +1107,10 @@
             const statusElement = document.getElementById('db-status');
             if (connected) {
                 statusElement.innerHTML = '<i class="fas fa-database"></i> 数据库状态: 在线';
-                statusElement.className = 'db-status online';
+                statusElement.style.color = '#2ecc71';
             } else {
                 statusElement.innerHTML = '<i class="fas fa-database"></i> 数据库状态: 离线';
-                statusElement.className = 'db-status offline';
+                statusElement.style.color = '#e74c3c';
             }
         }
 
@@ -1180,16 +1125,16 @@
             
             feedbackList.innerHTML = '';
             state.feedback.forEach((fb, index) => {
-                const feedbackItem = document.createElement('div');
-                feedbackItem.className = 'feedback-item';
-                feedbackItem.innerHTML = `
-                    <div class="feedback-content">${fb.content}</div>
-                    <div class="feedback-meta">
-                        <span>${fb.contact ? `联系方式: ${fb.contact} | ` : ''}${new Date(fb.timestamp).toLocaleString()}</span>
-                        <button class="delete-feedback" data-index="${index}">删除</button>
-                    </div>
+                const div = document.createElement('div');
+                div.style.padding = '10px';
+                div.style.borderBottom = '1px solid #eee';
+                div.innerHTML = `
+                    <strong>反馈 #${index + 1}</strong>
+                    <p>${fb.content}</p>
+                    <small>${fb.contact ? `联系方式: ${fb.contact} | ` : ''}${new Date(fb.timestamp).toLocaleString()}</small>
+                    <button class="delete-feedback" data-index="${index}" style="background: #e74c3c; padding: 2px 5px; font-size: 0.8rem;">删除</button>
                 `;
-                feedbackList.appendChild(feedbackItem);
+                feedbackList.appendChild(div);
             });
             
             // 添加删除按钮事件
@@ -1236,14 +1181,11 @@
                 
                 if (response.ok) {
                     console.log('配置已保存');
-                    updateDbStatus(true);
                 } else {
                     console.error('保存配置失败');
-                    updateDbStatus(false);
                 }
             } catch (error) {
                 console.error('保存配置时出错:', error);
-                updateDbStatus(false);
             }
         }
 
