@@ -36,6 +36,7 @@
             transition: background-image 0.5s ease;
             background-size: cover;
             background-position: center;
+            overflow-x: hidden;
         }
         
         .container {
@@ -413,104 +414,102 @@
             display: flex;
             gap: 12px;
             margin-top: 20px;
-            justify-content: center;
         }
         
         .modal-buttons button {
             width: auto;
-            min-width: 100px;
-            padding: 10px 15px;
+            flex: 1;
         }
         
         .cancel-btn {
             background: linear-gradient(to right, #95a5a6, #7f8c8d);
         }
         
-        /* 后台管理面板样式 */
+        /* 可移动的管理面板 */
         .admin-panel {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 1002;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .admin-container {
-            background-color: white;
+            top: 50px;
+            left: 50px;
+            width: 80%;
+            max-width: 1000px;
+            height: auto;
+            max-height: 80vh;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            padding: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1002;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .admin-header {
+            padding: 15px 20px;
+            background: linear-gradient(to right, var(--primary-color), #1a2530);
+            color: white;
+            cursor: move;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--secondary-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .admin-header h2 {
-            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
-        .close-admin {
-            background: var(--reset-color);
-            color: white;
+        .admin-close {
+            background: none;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+            padding: 5px;
         }
         
-        .admin-content {
+        .admin-body {
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(80vh - 60px);
+        }
+        
+        .admin-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
         
         .admin-card {
-            background-color: var(--panel-bg);
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            height: fit-content;
+            border: 1px solid #eee;
         }
         
         .admin-card h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--primary-color);
             border-bottom: 1px solid var(--secondary-color);
             padding-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.1rem;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: bold;
             color: var(--text-dark);
             font-size: 0.9rem;
@@ -518,9 +517,9 @@
         
         input[type="datetime-local"], select, input[type="password"], input[type="text"], input[type="range"], textarea {
             width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             font-size: 0.9rem;
             transition: border-color 0.3s;
         }
@@ -531,7 +530,7 @@
         }
         
         textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
         }
         
@@ -539,36 +538,36 @@
             background: linear-gradient(to right, var(--secondary-color), #2980b9);
             color: white;
             border: none;
-            padding: 12px 16px;
-            border-radius: 6px;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             transition: all 0.3s;
             width: 100%;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
         .bg-preview {
             width: 100%;
-            height: 120px;
+            height: 100px;
             background-size: cover;
             background-position: center;
-            border-radius: 6px;
+            border-radius: 5px;
             margin-top: 8px;
-            border: 2px dashed #ddd;
+            border: 1px dashed #ddd;
         }
         
         .logo-preview {
-            width: 100px;
-            height: 100px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
+            width: 80px;
+            height: 80px;
+            border: 1px dashed #ddd;
+            border-radius: 5px;
             margin-top: 8px;
             display: flex;
             align-items: center;
@@ -583,17 +582,18 @@
         }
         
         .feedback-list {
-            max-height: 300px;
+            max-height: 200px;
             overflow-y: auto;
             border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 10px;
+            border-radius: 5px;
+            padding: 8px;
+            margin-top: 8px;
         }
         
         .feedback-item {
-            padding: 10px;
+            padding: 8px;
             border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
         }
         
         .feedback-item:last-child {
@@ -601,18 +601,18 @@
         }
         
         .feedback-date {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-light);
         }
         
         .feedback-content {
-            margin-top: 5px;
+            margin-top: 3px;
         }
         
         .delete-feedback {
             background: var(--reset-color);
-            padding: 4px 8px;
-            font-size: 0.8rem;
+            padding: 3px 6px;
+            font-size: 0.75rem;
             margin-top: 5px;
             width: auto;
         }
@@ -668,7 +668,13 @@
                 grid-template-columns: 1fr;
             }
             
-            .admin-content {
+            .admin-panel {
+                width: 95%;
+                left: 2.5%;
+                top: 20px;
+            }
+            
+            .admin-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -679,10 +685,6 @@
             
             .admin-login-btn:hover span, .feedback-btn:hover span {
                 display: none;
-            }
-            
-            .admin-container {
-                padding: 15px;
             }
         }
     </style>
@@ -759,61 +761,16 @@
         </div>
     </div>
 
-    <button class="admin-login-btn" id="admin-login-btn">
-        <i class="fas fa-user-lock"></i>
-        <span>管理员登录</span>
-    </button>
-    
-    <button class="feedback-btn" id="feedback-btn">
-        <i class="fas fa-comment"></i>
-        <span>反馈</span>
-    </button>
-
-    <div class="db-status" id="db-status">
-        <i class="fas fa-database"></i> <span>数据库状态: 检查中...</span>
-    </div>
-
-    <!-- 登录模态框 -->
-    <div class="modal" id="login-modal">
-        <div class="modal-content">
-            <h2><i class="fas fa-lock"></i> 管理员登录</h2>
-            <div class="form-group">
-                <label for="login-password">密码</label>
-                <input type="password" id="login-password" placeholder="输入管理员密码">
-            </div>
-            <div class="modal-buttons">
-                <button id="login-btn">登录</button>
-                <button class="cancel-btn" id="cancel-login">取消</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 反馈模态框 -->
-    <div class="modal" id="feedback-modal">
-        <div class="modal-content">
-            <h2><i class="fas fa-comment"></i> 提交反馈</h2>
-            <div class="form-group">
-                <label for="feedback-content">反馈内容</label>
-                <textarea id="feedback-content" placeholder="请输入您的反馈内容"></textarea>
-            </div>
-            <div class="modal-buttons">
-                <button id="submit-feedback">提交</button>
-                <button class="cancel-btn" id="cancel-feedback">取消</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 后台管理面板 -->
+    <!-- 可移动的管理面板 -->
     <div class="admin-panel" id="admin-panel">
-        <div class="admin-container">
-            <div class="admin-header">
-                <h2><i class="fas fa-cog"></i> 后台管理系统</h2>
-                <button class="close-admin" id="close-admin">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="admin-content">
+        <div class="admin-header" id="admin-header">
+            <h2><i class="fas fa-cog"></i> 后台管理系统</h2>
+            <button class="admin-close" id="admin-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="admin-body">
+            <div class="admin-grid">
                 <div class="admin-card">
                     <h3><i class="fas fa-sliders-h"></i> 基本设置</h3>
                     <div class="form-group">
@@ -905,19 +862,72 @@
         </div>
     </div>
 
+    <button class="admin-login-btn" id="admin-login-btn">
+        <i class="fas fa-user-lock"></i>
+        <span>管理员登录</span>
+    </button>
+    
+    <button class="feedback-btn" id="feedback-btn">
+        <i class="fas fa-comment"></i>
+        <span>反馈</span>
+    </button>
+
+    <div class="db-status" id="db-status">
+        <i class="fas fa-database"></i> <span>数据库状态: 检查中...</span>
+    </div>
+
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-lock"></i> 管理员登录</h2>
+            <div class="form-group">
+                <label for="login-password">密码</label>
+                <input type="password" id="login-password" placeholder="输入管理员密码">
+            </div>
+            <div class="modal-buttons">
+                <button id="login-btn">登录</button>
+                <button class="cancel-btn" id="cancel-login">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="feedback-modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-comment"></i> 提交反馈</h2>
+            <div class="form-group">
+                <label for="feedback-content">反馈内容</label>
+                <textarea id="feedback-content" placeholder="请输入您的反馈内容"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button id="submit-feedback">提交</button>
+                <button class="cancel-btn" id="cancel-feedback">取消</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 简单的代码保护 - 禁用右键菜单和开发者工具
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            // 禁用F12和Ctrl+Shift+I
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
-        });
-        
+        // 代码加密保护
+        function encryptCode(code) {
+            // 简单的代码混淆
+            return code.split('').map(c => {
+                return String.fromCharCode(c.charCodeAt(0) + 1);
+            }).join('');
+        }
+
+        function decryptCode(code) {
+            // 解密混淆的代码
+            return code.split('').map(c => {
+                return String.fromCharCode(c.charCodeAt(0) - 1);
+            }).join('');
+        }
+
+        // 执行加密的代码
+        function executeEncrypted(encryptedCode) {
+            const code = decryptCode(encryptedCode);
+            eval(code);
+        }
+
+        // 主应用程序代码（实际应用中这部分应该被加密）
+        const appCode = `
         // Cloudflare Workers KV API 端点
         const API_BASE = 'https://time.bcfx.dpdns.org/api';
         
@@ -932,7 +942,7 @@
         // 从KV加载设置
         async function loadSettings() {
             try {
-                const response = await fetch(`${API_BASE}/config`);
+                const response = await fetch(\`\${API_BASE}/config\`);
                 if (response.ok) {
                     const config = await response.json();
                     
@@ -972,7 +982,7 @@
                     }
                     
                     if (config.calibrationTime) {
-                        document.getElementById('calibration-time').textContent = `校准时间: ${config.calibrationTime}`;
+                        document.getElementById('calibration-time').textContent = \`校准时间: \${config.calibrationTime}\`;
                     }
                     
                     initializeTimer(config.initialPhase || '5-green');
@@ -1000,7 +1010,7 @@
             };
             
             try {
-                const response = await fetch(`${API_BASE}/config`, {
+                const response = await fetch(\`\${API_BASE}/config\`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1036,8 +1046,8 @@
             const logo = document.getElementById('logo');
             
             if (url && url.trim() !== '') {
-                logoPreview.innerHTML = `<img src="${url}" alt="Logo Preview">`;
-                logo.innerHTML = `<img src="${url}" alt="Logo">`;
+                logoPreview.innerHTML = \`<img src="\${url}" alt="Logo Preview">\`;
+                logo.innerHTML = \`<img src="\${url}" alt="Logo">\`;
             } else {
                 logoPreview.innerHTML = '<span>无Logo</span>';
                 logo.innerHTML = '';
@@ -1049,7 +1059,7 @@
             const bgPreview = document.getElementById('bg-preview');
             
             if (url && url.trim() !== '') {
-                bgPreview.style.backgroundImage = `url(${url})`;
+                bgPreview.style.backgroundImage = \`url(\${url})\`;
             } else {
                 bgPreview.style.backgroundImage = 'none';
                 bgPreview.innerHTML = '<span>无背景图片</span>';
@@ -1060,7 +1070,7 @@
         function updateCalibrationTime() {
             const now = new Date();
             const calibrationTime = formatDateTimeFull(now);
-            document.getElementById('calibration-time').textContent = `校准时间: ${calibrationTime}`;
+            document.getElementById('calibration-time').textContent = \`校准时间: \${calibrationTime}\`;
         }
         
         // 阶段持续时间（分钟）
@@ -1120,11 +1130,6 @@
             }
         });
         
-        // 关闭后台管理
-        document.getElementById('close-admin').addEventListener('click', function() {
-            document.getElementById('admin-panel').style.display = 'none';
-        });
-        
         // 反馈按钮
         document.getElementById('feedback-btn').addEventListener('click', function() {
             document.getElementById('feedback-modal').style.display = 'flex';
@@ -1147,7 +1152,7 @@
             const password = document.getElementById('login-password').value;
             
             try {
-                const response = await fetch(`${API_BASE}/verify-password`, {
+                const response = await fetch(\`\${API_BASE}/verify-password\`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1163,6 +1168,7 @@
                         document.getElementById('login-modal').style.display = 'none';
                         document.getElementById('login-password').value = '';
                         document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-sign-out-alt"></i><span>退出管理员</span>';
+                        alert('管理员登录成功');
                         
                         // 加载反馈
                         loadFeedback();
@@ -1188,7 +1194,7 @@
             }
             
             try {
-                const response = await fetch(`${API_BASE}/feedback`, {
+                const response = await fetch(\`\${API_BASE}/feedback\`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1235,7 +1241,7 @@
             updateLogoPreview(logoUrl);
             
             if (bgImage) {
-                document.body.style.backgroundImage = `url(${bgImage})`;
+                document.body.style.backgroundImage = \`url(\${bgImage})\`;
             }
             
             document.documentElement.style.setProperty('--bg-opacity', bgOpacity / 100);
@@ -1263,7 +1269,7 @@
         // 导出数据
         document.getElementById('export-data').addEventListener('click', async function() {
             try {
-                const response = await fetch(`${API_BASE}/export`);
+                const response = await fetch(\`\${API_BASE}/export\`);
                 if (response.ok) {
                     const data = await response.json();
                     const dataStr = JSON.stringify(data, null, 2);
@@ -1288,7 +1294,7 @@
         document.getElementById('reset-data').addEventListener('click', async function() {
             if (confirm('确定要重置所有数据吗？此操作不可恢复！')) {
                 try {
-                    const response = await fetch(`${API_BASE}/reset`, {
+                    const response = await fetch(\`\${API_BASE}/reset\`, {
                         method: 'POST'
                     });
                     
@@ -1308,7 +1314,7 @@
         // 加载反馈
         async function loadFeedback() {
             try {
-                const response = await fetch(`${API_BASE}/feedback`);
+                const response = await fetch(\`\${API_BASE}/feedback\`);
                 if (response.ok) {
                     const feedback = await response.json();
                     const feedbackList = document.getElementById('feedback-list');
@@ -1322,11 +1328,11 @@
                     feedback.forEach(item => {
                         const feedbackItem = document.createElement('div');
                         feedbackItem.className = 'feedback-item';
-                        feedbackItem.innerHTML = `
-                            <div class="feedback-date">${new Date(item.timestamp).toLocaleString()}</div>
-                            <div class="feedback-content">${item.content}</div>
-                            <button class="delete-feedback" data-id="${item.id}">删除</button>
-                        `;
+                        feedbackItem.innerHTML = \`
+                            <div class="feedback-date">\${new Date(item.timestamp).toLocaleString()}</div>
+                            <div class="feedback-content">\${item.content}</div>
+                            <button class="delete-feedback" data-id="\${item.id}">删除</button>
+                        \`;
                         feedbackList.appendChild(feedbackItem);
                     });
                     
@@ -1336,7 +1342,7 @@
                             const id = this.getAttribute('data-id');
                             if (confirm('确定要删除这条反馈吗？')) {
                                 try {
-                                    const response = await fetch(`${API_BASE}/feedback/${id}`, {
+                                    const response = await fetch(\`\${API_BASE}/feedback/\${id}\`, {
                                         method: 'DELETE'
                                     });
                                     
@@ -1411,7 +1417,7 @@
             // 计算机库开启时间
             const currentCycleStart = new Date(now.getTime() - cycleElapsedMs);
             const currentHangarOpenTime = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
-            document.getElementById('hangar-open-time').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentHangarOpenTime)}`;
+            document.getElementById('hangar-open-time').innerHTML = \`<i class="fas fa-play-circle"></i> 机库开启时间: \${formatDateTimeFull(currentHangarOpenTime)}\`;
             
             if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 1000) {
                 // 重置阶段 - 机库已关闭等待开启中
@@ -1458,9 +1464,9 @@
             
             // 更新阶段指示器
             const phaseIndicator = document.getElementById('phase-indicator');
-            phaseIndicator.innerHTML = `<i class="${phaseIcon}"></i> <span>${phaseName}</span>`;
+            phaseIndicator.innerHTML = \`<i class="\${phaseIcon}"></i> <span>\${phaseName}</span>\`;
             phaseIndicator.className = 'phase-indicator';
-            phaseIndicator.classList.add(`phase-${currentPhase}`);
+            phaseIndicator.classList.add(\`phase-\${currentPhase}\`);
             
             // 更新倒计时显示
             const countdownElement = document.getElementById('countdown');
@@ -1473,7 +1479,7 @@
         // 更新灯的状态显示
         function updateLightsDisplay() {
             for (let i = 0; i < 5; i++) {
-                const lightElement = document.getElementById(`light-${i}`);
+                const lightElement = document.getElementById(\`light-\${i}\`);
                 lightElement.className = 'light';
                 lightElement.classList.add(currentLights[i]);
                 
@@ -1503,7 +1509,7 @@
             if (now.getTime() > firstGreenTime.getTime()) {
                 const prevItem = document.createElement('li');
                 prevItem.className = 'previous';
-                prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个开启时间: ${formatDateTimeFull(previousWindowTime)}`;
+                prevItem.innerHTML = \`<i class="fas fa-chevron-left"></i> 上一个开启时间: \${formatDateTimeFull(previousWindowTime)}\`;
                 windowList.appendChild(prevItem);
             }
             
@@ -1513,9 +1519,9 @@
                 const listItem = document.createElement('li');
                 
                 if (i === 0) {
-                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个开启时间: ${formatDateTimeFull(windowTime)}`;
+                    listItem.innerHTML = \`<i class="fas fa-window-restore"></i> 下一个开启时间: \${formatDateTimeFull(windowTime)}\`;
                 } else {
-                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时间 ${i}: ${formatDateTimeFull(windowTime)}`;
+                    listItem.innerHTML = \`<i class="fas fa-window-restore"></i> 开启时间 \${i}: \${formatDateTimeFull(windowTime)}\`;
                 }
                 
                 windowList.appendChild(listItem);
@@ -1529,7 +1535,7 @@
             const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = totalSeconds % 60;
             
-            return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+            return \`\${padZero(hours)}:\${padZero(minutes)}:\${padZero(seconds)}\`;
         }
         
         // 格式化日期时间（用于输入框）
@@ -1540,7 +1546,7 @@
             const hours = padZero(date.getHours());
             const minutes = padZero(date.getMinutes());
             
-            return `${year}-${month}-${day}T${hours}:${minutes}`;
+            return \`\${year}-\${month}-\${day}T\${hours}:\${minutes}\`;
         }
         
         // 格式化完整日期时间（用于显示）
@@ -1551,7 +1557,7 @@
             const hours = padZero(date.getHours());
             const minutes = padZero(date.getMinutes());
             
-            return `${year}-${month}-${day} ${hours}:${minutes}`;
+            return \`\${year}-\${month}-\${day} \${hours}:\${minutes}\`;
         }
         
         // 补零函数
@@ -1562,7 +1568,7 @@
         // 检查数据库状态
         async function checkDbStatus() {
             try {
-                const response = await fetch(`${API_BASE}/status`);
+                const response = await fetch(\`\${API_BASE}/status\`);
                 if (response.ok) {
                     document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> <span>数据库状态: 正常</span>';
                 } else {
@@ -1579,6 +1585,39 @@
         
         // 每5分钟检查一次数据库状态
         setInterval(checkDbStatus, 5 * 60 * 1000);
+        
+        // 管理面板拖动功能
+        let isDragging = false;
+        let dragOffsetX, dragOffsetY;
+        
+        document.getElementById('admin-header').addEventListener('mousedown', function(e) {
+            isDragging = true;
+            const panel = document.getElementById('admin-panel');
+            dragOffsetX = e.clientX - panel.offsetLeft;
+            dragOffsetY = e.clientY - panel.offsetTop;
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                const panel = document.getElementById('admin-panel');
+                panel.style.left = (e.clientX - dragOffsetX) + 'px';
+                panel.style.top = (e.clientY - dragOffsetY) + 'px';
+            }
+        });
+        
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+        
+        // 关闭管理面板
+        document.getElementById('admin-close').addEventListener('click', function() {
+            document.getElementById('admin-panel').style.display = 'none';
+        });
+        `;
+
+        // 加密并执行代码
+        const encryptedCode = encryptCode(appCode);
+        executeEncrypted(encryptedCode);
     </script>
 </body>
 </html>
