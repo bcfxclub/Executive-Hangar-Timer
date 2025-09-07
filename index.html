@@ -1413,17 +1413,17 @@
             const firstGreenTime = new Date(adjustedStartTime.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
             const now = new Date();
             
-            // 计算上一个开启时间
+            // 计算上次开启时间
             let previousWindowTime = new Date(firstGreenTime.getTime());
             while (previousWindowTime.getTime() + totalCycleMs < now.getTime()) {
                 previousWindowTime = new Date(previousWindowTime.getTime() + totalCycleMs);
             }
             
-            // 如果当前时间已经超过了第一个开启时间，则显示上一个开启时间
+            // 如果当前时间已经超过了第一个开启时间，则显示上次开启时间
             if (now.getTime() > firstGreenTime.getTime()) {
                 const prevItem = document.createElement('li');
                 prevItem.className = 'previous';
-                prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个开启时间: ${formatDateTimeFull(previousWindowTime)}`;
+                prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上次开启时间: ${formatDateTimeFull(previousWindowTime)}`;
                 windowList.appendChild(prevItem);
             }
             
@@ -1433,7 +1433,7 @@
                 const listItem = document.createElement('li');
                 
                 if (i === 0) {
-                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个开启时间: ${formatDateTimeFull(windowTime)}`;
+                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 即将开启时间: ${formatDateTimeFull(windowTime)}`;
                 } else {
                     listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时间 ${i}: ${formatDateTimeFull(windowTime)}`;
                 }
