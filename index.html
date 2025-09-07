@@ -413,37 +413,85 @@
             display: flex;
             gap: 12px;
             margin-top: 20px;
+            justify-content: center;
         }
         
         .modal-buttons button {
             width: auto;
-            flex: 1;
+            min-width: 100px;
+            padding: 10px 15px;
         }
         
         .cancel-btn {
             background: linear-gradient(to right, #95a5a6, #7f8c8d);
         }
         
-        .admin-section {
+        /* 后台管理面板样式 */
+        .admin-panel {
             display: none;
-            background-color: rgba(255, 255, 255, var(--bg-opacity));
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin-top: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1002;
+            overflow-y: auto;
+            padding: 20px;
         }
         
-        .admin-panel {
+        .admin-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .admin-header h2 {
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-admin {
+            background: var(--reset-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .admin-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
         
         .admin-card {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: var(--panel-bg);
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            height: fit-content;
         }
         
         .admin-card h3 {
@@ -566,6 +614,7 @@
             padding: 4px 8px;
             font-size: 0.8rem;
             margin-top: 5px;
+            width: auto;
         }
         
         .calibration-time {
@@ -596,7 +645,7 @@
                 padding: 1rem;
             }
             
-            .timer-display, .card-windows, .admin-section {
+            .timer-display, .card-windows {
                 padding: 15px;
             }
             
@@ -619,7 +668,7 @@
                 grid-template-columns: 1fr;
             }
             
-            .admin-panel {
+            .admin-content {
                 grid-template-columns: 1fr;
             }
             
@@ -630,6 +679,10 @@
             
             .admin-login-btn:hover span, .feedback-btn:hover span {
                 display: none;
+            }
+            
+            .admin-container {
+                padding: 15px;
             }
         }
     </style>
@@ -693,8 +746,8 @@
                 <h2><i class="fas fa-calendar-check"></i> 机库开启时间</h2>
                 <p class="window-status">该时间段内可以插卡开启机库大门</p>
                 <ul class="window-list" id="window-list">
-                    <li class="previous"><i class="fas fa-chevron-left"></i> 上次开启时间: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 下次开启时间: 计算中...</li>
+                    <li class="previous"><i class="fas fa-chevron-left"></i> 上一个开启时间: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 下一个开启时间: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 开启时间 1: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 开启时间 2: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 开启时间 3: 计算中...</li>
@@ -702,99 +755,6 @@
                     <li><i class="fas fa-window-restore"></i> 开启时间 5: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 开启时间 6: 计算中...</li>
                 </ul>
-            </div>
-            
-            <div class="admin-section" id="admin-section">
-                <h2><i class="fas fa-cog"></i> 后台管理</h2>
-                <div class="admin-panel">
-                    <div class="admin-card">
-                        <h3><i class="fas fa-sliders-h"></i> 基本设置</h3>
-                        <div class="form-group">
-                            <label for="start-time"><i class="fas fa-calendar-alt"></i> 开始时间</label>
-                            <input type="datetime-local" id="start-time">
-                        </div>
-                        <div class="form-group">
-                            <label for="initial-phase"><i class="fas fa-list-alt"></i> 初始阶段</label>
-                            <select id="initial-phase">
-                                <option value="5-red">5红灯</option>
-                                <option value="1-green-4-red">1绿灯4红灯</option>
-                                <option value="2-green-3-red">2绿灯3红灯</option>
-                                <option value="3-green-2-red">3绿灯2红灯</option>
-                                <option value="4-green-1-red">4绿灯1红灯</option>
-                                <option value="5-green" selected>5绿灯</option>
-                                <option value="1-gray-4-green">1灰灯4绿灯</option>
-                                <option value="2-gray-3-green">2灰灯3绿灯</option>
-                                <option value="3-gray-2-green">3灰灯2绿灯</option>
-                                <option value="4-gray-1-green">4灰灯1绿灯</option>
-                                <option value="5-gray">5灰灯</option>
-                            </select>
-                        </div>
-                        <button id="update-timer">
-                            <i class="fas fa-sync"></i> 更新计时器
-                        </button>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <h3><i class="fas fa-bell"></i> 通知管理</h3>
-                        <div class="form-group">
-                            <label for="notification-content">通知内容</label>
-                            <textarea id="notification-content" placeholder="输入通知内容"></textarea>
-                        </div>
-                        <button id="update-notification">
-                            <i class="fas fa-save"></i> 更新通知
-                        </button>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <h3><i class="fas fa-image"></i> 外观设置</h3>
-                        <div class="form-group">
-                            <label for="custom-title">系统标题</label>
-                            <input type="text" id="custom-title" placeholder="输入系统标题">
-                        </div>
-                        <div class="form-group">
-                            <label for="logo-url">Logo URL</label>
-                            <input type="text" id="logo-url" placeholder="输入Logo URL">
-                            <div class="logo-preview" id="logo-preview"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="bg-image">背景图片URL</label>
-                            <input type="text" id="bg-image" placeholder="输入背景图片URL">
-                            <div class="bg-preview" id="bg-preview"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="bg-opacity">背景透明度: <span id="opacity-value">80</span>%</label>
-                            <input type="range" id="bg-opacity" min="10" max="100" value="80">
-                        </div>
-                        <button id="save-appearance">
-                            <i class="fas fa-save"></i> 保存外观设置
-                        </button>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <h3><i class="fas fa-database"></i> 数据管理</h3>
-                        <div class="form-group">
-                            <label for="admin-password">管理密码</label>
-                            <input type="password" id="admin-password" placeholder="输入新密码">
-                        </div>
-                        <div class="form-group">
-                            <button id="export-data">
-                                <i class="fas fa-download"></i> 导出数据
-                            </button>
-                        </div>
-                        <div class="form-group">
-                            <button id="reset-data" style="background: var(--reset-color);">
-                                <i class="fas fa-trash"></i> 重置数据
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <h3><i class="fas fa-comments"></i> 反馈管理</h3>
-                        <div class="feedback-list" id="feedback-list">
-                            <!-- Feedback items will be loaded here -->
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -813,6 +773,7 @@
         <i class="fas fa-database"></i> <span>数据库状态: 检查中...</span>
     </div>
 
+    <!-- 登录模态框 -->
     <div class="modal" id="login-modal">
         <div class="modal-content">
             <h2><i class="fas fa-lock"></i> 管理员登录</h2>
@@ -827,6 +788,7 @@
         </div>
     </div>
     
+    <!-- 反馈模态框 -->
     <div class="modal" id="feedback-modal">
         <div class="modal-content">
             <h2><i class="fas fa-comment"></i> 提交反馈</h2>
@@ -840,8 +802,122 @@
             </div>
         </div>
     </div>
+    
+    <!-- 后台管理面板 -->
+    <div class="admin-panel" id="admin-panel">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2><i class="fas fa-cog"></i> 后台管理系统</h2>
+                <button class="close-admin" id="close-admin">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="admin-content">
+                <div class="admin-card">
+                    <h3><i class="fas fa-sliders-h"></i> 基本设置</h3>
+                    <div class="form-group">
+                        <label for="start-time"><i class="fas fa-calendar-alt"></i> 开始时间</label>
+                        <input type="datetime-local" id="start-time">
+                    </div>
+                    <div class="form-group">
+                        <label for="initial-phase"><i class="fas fa-list-alt"></i> 初始阶段</label>
+                        <select id="initial-phase">
+                            <option value="5-red">5红灯</option>
+                            <option value="1-green-4-red">1绿灯4红灯</option>
+                            <option value="2-green-3-red">2绿灯3红灯</option>
+                            <option value="3-green-2-red">3绿灯2红灯</option>
+                            <option value="4-green-1-red">4绿灯1红灯</option>
+                            <option value="5-green" selected>5绿灯</option>
+                            <option value="1-gray-4-green">1灰灯4绿灯</option>
+                            <option value="2-gray-3-green">2灰灯3绿灯</option>
+                            <option value="3-gray-2-green">3灰灯2绿灯</option>
+                            <option value="4-gray-1-green">4灰灯1绿灯</option>
+                            <option value="5-gray">5灰灯</option>
+                        </select>
+                    </div>
+                    <button id="update-timer">
+                        <i class="fas fa-sync"></i> 更新计时器
+                    </button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3><i class="fas fa-bell"></i> 通知管理</h3>
+                    <div class="form-group">
+                        <label for="notification-content">通知内容</label>
+                        <textarea id="notification-content" placeholder="输入通知内容"></textarea>
+                    </div>
+                    <button id="update-notification">
+                        <i class="fas fa-save"></i> 更新通知
+                    </button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3><i class="fas fa-image"></i> 外观设置</h3>
+                    <div class="form-group">
+                        <label for="custom-title">系统标题</label>
+                        <input type="text" id="custom-title" placeholder="输入系统标题">
+                    </div>
+                    <div class="form-group">
+                        <label for="logo-url">Logo URL</label>
+                        <input type="text" id="logo-url" placeholder="输入Logo URL">
+                        <div class="logo-preview" id="logo-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bg-image">背景图片URL</label>
+                        <input type="text" id="bg-image" placeholder="输入背景图片URL">
+                        <div class="bg-preview" id="bg-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bg-opacity">背景透明度: <span id="opacity-value">80</span>%</label>
+                        <input type="range" id="bg-opacity" min="10" max="100" value="80">
+                    </div>
+                    <button id="save-appearance">
+                        <i class="fas fa-save"></i> 保存外观设置
+                    </button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3><i class="fas fa-database"></i> 数据管理</h3>
+                    <div class="form-group">
+                        <label for="admin-password">管理密码</label>
+                        <input type="password" id="admin-password" placeholder="输入新密码">
+                    </div>
+                    <div class="form-group">
+                        <button id="export-data">
+                            <i class="fas fa-download"></i> 导出数据
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <button id="reset-data" style="background: var(--reset-color);">
+                            <i class="fas fa-trash"></i> 重置数据
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="admin-card">
+                    <h3><i class="fas fa-comments"></i> 反馈管理</h3>
+                    <div class="feedback-list" id="feedback-list">
+                        <!-- Feedback items will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
+        // 简单的代码保护 - 禁用右键菜单和开发者工具
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            // 禁用F12和Ctrl+Shift+I
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+        
         // Cloudflare Workers KV API 端点
         const API_BASE = 'https://time.bcfx.dpdns.org/api';
         
@@ -1036,12 +1112,17 @@
             if (isAdmin) {
                 // 退出管理员模式
                 isAdmin = false;
-                document.getElementById('admin-section').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'none';
                 this.innerHTML = '<i class="fas fa-user-lock"></i><span>管理员登录</span>';
                 alert('已退出管理员模式');
             } else {
                 document.getElementById('login-modal').style.display = 'flex';
             }
+        });
+        
+        // 关闭后台管理
+        document.getElementById('close-admin').addEventListener('click', function() {
+            document.getElementById('admin-panel').style.display = 'none';
         });
         
         // 反馈按钮
@@ -1078,11 +1159,10 @@
                     const result = await response.json();
                     if (result.valid) {
                         isAdmin = true;
-                        document.getElementById('admin-section').style.display = 'block';
+                        document.getElementById('admin-panel').style.display = 'block';
                         document.getElementById('login-modal').style.display = 'none';
                         document.getElementById('login-password').value = '';
                         document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-sign-out-alt"></i><span>退出管理员</span>';
-                        alert('管理员登录成功');
                         
                         // 加载反馈
                         loadFeedback();
@@ -1413,17 +1493,17 @@
             const firstGreenTime = new Date(adjustedStartTime.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
             const now = new Date();
             
-            // 计算上次开启时间
+            // 计算上一个开启时间
             let previousWindowTime = new Date(firstGreenTime.getTime());
             while (previousWindowTime.getTime() + totalCycleMs < now.getTime()) {
                 previousWindowTime = new Date(previousWindowTime.getTime() + totalCycleMs);
             }
             
-            // 如果当前时间已经超过了第一个开启时间，则显示上次开启时间
+            // 如果当前时间已经超过了第一个开启时间，则显示上一个开启时间
             if (now.getTime() > firstGreenTime.getTime()) {
                 const prevItem = document.createElement('li');
                 prevItem.className = 'previous';
-                prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上次开启时间: ${formatDateTimeFull(previousWindowTime)}`;
+                prevItem.innerHTML = `<i class="fas fa-chevron-left"></i> 上一个开启时间: ${formatDateTimeFull(previousWindowTime)}`;
                 windowList.appendChild(prevItem);
             }
             
@@ -1433,7 +1513,7 @@
                 const listItem = document.createElement('li');
                 
                 if (i === 0) {
-                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下次开启时间: ${formatDateTimeFull(windowTime)}`;
+                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下一个开启时间: ${formatDateTimeFull(windowTime)}`;
                 } else {
                     listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时间 ${i}: ${formatDateTimeFull(windowTime)}`;
                 }
