@@ -694,7 +694,7 @@
                 <p class="window-status">该时间段内可以插卡开启机库大门</p>
                 <ul class="window-list" id="window-list">
                     <li class="previous"><i class="fas fa-chevron-left"></i> 上次开启时间: 计算中...</li>
-                    <li><i class="fas fa-window-restore"></i> 即将开启时间: 计算中...</li>
+                    <li><i class="fas fa-window-restore"></i> 下次开启时间: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 开启时间 1: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 开启时间 2: 计算中...</li>
                     <li><i class="fas fa-window-restore"></i> 开启时间 3: 计算中...</li>
@@ -1433,7 +1433,7 @@
                 const listItem = document.createElement('li');
                 
                 if (i === 0) {
-                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 即将开启时间: ${formatDateTimeFull(windowTime)}`;
+                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下次开启时间: ${formatDateTimeFull(windowTime)}`;
                 } else {
                     listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时间 ${i}: ${formatDateTimeFull(windowTime)}`;
                 }
