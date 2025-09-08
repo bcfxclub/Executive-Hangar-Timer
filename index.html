@@ -370,52 +370,8 @@
             gap: 5px;
         }
         
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1001;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal h2 {
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            text-align: center;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        
-        .modal-buttons button {
-            width: auto;
-            flex: 1;
-        }
-        
-        .cancel-btn {
-            background: linear-gradient(to right, #95a5a6, #7f8c8d);
-        }
-        
-        .admin-panel {
+        /* 后台管理弹窗样式 */
+        .admin-modal {
             display: none;
             position: fixed;
             top: 50%;
@@ -424,15 +380,15 @@
             width: 90%;
             max-width: 1000px;
             max-height: 90vh;
-            background: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             z-index: 1002;
             overflow: hidden;
             backdrop-filter: blur(10px);
         }
         
-        .admin-header {
+        .admin-modal-header {
             padding: 15px 20px;
             background: var(--primary-color);
             color: white;
@@ -442,33 +398,44 @@
             cursor: move;
         }
         
-        .admin-body {
+        .admin-modal-body {
             padding: 20px;
             overflow-y: auto;
             max-height: calc(90vh - 60px);
         }
         
-        .admin-card-container {
+        .close-admin {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-admin:hover {
+            color: #ff4757;
+        }
+        
+        .admin-panel {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 15px;
         }
         
         .admin-card {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         
         .admin-card h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--primary-color);
             border-bottom: 1px solid var(--secondary-color);
             padding-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.1rem;
         }
         
         .form-group {
@@ -556,20 +523,15 @@
             border-radius: 6px;
             padding: 10px;
             margin-top: 10px;
-            background: white;
         }
         
         .feedback-item {
             padding: 10px;
             border-bottom: 1px solid #eee;
-            background: var(--panel-bg);
-            border-radius: 4px;
-            margin-bottom: 8px;
         }
         
         .feedback-item:last-child {
             border-bottom: none;
-            margin-bottom: 0;
         }
         
         .feedback-date {
@@ -586,7 +548,6 @@
             padding: 4px 8px;
             font-size: 0.8rem;
             margin-top: 5px;
-            width: auto;
         }
         
         .calibration-time {
@@ -605,23 +566,6 @@
             color: var(--text-light);
             margin-top: 8px;
             text-align: center;
-        }
-        
-        .close-admin {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: auto;
-            padding: 0;
-            box-shadow: none;
-        }
-        
-        .close-admin:hover {
-            transform: none;
-            box-shadow: none;
-            color: #ffdddd;
         }
         
         /* 手机端优化 */
@@ -657,12 +601,12 @@
                 grid-template-columns: 1fr;
             }
             
-            .admin-panel {
+            .admin-modal {
                 width: 95%;
-                height: 90vh;
+                height: 85vh;
             }
             
-            .admin-card-container {
+            .admin-panel {
                 grid-template-columns: 1fr;
             }
             
@@ -674,6 +618,73 @@
             .admin-login-btn:hover span, .feedback-btn:hover span {
                 display: none;
             }
+        }
+        
+        /* 登录模态框 */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-modal h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .modal-buttons button {
+            width: auto;
+            flex: 1;
+        }
+        
+        .cancel-btn {
+            background: linear-gradient(to right, #95a5a6, #7f8c8d);
+        }
+        
+        /* 反馈模态框 */
+        .feedback-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .feedback-modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -750,15 +761,14 @@
         </div>
     </div>
 
-    <div class="admin-panel" id="admin-panel">
-        <div class="admin-header" id="admin-header">
-            <h2><i class="fas fa-cog"></i> 后台管理系统</h2>
-            <button class="close-admin" id="close-admin">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- 后台管理弹窗 -->
+    <div class="admin-modal" id="admin-modal">
+        <div class="admin-modal-header" id="admin-drag-handle">
+            <h2><i class="fas fa-cog"></i> 后台管理</h2>
+            <span class="close-admin" id="close-admin">&times;</span>
         </div>
-        <div class="admin-body">
-            <div class="admin-card-container">
+        <div class="admin-modal-body">
+            <div class="admin-panel">
                 <div class="admin-card">
                     <h3><i class="fas fa-sliders-h"></i> 基本设置</h3>
                     <div class="form-group">
@@ -823,20 +833,6 @@
                 </div>
                 
                 <div class="admin-card">
-                    <h3><i class="fas fa-database"></i> 数据管理</h3>
-                    <div class="form-group">
-                        <button id="export-data">
-                            <i class="fas fa-download"></i> 导出数据
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <button id="reset-data" style="background: var(--reset-color);">
-                            <i class="fas fa-trash"></i> 重置数据
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="admin-card">
                     <h3><i class="fas fa-key"></i> 密码管理</h3>
                     <div class="form-group">
                         <label for="current-password">当前密码</label>
@@ -853,6 +849,20 @@
                     <button id="change-password">
                         <i class="fas fa-key"></i> 修改密码
                     </button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3><i class="fas fa-database"></i> 数据管理</h3>
+                    <div class="form-group">
+                        <button id="export-data">
+                            <i class="fas fa-download"></i> 导出数据
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <button id="reset-data" style="background: var(--reset-color);">
+                            <i class="fas fa-trash"></i> 重置数据
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="admin-card">
@@ -879,8 +889,8 @@
         <i class="fas fa-database"></i> <span>数据库状态: 检查中...</span>
     </div>
 
-    <div class="modal" id="login-modal">
-        <div class="modal-content">
+    <div class="login-modal" id="login-modal">
+        <div class="login-modal-content">
             <h2><i class="fas fa-lock"></i> 管理员登录</h2>
             <div class="form-group">
                 <label for="login-password">密码</label>
@@ -893,8 +903,8 @@
         </div>
     </div>
     
-    <div class="modal" id="feedback-modal">
-        <div class="modal-content">
+    <div class="feedback-modal" id="feedback-modal">
+        <div class="feedback-modal-content">
             <h2><i class="fas fa-comment"></i> 提交反馈</h2>
             <div class="form-group">
                 <label for="feedback-content">反馈内容</label>
@@ -908,23 +918,8 @@
     </div>
 
     <script>
-        // 加密的代码部分
-        // 使用简单的字符替换加密
-        function encrypt(code) {
-            return code.split('').map(char => {
-                return String.fromCharCode(char.charCodeAt(0) + 1);
-            }).join('');
-        }
-
-        function decrypt(code) {
-            return code.split('').map(char => {
-                return String.fromCharCode(char.charCodeAt(0) - 1);
-            }).join('');
-        }
-
-        // 加密的API地址
-        const encryptedApiBase = 'https://time.bcfx.dpdns.org/api';
-        const API_BASE = decrypt(encryptedApiBase);
+        // Cloudflare Workers API 端点
+        const API_BASE = 'https://time.bcfx.dpdns.org/api';
         
         // 初始化状态
         let startTime = new Date();
@@ -932,9 +927,8 @@
         let currentLights = [];
         let countdownInterval;
         let isAdmin = false;
-        const DEFAULT_PASSWORD = 'admin'; // 修改默认密码为admin
         
-        // 从KV加载设置
+        // 从API加载设置
         async function loadSettings() {
             try {
                 const response = await fetch(`${API_BASE}/config`);
@@ -991,7 +985,7 @@
             }
         }
         
-        // 保存设置到KV
+        // 保存设置到API
         async function saveSettings() {
             const config = {
                 startTime: startTime.toISOString(),
@@ -1117,7 +1111,7 @@
             if (isAdmin) {
                 // 退出管理员模式
                 isAdmin = false;
-                document.getElementById('admin-panel').style.display = 'none';
+                document.getElementById('admin-modal').style.display = 'none';
                 this.innerHTML = '<i class="fas fa-user-lock"></i><span>管理员登录</span>';
                 alert('已退出管理员模式');
             } else {
@@ -1125,9 +1119,9 @@
             }
         });
         
-        // 关闭管理员面板
+        // 关闭后台管理
         document.getElementById('close-admin').addEventListener('click', function() {
-            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('admin-modal').style.display = 'none';
         });
         
         // 反馈按钮
@@ -1164,11 +1158,10 @@
                     const result = await response.json();
                     if (result.valid) {
                         isAdmin = true;
-                        document.getElementById('admin-panel').style.display = 'block';
                         document.getElementById('login-modal').style.display = 'none';
                         document.getElementById('login-password').value = '';
+                        document.getElementById('admin-modal').style.display = 'block';
                         document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-sign-out-alt"></i><span>退出管理员</span>';
-                        alert('管理员登录成功');
                         
                         // 加载反馈
                         loadFeedback();
@@ -1250,50 +1243,6 @@
             saveSettings();
         });
         
-        // 修改密码
-        document.getElementById('change-password').addEventListener('click', async function() {
-            const currentPassword = document.getElementById('current-password').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            
-            if (!currentPassword || !newPassword || !confirmPassword) {
-                alert('请填写所有密码字段');
-                return;
-            }
-            
-            if (newPassword !== confirmPassword) {
-                alert('新密码和确认密码不一致');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/change-password`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ currentPassword, newPassword })
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success) {
-                        alert('密码修改成功');
-                        document.getElementById('current-password').value = '';
-                        document.getElementById('new-password').value = '';
-                        document.getElementById('confirm-password').value = '';
-                    } else {
-                        alert('当前密码错误');
-                    }
-                } else {
-                    alert('密码修改失败');
-                }
-            } catch (error) {
-                console.error('Change password error:', error);
-                alert('密码修改失败');
-            }
-        });
-        
         // 背景透明度调整
         document.getElementById('bg-opacity').addEventListener('input', function() {
             document.documentElement.style.setProperty('--bg-opacity', this.value / 100);
@@ -1352,6 +1301,50 @@
                     console.error('Reset error:', error);
                     alert('重置失败');
                 }
+            }
+        });
+        
+        // 修改密码
+        document.getElementById('change-password').addEventListener('click', async function() {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('请填写所有密码字段');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('新密码和确认密码不一致');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/change-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('密码修改成功');
+                        document.getElementById('current-password').value = '';
+                        document.getElementById('new-password').value = '';
+                        document.getElementById('confirm-password').value = '';
+                    } else {
+                        alert('密码修改失败: ' + result.message);
+                    }
+                } else {
+                    alert('密码修改失败');
+                }
+            } catch (error) {
+                console.error('Change password error:', error);
+                alert('密码修改失败');
             }
         });
         
@@ -1622,26 +1615,26 @@
             }
         }
         
-        // 使管理员面板可拖动
+        // 使后台管理窗口可拖动
         function makeDraggable(element, handle) {
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             
-            handle.onmousedown = dragMouseDown;
+            handle.addEventListener('mousedown', dragMouseDown);
             
             function dragMouseDown(e) {
                 e = e || window.event;
                 e.preventDefault();
-                // 获取鼠标初始位置
+                // 获取鼠标位置
                 pos3 = e.clientX;
                 pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
             }
             
             function elementDrag(e) {
                 e = e || window.event;
                 e.preventDefault();
-                // 计算新的鼠标位置
+                // 计算新位置
                 pos1 = pos3 - e.clientX;
                 pos2 = pos4 - e.clientY;
                 pos3 = e.clientX;
@@ -1649,13 +1642,12 @@
                 // 设置元素的新位置
                 element.style.top = (element.offsetTop - pos2) + "px";
                 element.style.left = (element.offsetLeft - pos1) + "px";
-                element.style.transform = 'none';
             }
             
             function closeDragElement() {
                 // 停止移动
-                document.onmouseup = null;
-                document.onmousemove = null;
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
             }
         }
         
@@ -1663,13 +1655,13 @@
         loadSettings();
         checkDbStatus();
         
+        // 使后台管理窗口可拖动
+        const adminModal = document.getElementById('admin-modal');
+        const adminDragHandle = document.getElementById('admin-drag-handle');
+        makeDraggable(adminModal, adminDragHandle);
+        
         // 每5分钟检查一次数据库状态
         setInterval(checkDbStatus, 5 * 60 * 1000);
-        
-        // 使管理员面板可拖动
-        const adminPanel = document.getElementById('admin-panel');
-        const adminHeader = document.getElementById('admin-header');
-        makeDraggable(adminPanel, adminHeader);
     </script>
 </body>
 </html>
