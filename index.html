@@ -1184,7 +1184,7 @@
                 <h3><i class="fas fa-info-circle"></i> 页脚信息设置</h3>
                 <div class="form-group">
                     <label for="footer-notice-input">底部公告栏</label>
-                    <textarea id="footer-notice-input" placeholder="输入底部公告栏内容" rows="3">欢迎使用行政机库计时器系统</textarea>
+                    <textarea id="footer-notice-input" placeholder="输入底部公告栏内容" rows="3">欢迎使用星际公民行政机库计时系统</textarea>
                 </div>
                 <div class="form-group">
                     <label for="record-info-input">备案信息</label>
@@ -1192,24 +1192,19 @@
                 </div>
                 <div class="form-group">
                     <label for="organization-name-input">组织名称</label>
-                    <input type="text" id="organization-name-input" placeholder="输入组织名称" value="航空航天管理局">
+                    <input type="text" id="organization-name-input" placeholder="输入组织名称" value="罗伯茨航空航天管理局">
                 </div>
                 <div class="form-group">
                     <label for="project-description-input">项目介绍（详细内容）</label>
-                    <textarea id="project-description-input" placeholder="输入项目介绍" rows="4">行政机库计时器系统是一个用于管理机库开启时间的专业工具，提供精确的计时功能和状态指示。</textarea>
+                    <textarea id="project-description-input" placeholder="输入项目介绍" rows="4"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="version-input">版本号（详细内容）</label>
-                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v2.1.0
-更新日期：2023-10-15
-更新内容：
-- 新增计时器控制功能
-- 优化页脚信息展示
-- 修复已知问题</textarea>
+                    <label for="version-input">版本更新（详细内容）</label>
+                    <textarea id="version-input" placeholder="输入版本号" rows="4"> </textarea>
                 </div>
                 <div class="form-group">
                     <label for="about-input">关于本网站（详细内容）</label>
-                    <textarea id="about-input" placeholder="输入关于本网站" rows="4">行政机库计时器系统由航空航天管理局开发，旨在提供高效的机库管理解决方案。如有问题请联系：support@example.com</textarea>
+                    <textarea id="about-input" placeholder="输入关于本网站" rows="4"></textarea>
                 </div>
                 <button id="save-footer-info">
                     <i class="fas fa-save"></i> 保存页脚信息
@@ -1220,7 +1215,7 @@
 
     <script>
         // API地址设置
-        let API_BASE = "/api";
+        let API_BASE = "https://time.bcfx.dpdns.org/api";
         
         // 初始化状态
         let startTime = new Date();
@@ -2198,7 +2193,7 @@
         
         document.getElementById('version-btn').addEventListener('click', function() {
             const content = document.getElementById('version-input').value || '暂无版本信息';
-            document.getElementById('footer-modal-title').textContent = '版本信息';
+            document.getElementById('footer-modal-title').textContent = '版本更新';
             document.getElementById('footer-modal-content').innerHTML = `<p>${content.replace(/\n/g, '<br>')}</p>`;
             document.getElementById('footer-info-modal').style.display = 'flex';
         });
