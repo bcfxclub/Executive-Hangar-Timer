@@ -501,7 +501,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: rgba(255, 255, 255, 0.98);
-            border-radius: 12px;
+            border-radius: 16px; /* 增加圆角大小 */
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             padding: 20px;
             width: 85%;
@@ -688,6 +688,7 @@
         
         .feedback-content {
             margin-top: 5px;
+            word-break: break-word;
         }
         
         .delete-feedback {
@@ -980,7 +981,7 @@
                 <span id="record-info">沪ICP备12345678号</span>
                 <span id="organization-name">航空航天管理局</span>
                 <a id="project-description-btn">项目介绍</a>
-                <a id="version-btn">版本号</a>
+                <a id="version-btn">版本更新</a>
                 <a id="about-btn">关于我们</a>
             </div>
         </div>
@@ -1169,7 +1170,7 @@
                     <button id="reset-data" style="background: var(--reset-color);">
                         <i class="fas fa-trash"></i> 重置数据
                     </button>
-                </div>
+            </div>
             </div>
             
             <div class="admin-card">
@@ -1330,6 +1331,13 @@
                         document.getElementById('admin-panel-btn').style.display = 'flex';
                         document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-sign-out-alt"></i><span>退出管理员</span>';
                     }
+
+                    // 添加计时器状态实时保存功能
+                    document.getElementById('timer-enabled').addEventListener('change', async function() {
+                        timerEnabled = this.value === 'true';
+                        await saveSettings();
+                        initializeTimer(document.getElementById('initial-phase').value);
+                    });
                 } else {
                     console.error('Failed to load settings');
                     initializeTimer('5-green');
@@ -1343,7 +1351,7 @@
         // 保存设置到API
         async function saveSettings() {
             const config = {
-                startTime: startTime.toISOString(),
+                startTime: new Date(document.getElementById('start-time').value).toISOString(),
                 initialPhase: document.getElementById('initial-phase').value,
                 timerEnabled: document.getElementById('timer-enabled').value === 'true',
                 notification: document.getElementById('notification-content').value,
@@ -1373,17 +1381,19 @@
                 });
                 
                 if (response.ok) {
-                    alert('设置已保存');
                     // 更新API地址
                     API_BASE = config.apiUrl;
                     // 更新页脚显示
                     updateFooterDisplay(config);
+                    return true;
                 } else {
                     alert('保存失败');
+                    return false;
                 }
             } catch (error) {
                 console.error('Failed to save settings:', error);
                 alert('保存失败');
+                return false;
             }
         }
         
@@ -1491,7 +1501,6 @@
         document.getElementById('update-timer').addEventListener('click', function() {
             const newStartTime = new Date(document.getElementById('start-time').value);
             const initialPhase = document.getElementById('initial-phase').value;
-            const timerEnabled = document.getElementById('timer-enabled').value === 'true';
             
             if (isNaN(newStartTime.getTime())) {
                 alert('请输入有效的时间');
