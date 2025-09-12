@@ -748,75 +748,6 @@
             flex: 0 0 100px;
         }
         
-        /* 计时器控制按钮样式 */
-        .timer-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .timer-toggle {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-        
-        .timer-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .timer-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 30px;
-        }
-        
-        .timer-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .timer-slider {
-            background-color: var(--card-color);
-        }
-        
-        input:checked + .timer-slider:before {
-            transform: translateX(30px);
-        }
-        
-        .timer-status {
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        
-        .timer-status-on {
-            background-color: rgba(46, 204, 113, 0.2);
-            color: var(--card-color);
-        }
-        
-        .timer-status-off {
-            background-color: rgba(231, 76, 60, 0.2);
-            color: var(--reset-color);
-        }
-        
         /* 页脚样式 - 透明设计 */
         .footer {
             position: fixed;
@@ -1144,14 +1075,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-power-off"></i> 计时器状态</label>
-                    <div class="timer-control">
-                        <label class="timer-toggle">
-                            <input type="checkbox" id="timer-toggle" checked>
-                            <span class="timer-slider"></span>
-                        </label>
-                        <div id="timer-status" class="timer-status timer-status-on">已开启</div>
-                    </div>
+                    <label for="timer-enabled"><i class="fas fa-power-off"></i> 计时器状态</label>
+                    <select id="timer-enabled">
+                        <option value="true">开启</option>
+                        <option value="false">关闭</option>
+                    </select>
                 </div>
                 <button id="update-timer">
                     <i class="fas fa-sync"></i> 更新计时器
@@ -1188,7 +1116,6 @@
                     <label for="qrcode-url">二维码URL</label>
                     <input type="url" id="qrcode-url" placeholder="输入二维码URL">
                     <div class="upload-group">
-                       极
                         <input type="file" id="qrcode-upload" accept="image/*">
                         <button id="upload-qrcode"><i class="fas fa-upload"></i></button>
                     </div>
@@ -1202,7 +1129,6 @@
                     <input type="text" id="qrcode-caption-input" placeholder="输入二维码注释">
                 </div>
                 <div class="form-group">
-                   极
                     <label for="bg-image">背景图片URL</label>
                     <input type="url" id="bg-image" placeholder="输入背景图片URL">
                     <div class="upload-group">
@@ -1224,7 +1150,7 @@
                 <h3><i class="fas fa-database"></i> 数据管理</h3>
                 <div class="form-group">
                     <label for="admin-password">修改密码</label>
-                    <input type="password"极 id="admin-password" placeholder="输入新密码">
+                    <input type="password" id="admin-password" placeholder="输入新密码">
                 </div>
                 <div class="form-group">
                     <label for="api-url">API地址</label>
@@ -1234,8 +1160,8 @@
                     </button>
                     <div id="api-test-result" class="api-test-result"></div>
                 </div>
-                <div极 class="form-group">
-                    <button id极="export-data">
+                <div class="form-group">
+                    <button id="export-data">
                         <i class="fas fa-download"></i> 导出数据
                     </button>
                 </div>
@@ -1321,8 +1247,7 @@
                     
                     if (config.timerEnabled !== undefined) {
                         timerEnabled = config.timerEnabled;
-                        document.getElementById('timer-toggle').checked = timerEnabled;
-                        updateTimerStatusDisplay();
+                        document.getElementById('timer-enabled').value = timerEnabled.toString();
                     }
                     
                     if (config.notification) {
@@ -1332,7 +1257,7 @@
                     
                     if (config.customTitle) {
                         document.getElementById('custom-title').value = config.customTitle;
-                        document.getElementById极('title').textContent = config.customTitle;
+                        document.getElementById('title').textContent = config.customTitle;
                     }
                     
                     if (config.logoUrl) {
@@ -1351,7 +1276,7 @@
                     }
                     
                     if (config.bgImage) {
-                        document.getElementById('bg-image').极value = config.bgImage;
+                        document.getElementById('bg-image').value = config.bgImage;
                         updateBgPreview(config.bgImage);
                     }
                     
@@ -1415,33 +1340,21 @@
             }
         }
         
-        // 更新计时器状态显示
-        function updateTimerStatusDisplay() {
-            const timerStatus = document.getElementById('timer-status');
-            if (timerEnabled) {
-                timerStatus.textContent = '已开启';
-                timerStatus.className = 'timer-status timer-status-on';
-            } else {
-                timerStatus.textContent = '已关闭';
-                timerStatus.className = 'timer-status timer-status-off';
-            }
-        }
-        
         // 保存设置到API
         async function saveSettings() {
             const config = {
                 startTime: startTime.toISOString(),
                 initialPhase: document.getElementById('initial-phase').value,
-                timerEnabled: timerEnabled,
+                timerEnabled: document.getElementById('timer-enabled').value === 'true',
                 notification: document.getElementById('notification-content').value,
                 customTitle: document.getElementById('custom-title').value,
                 logoUrl: document.getElementById('logo-url').value,
                 qrcodeUrl: document.getElementById('qrcode-url').value,
-                qrcodeCaption: document.getElementById('极qrcode-caption-input').value,
+                qrcodeCaption: document.getElementById('qrcode-caption-input').value,
                 bgImage: document.getElementById('bg-image').value,
                 bgOpacity: document.getElementById('bg-opacity').value,
                 calibrationTime: document.getElementById('calibration-time').textContent.replace('校准时间: ', ''),
-                api极Url: document.getElementById('api-url').value,
+                apiUrl: document.getElementById('api-url').value,
                 footerNotice: document.getElementById('footer-notice-input').value,
                 recordInfo: document.getElementById('record-info-input').value,
                 organizationName: document.getElementById('organization-name-input').value,
@@ -1520,7 +1433,7 @@
             const qrcode = document.getElementById('qrcode');
             
             if (url && url.trim() !== '') {
-                qrcodePreview.innerHTML = `<极img src="${url}" alt="QR Code Preview">`;
+                qrcodePreview.innerHTML = `<img src="${url}" alt="QR Code Preview">`;
                 qrcode.innerHTML = `<img src="${url}" alt="QR Code">`;
             } else {
                 qrcodePreview.innerHTML = '<span>无二维码</span>';
@@ -1534,7 +1447,7 @@
             
             if (url && url.trim() !== '') {
                 bgPreview.style.backgroundImage = `url(${url})`;
-                document.body.style.backgroundImage = `url($极{url})`;
+                document.body.style.backgroundImage = `url(${url})`;
             } else {
                 bgPreview.style.backgroundImage = 'none';
                 bgPreview.innerHTML = '<span>无背景图片</span>';
@@ -1559,16 +1472,16 @@
         // 阶段配置
         const PHASE_CONFIG = {
             '5-red': { phase: 'reset', lights: ['red', 'red', 'red', 'red', 'red'], offset: 0 },
-            '1-green-4-red': { phase: 'reset', lights: ['green', '极red', 'red', 'red', 'red'], offset: 24 },
+            '1-green-4-red': { phase: 'reset', lights: ['green', 'red', 'red', 'red', 'red'], offset: 24 },
             '2-green-3-red': { phase: 'reset', lights: ['green', 'green', 'red', 'red', 'red'], offset: 48 },
             '3-green-2-red': { phase: 'reset', lights: ['green', 'green', 'green', 'red', 'red'], offset: 72 },
             '4-green-1-red': { phase: 'reset', lights: ['green', 'green', 'green', 'green', 'red'], offset: 96 },
             '5-green': { phase: 'card', lights: ['green', 'green', 'green', 'green', 'green'], offset: 0 },
-            '1-gray-4-green': { phase极: 'card', lights: ['gray', 'green', 'green', 'green', 'green'], offset: 12 },
+            '1-gray-4-green': { phase: 'card', lights: ['gray', 'green', 'green', 'green', 'green'], offset: 12 },
             '2-gray-3-green': { phase: 'card', lights: ['gray', 'gray', 'green', 'green', 'green'], offset: 24 },
             '3-gray-2-green': { phase: 'card', lights: ['gray', 'gray', 'gray', 'green', 'green'], offset: 36 },
-           极 '4-gray-1-green': { phase: '极card', lights: ['gray', 'gray', 'gray', 'gray', 'green'], offset: 48 },
-            '5-gray': { phase: 'poweroff', lights: ['gray', 'gray', 'gray', '极gray', 'gray'], offset: 0 }
+            '4-gray-1-green': { phase: 'card', lights: ['gray', 'gray', 'gray', 'gray', 'green'], offset: 48 },
+            '5-gray': { phase: 'poweroff', lights: ['gray', 'gray', 'gray', 'gray', 'gray'], offset: 0 }
         };
         
         // 设置初始时间
@@ -1578,6 +1491,7 @@
         document.getElementById('update-timer').addEventListener('click', function() {
             const newStartTime = new Date(document.getElementById('start-time').value);
             const initialPhase = document.getElementById('initial-phase').value;
+            const timerEnabled = document.getElementById('timer-enabled').value === 'true';
             
             if (isNaN(newStartTime.getTime())) {
                 alert('请输入有效的时间');
@@ -1590,14 +1504,6 @@
             initializeTimer(initialPhase);
             
             // 保存设置
-            saveSettings();
-        });
-        
-        // 计时器开关控制
-        document.getElementById('timer-toggle').addEventListener('change', function() {
-            timerEnabled = this.checked;
-            updateTimerStatusDisplay();
-            initializeTimer(document.getElementById('initial-phase').value);
             saveSettings();
         });
         
@@ -1633,8 +1539,8 @@
         });
         
         // 取消登录
-        document.getElementById('cancel极-login').addEventListener('click', function() {
-            document.getElementById('login-modal').style.display = '极none';
+        document.getElementById('cancel-login').addEventListener('click', function() {
+            document.getElementById('login-modal').style.display = 'none';
             document.getElementById('login-password').value = '';
         });
         
@@ -1666,7 +1572,7 @@
                         document.getElementById('admin-panel-btn').style.display = 'flex';
                         document.getElementById('login-modal').style.display = 'none';
                         document.getElementById('login-password').value = '';
-                        document.getElementById('admin-login-btn').innerHTML = '<i极 class="fas fa-sign-out-alt"></i><span>退出管理员</span>';
+                        document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-sign-out-alt"></i><span>退出管理员</span>';
                         alert('管理员登录成功');
                         
                         // 加载反馈
@@ -1701,7 +1607,7 @@
                     body: JSON.stringify({ content })
                 });
                 
-                if极 (response.ok) {
+                if (response.ok) {
                     alert('反馈提交成功');
                     document.getElementById('feedback-modal').style.display = 'none';
                     document.getElementById('feedback-content').value = '';
@@ -1746,7 +1652,7 @@
                 document.getElementById('qrcode-caption').textContent = qrcodeCaption;
             }
             
-            if (bgImage极) {
+            if (bgImage) {
                 document.body.style.backgroundImage = `url(${bgImage})`;
             }
             
@@ -1799,7 +1705,7 @@
             try {
                 const response = await fetch(`${apiUrl}/status`);
                 if (response.ok) {
-                    result极Div.textContent = 'API连接成功！';
+                    resultDiv.textContent = 'API连接成功！';
                     resultDiv.className = 'api-test-result success';
                 } else {
                     resultDiv.textContent = 'API连接失败：服务器返回错误';
@@ -1821,7 +1727,7 @@
                     const dataBlob = new Blob([dataStr], {type: 'application/json'});
                     
                     const a = document.createElement('a');
-                    a.href = URL.createObjectURL(data极Blob);
+                    a.href = URL.createObjectURL(dataBlob);
                     a.download = 'hangar-timer-backup.json';
                     document.body.appendChild(a);
                     a.click();
@@ -1830,7 +1736,7 @@
                     alert('导出失败');
                 }
             } catch (error) {
-                console.error('Export error:',极 error);
+                console.error('Export error:', error);
                 alert('导出失败');
             }
         });
@@ -1872,7 +1778,7 @@
                     });
                     
                     if (response.ok) {
-                        alert极('密码已更新');
+                        alert('密码已更新');
                         this.value = '';
                     } else {
                         alert('密码更新失败');
@@ -1927,9 +1833,9 @@
             }
             
             // 模拟上传过程 - 实际应用中应该发送到服务器
-            const极 file = fileInput.files[0];
+            const file = fileInput.files[0];
             const reader = new FileReader();
-            reader.on极load = function(e) {
+            reader.onload = function(e) {
                 document.getElementById('bg-image').value = e.target.result;
                 updateBgPreview(e.target.result);
             };
@@ -1972,7 +1878,7 @@
                                     });
                                     
                                     if (response.ok) {
-                                        alert('反馈极已删除');
+                                        alert('反馈已删除');
                                         loadFeedback();
                                     } else {
                                         alert('删除失败');
@@ -2030,7 +1936,7 @@
             const adjustedStartTime = new Date(startTime.getTime() - offsetMinutes * 60 * 1000);
             
             // 更新显示
-            updateDisplay(adjusted极StartTime);
+            updateDisplay(adjustedStartTime);
             
             // 计算并显示机库开启时间
             calculateHangarOpenTimes(adjustedStartTime);
@@ -2048,7 +1954,7 @@
             
             const now = new Date();
             const elapsedMs = now.getTime() - adjustedStartTime.getTime();
-            const totalCycleMs = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card + PHASE_DURATIONS.poweroff) * 极60 * 1000;
+            const totalCycleMs = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card + PHASE_DURATIONS.poweroff) * 60 * 1000;
             
             // 计算当前周期内的经过时间
             const cycleElapsedMs = elapsedMs % totalCycleMs;
@@ -2063,12 +1969,12 @@
             const currentHangarOpenTime = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
             document.getElementById('hangar-open-time').innerHTML = `<i class="fas fa-play-circle"></i> 机库开启时间: ${formatDateTimeFull(currentHangarOpenTime)}`;
             
-            if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 极1000) {
+            if (cycleElapsedMs < PHASE_DURATIONS.reset * 60 * 1000) {
                 // 重置阶段 - 机库已关闭等待开启中
                 currentPhase = 'reset';
                 phaseName = '机库已关闭等待开启中';
                 phaseIcon = 'fas fa-sync-alt';
-                phaseTimeRemaining = PHASE_DURATIONS.reset * 60 * 1000 - cycle极ElapsedMs;
+                phaseTimeRemaining = PHASE_DURATIONS.reset * 60 * 1000 - cycleElapsedMs;
                 
                 // 计算灯的状态（每24分钟变化一次）
                 const lightChangeInterval = 24 * 60 * 1000;
@@ -2112,9 +2018,9 @@
             phaseIndicator.className = 'phase-indicator';
             phaseIndicator.classList.add(`phase-${currentPhase}`);
             
-            // 更新极倒计时显示
+            // 更新倒计时显示
             const countdownElement = document.getElementById('countdown');
-            countdownElement.text极Content = formatTimeRemaining(phaseTimeRemaining);
+            countdownElement.textContent = formatTimeRemaining(phaseTimeRemaining);
             
             // 更新灯的状态
             updateLightsDisplay();
@@ -2145,15 +2051,15 @@
             
             // 计算上一个开启时间
             let previousWindowTime = new Date(firstGreenTime.getTime());
-            while (previousWindowTime.getTime() + totalCycleMs < now.get极Time()) {
+            while (previousWindowTime.getTime() + totalCycleMs < now.getTime()) {
                 previousWindowTime = new Date(previousWindowTime.getTime() + totalCycleMs);
             }
             
             // 如果当前时间已经超过了第一个开启时间，则显示上一个开启时间
             if (now.getTime() > firstGreenTime.getTime()) {
                 const prevItem = document.createElement('li');
-                prevItem.innerHTML = `<i class="fas fa-window-restore"></i> 上次开启极时间: ${formatDateTimeFull(previousWindowTime)}`;
-                windowList.appendChild(prev极Item);
+                prevItem.innerHTML = `<i class="fas fa-window-restore"></i> 上次开启时间: ${formatDateTimeFull(previousWindowTime)}`;
+                windowList.appendChild(prevItem);
             }
             
             // 生成后续的8个机库开启时间节点
@@ -2219,7 +2125,7 @@
             let initialX;
             let initialY;
             let xOffset = 0;
-           极 let yOffset = 0;
+            let yOffset = 0;
             
             header.addEventListener("mousedown", dragStart);
             document.addEventListener("mouseup", dragEnd);
@@ -2234,7 +2140,7 @@
                 }
             }
             
-            function dragEnd(e极) {
+            function dragEnd(e) {
                 initialX = currentX;
                 initialY = currentY;
                 
@@ -2266,10 +2172,10 @@
                 if (response.ok) {
                     document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> <span>数据库状态: 正常</span>';
                 } else {
-                    document.getElementById('db-status').innerHTML = '<i class="fas极 fa-database" style="color: #e74c3c;"></i> <span>数据库状态: 异常</span>';
+                    document.getElementById('db-status').innerHTML = '<i class="fas fa-database" style="color: #e74c3c;"></i> <span>数据库状态: 异常</span>';
                 }
             } catch (error) {
-                document.getElementById('db-status').innerHTML = '<i class="fas fa-database" style极="color: #e74c3c;"></i> <span>数据库状态: 异常</span>';
+                document.getElementById('db-status').innerHTML = '<i class="fas fa-database" style="color: #e74c3c;"></i> <span>数据库状态: 异常</span>';
             }
         }
         
@@ -2291,7 +2197,7 @@
         document.getElementById('about-btn').addEventListener('click', function() {
             const content = document.getElementById('about-input').value || '暂无关于信息';
             document.getElementById('footer-modal-title').textContent = '关于本网站';
-            document.getElementById('footer-modal-content').innerHTML = `<p>${content.replace(/\n/g, '<br>')}</极p>`;
+            document.getElementById('footer-modal-content').innerHTML = `<p>${content.replace(/\n/g, '<br>')}</p>`;
             document.getElementById('footer-info-modal').style.display = 'flex';
         });
         
