@@ -1206,7 +1206,7 @@
                 </div>
                 <div class="form-group">
                     <label for="api-url">API地址</label>
-                    <input type="url" id="api-url" placeholder="输入API地址" value="https://time.bcfx.dpdns.org/api">
+                    <input type="url" id="api-url" placeholder="输入API地址" value="/api">
                     <button id="test-api" style="margin-top: 10px;">
                         <i class="fas fa-plug"></i> 测试API连接
                     </button>
@@ -1269,8 +1269,8 @@
     </div>
 
     <script>
-        // API地址设置 - 修复默认API地址
-        let API_BASE = localStorage.getItem('apiBase') || "https://time.bcfx.dpdns.org/api";
+        // API地址设置 - 使用相对路径，适应Cloudflare部署
+        let API_BASE = localStorage.getItem('apiBase') || "/api";
         
         // 初始化状态
         let startTime = new Date();
