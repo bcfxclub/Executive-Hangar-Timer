@@ -117,6 +117,12 @@
             justify-content: center;
             overflow: hidden;
             margin-bottom: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .qrcode:hover {
+            transform: scale(1.05);
         }
         
         .qrcode img {
@@ -209,6 +215,11 @@
             position: absolute;
             white-space: nowrap;
             animation: scroll 20s linear infinite;
+        }
+        
+        .notification-scroll a {
+            color: inherit;
+            text-decoration: none;
         }
         
         @keyframes scroll {
@@ -314,12 +325,20 @@
         }
         
         .card-windows h2 {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: var(--window-title-color);
-            padding-bottom: 12px;
+            padding-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
+            border-bottom: 1px solid var(--window-comment-color);
+        }
+        
+        .window-status {
+            font-size: 0.85rem;
+            color: var(--window-comment-color);
+            margin-bottom: 15px;
+            text-align: center;
         }
         
         .window-list {
@@ -344,13 +363,6 @@
         .window-list li i {
             color: var(--card-color);
             font-size: 1.1rem;
-        }
-        
-        .window-status {
-            font-size: 0.85rem;
-            color: var(--window-comment-color);
-            margin-top: 8px;
-            text-align: center;
         }
         
         .info-text {
@@ -617,12 +629,12 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.98);
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             padding: 20px;
-            width: 85%;
-            max-width: 900px;
+            width: 90%;
+            max-width: 1000px;
             max-height: 85vh;
             overflow-y: auto;
             z-index: 1002;
@@ -664,33 +676,35 @@
         .admin-panel-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+            gap: 15px;
         }
         
         .admin-card {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
         }
         
         .admin-card h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--primary-color);
             border-bottom: 1px solid var(--secondary-color);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.1rem;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: bold;
             color: var(--text-dark);
             font-size: 0.9rem;
@@ -698,7 +712,7 @@
         
         input[type="datetime-local"], select, input[type="password"], input[type="text"], input[type="range"], textarea, input[type="url"], input[type="file"], input[type="color"] {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border: 2px solid #ddd;
             border-radius: 6px;
             font-size: 0.9rem;
@@ -711,7 +725,7 @@
         }
         
         textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
         }
         
@@ -719,10 +733,10 @@
             background: linear-gradient(to right, var(--secondary-color), #2980b9);
             color: white;
             border: none;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             transition: all 0.3s;
             width: 100%;
@@ -736,7 +750,7 @@
         
         .bg-preview {
             width: 100%;
-            height: 120px;
+            height: 100px;
             background-size: cover;
             background-position: center;
             border-radius: 6px;
@@ -744,9 +758,23 @@
             border: 2px dashed #ddd;
         }
         
+        .video-preview {
+            width: 100%;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 6px;
+            margin-top: 8px;
+            border: 2px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+        
         .logo-preview {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border: 2px dashed #ddd;
             border-radius: 8px;
             margin-top: 8px;
@@ -763,8 +791,8 @@
         }
         
         .qrcode-preview {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border: 2px dashed #ddd;
             border-radius: 8px;
             margin-top: 8px;
@@ -772,6 +800,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .qrcode-preview img {
@@ -781,7 +810,7 @@
         }
         
         .feedback-list {
-            max-height: 300px;
+            max-height: 200px;
             overflow-y: auto;
             border: 1px solid #ddd;
             border-radius: 6px;
@@ -790,7 +819,7 @@
         }
         
         .feedback-item {
-            padding: 10px;
+            padding: 8px;
             border-bottom: 1px solid #eee;
         }
         
@@ -799,7 +828,7 @@
         }
         
         .feedback-date {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-light);
         }
         
@@ -808,19 +837,26 @@
             word-break: break-word;
         }
         
+        .feedback-contact {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-top: 3px;
+        }
+        
         .delete-feedback {
             background: var(--reset-color);
             padding: 4px 8px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-top: 5px;
+            width: auto;
         }
         
         .api-test-result {
             margin-top: 10px;
-            padding: 10px;
+            padding: 8px;
             border-radius: 6px;
             background-color: #f8f9fa;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
         .success {
@@ -835,7 +871,7 @@
         
         .upload-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: 8px;
         }
         
@@ -845,7 +881,8 @@
         
         .upload-group button {
             width: auto;
-            flex: 0 0 100px;
+            flex: 0 0 80px;
+            padding: 8px;
         }
         
         .footer {
@@ -866,7 +903,7 @@
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
             color: rgba(255, 255, 255, 0.8);
             font-size: 0.85rem;
         }
@@ -884,6 +921,11 @@
             animation: footer-scroll 15s linear infinite;
         }
         
+        .footer-notice-scroll a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
         @keyframes footer-scroll {
             0% { transform: translate(0, 0); }
             100% { transform: translate(-100%, 0); }
@@ -892,7 +934,7 @@
         .footer-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -963,14 +1005,80 @@
         .color-picker-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .color-preview {
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             border-radius: 4px;
             border: 1px solid #ddd;
+        }
+        
+        .admin-panel-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .qrcode-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1003;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .qrcode-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .qrcode-modal img {
+            max-width: 250px;
+            max-height: 250px;
+            margin-bottom: 15px;
+        }
+        
+        .qrcode-modal-caption {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-top: 10px;
+        }
+        
+        .contact-inputs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .contact-inputs input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .link-input-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .link-input-group input {
+            flex: 1;
         }
         
         @media (max-width: 768px) {
@@ -1050,6 +1158,16 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 20px;
+            }
+            
+            .admin-card {
+                padding: 12px;
+            }
+            
+            .admin-panel {
+                width: 95%;
+                min-width: unset;
+                padding: 15px;
             }
         }
     </style>
@@ -1203,6 +1321,11 @@
                 <label for="feedback-content">反馈内容</label>
                 <textarea id="feedback-content" placeholder="请输入您的反馈内容"></textarea>
             </div>
+            <div class="contact-inputs">
+                <input type="text" id="feedback-qq" placeholder="QQ号码（选填）">
+                <input type="text" id="feedback-wechat" placeholder="微信号（选填）">
+                <input type="text" id="feedback-phone" placeholder="手机号（选填）">
+            </div>
             <div class="modal-buttons">
                 <button id="submit-feedback">提交</button>
                 <button class="cancel-btn" id="cancel-feedback">取消</button>
@@ -1226,9 +1349,6 @@
                 </div>
             </div>
             
-
-            </div>
-            
             <div class="modal-buttons">
                 <button class="cancel-btn" id="close-donation-modal">关闭</button>
             </div>
@@ -1244,6 +1364,14 @@
             <div class="modal-buttons">
                 <button class="cancel-btn" id="close-footer-modal">关闭</button>
             </div>
+        </div>
+    </div>
+
+    <div class="qrcode-modal" id="qrcode-modal">
+        <div class="qrcode-modal-content">
+            <img id="qrcode-modal-img" src="" alt="二维码">
+            <div class="qrcode-modal-caption" id="qrcode-modal-caption"></div>
+            <button class="cancel-btn" id="close-qrcode-modal">关闭</button>
         </div>
     </div>
 
@@ -1291,7 +1419,11 @@
                 <h3><i class="fas fa-bell"></i> 通知管理</h3>
                 <div class="form-group">
                     <label for="notification-content">通知内容</label>
-                    <textarea id="notification-content" placeholder="输入通知内容"></textarea>
+                    <textarea id="notification-content" placeholder="输入通知内容（可包含链接）"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="notification-link">通知链接URL（选填）</label>
+                    <input type="url" id="notification-link" placeholder="输入通知链接URL">
                 </div>
                 <div class="form-group color-picker-container">
                     <label for="notification-color">通知文字颜色</label>
@@ -1384,6 +1516,9 @@
                     <div class="upload-group">
                         <input type="file" id="video-upload" accept="video/*">
                         <button id="upload-video"><i class="fas fa-upload"></i></button>
+                    </div>
+                    <div class="video-preview" id="video-preview">
+                        <span>视频预览区域</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -1500,7 +1635,11 @@
                 <h3><i class="fas fa-info-circle"></i> 页脚信息设置</h3>
                 <div class="form-group">
                     <label for="footer-notice-input">底部公告栏</label>
-                    <textarea id="footer-notice-input" placeholder="输入底部公告栏内容" rows="3">欢迎使用行政机库计时系统</textarea>
+                    <textarea id="footer-notice-input" placeholder="输入底部公告栏内容（可包含链接）" rows="3">欢迎使用行政机库计时系统</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="footer-notice-link">公告栏链接URL（选填）</label>
+                    <input type="url" id="footer-notice-link" placeholder="输入公告栏链接URL">
                 </div>
                 <div class="form-group">
                     <label for="record-info-input">备案信息</label>
@@ -1516,14 +1655,17 @@
                 </div>
                 <div class="form-group">
                     <label for="version-input">版本更新（详细内容）</label>
-                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v2.1.2
+                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v2.1.3
 更新日期：2025-09-20
 更新内容：
 在上一版基础上，做出如下修改：
-1、标题栏样式改进：标题栏背景默认全局背景透明。标题栏去掉背景外框和底框，去掉毛玻璃处理，支持全局背景透明度设置，自适应调整标题大小。
-2、所有标题、通知、注释可以修改文字颜色。所有调整素材大小、文字颜色、更换视频背景或图片等操作都是实时可见的，不需要保存设置以后才能看到效果。
-3、视频背景增加单独地址输入框，可以实时预览
-4、修复已知问题</textarea>
+1、机库开启时间模块标题与注释文字中间加分隔横线。
+2、二维码图片支持点击放大功能，放大后也可以显示注释信息。
+3、反馈功能增加联系方式：可以输入QQ、微信、手机号。
+4、通知栏内容增加超链接功能，可以在后台设置跳转地址。前端通知界面不要显示下划线。
+5、页脚通知公告栏内容增加超链接功能，可以在后台设置跳转地址。前端通知界面不要显示下划线。
+6、对后台管理界面布局进行合理紧凑优化。底部增加关闭按钮。后台管理透明背景。
+7、视频背景可以在后台预览。</textarea>
                 </div>
                 <div class="form-group">
                     <label for="about-input">关于本网站（详细内容）</label>
@@ -1533,6 +1675,10 @@
                     <i class="fas fa-save"></i> 保存页脚信息
                 </button>
             </div>
+        </div>
+        
+        <div class="admin-panel-footer">
+            <button class="cancel-btn" id="close-admin-panel-bottom">关闭管理面板</button>
         </div>
     </div>
 
@@ -1581,13 +1727,17 @@
                     
                     if (config.notification) {
                         document.getElementById('notification-content').value = config.notification;
-                        updateNotificationDisplay(config.notification);
+                        updateNotificationDisplay(config.notification, config.notificationLink);
                     }
                     
                     if (config.notificationColor) {
                         document.getElementById('notification-color').value = config.notificationColor;
                         document.getElementById('notification-color-preview').style.backgroundColor = config.notificationColor;
                         document.documentElement.style.setProperty('--notification-color', config.notificationColor);
+                    }
+                    
+                    if (config.notificationLink) {
+                        document.getElementById('notification-link').value = config.notificationLink;
                     }
                     
                     if (config.customTitle) {
@@ -1742,7 +1892,11 @@
                     // 加载页脚信息
                     if (config.footerNotice) {
                         document.getElementById('footer-notice-input').value = config.footerNotice;
-                        document.getElementById('footer-notice-scroll').textContent = config.footerNotice;
+                        updateFooterNoticeDisplay(config.footerNotice, config.footerNoticeLink);
+                    }
+                    
+                    if (config.footerNoticeLink) {
+                        document.getElementById('footer-notice-link').value = config.footerNoticeLink;
                     }
                     
                     if (config.recordInfo) {
@@ -1803,6 +1957,7 @@
                 initialPhase: document.getElementById('initial-phase').value,
                 timerEnabled: document.getElementById('timer-enabled').value === 'true',
                 notification: document.getElementById('notification-content').value,
+                notificationLink: document.getElementById('notification-link').value,
                 notificationColor: document.getElementById('notification-color').value,
                 customTitle: document.getElementById('custom-title').value,
                 headerTextColor: document.getElementById('header-text-color').value,
@@ -1832,6 +1987,7 @@
                 alipayQrcodeUrl: document.getElementById('alipay-qrcode-url').value,
                 donationBtnColor: document.getElementById('donation-btn-color').value,
                 footerNotice: document.getElementById('footer-notice-input').value,
+                footerNoticeLink: document.getElementById('footer-notice-link').value,
                 recordInfo: document.getElementById('record-info-input').value,
                 organizationName: document.getElementById('organization-name-input').value,
                 projectDescription: document.getElementById('project-description-input').value,
@@ -1903,7 +2059,7 @@
         // 更新页脚显示
         function updateFooterDisplay(config) {
             if (config.footerNotice) {
-                document.getElementById('footer-notice-scroll').textContent = config.footerNotice;
+                updateFooterNoticeDisplay(config.footerNotice, config.footerNoticeLink);
             }
             
             if (config.recordInfo) {
@@ -1916,13 +2072,29 @@
         }
         
         // 更新通知显示
-        function updateNotificationDisplay(notification) {
+        function updateNotificationDisplay(notification, link) {
             const notificationScroll = document.getElementById('notification-scroll');
             if (notification && notification.trim() !== '') {
-                notificationScroll.textContent = notification;
+                if (link && link.trim() !== '') {
+                    notificationScroll.innerHTML = `<a href="${link}" target="_blank">${notification}</a>`;
+                } else {
+                    notificationScroll.textContent = notification;
+                }
                 document.getElementById('notification-bar').style.display = 'block';
             } else {
                 document.getElementById('notification-bar').style.display = 'none';
+            }
+        }
+        
+        // 更新页脚公告显示
+        function updateFooterNoticeDisplay(notice, link) {
+            const footerNoticeScroll = document.getElementById('footer-notice-scroll');
+            if (notice && notice.trim() !== '') {
+                if (link && link.trim() !== '') {
+                    footerNoticeScroll.innerHTML = `<a href="${link}" target="_blank">${notice}</a>`;
+                } else {
+                    footerNoticeScroll.textContent = notice;
+                }
             }
         }
         
@@ -1948,10 +2120,28 @@
             if (url && url.trim() !== '') {
                 qrcodePreview.innerHTML = `<img src="${url}" alt="QR Code Preview">`;
                 qrcode.innerHTML = `<img src="${url}" alt="QR Code">`;
+                
+                // 添加点击事件
+                qrcodePreview.onclick = function() {
+                    showQrcodeModal(url, document.getElementById('qrcode-caption-input').value);
+                };
+                
+                qrcode.onclick = function() {
+                    showQrcodeModal(url, document.getElementById('qrcode-caption-input').value);
+                };
             } else {
                 qrcodePreview.innerHTML = '<span>无二维码</span>';
                 qrcode.innerHTML = '';
+                qrcodePreview.onclick = null;
+                qrcode.onclick = null;
             }
+        }
+        
+        // 显示二维码模态框
+        function showQrcodeModal(url, caption) {
+            document.getElementById('qrcode-modal-img').src = url;
+            document.getElementById('qrcode-modal-caption').textContent = caption || '';
+            document.getElementById('qrcode-modal').style.display = 'flex';
         }
         
         // 更新背景预览
@@ -1961,8 +2151,8 @@
             
             if (url && url.trim() !== '') {
                 if (type === 'video') {
-                    // 视频背景
-                    bgPreview.innerHTML = '<span>视频背景预览</span>';
+                    // 图片背景
+                    bgPreview.innerHTML = '<span>图片背景预览</span>';
                 } else {
                     // 图片背景
                     bgPreview.style.backgroundImage = `url(${url})`;
@@ -1979,14 +2169,24 @@
         // 更新视频预览
         function updateVideoPreview(url) {
             const videoBackground = document.getElementById('video-background');
+            const videoPreview = document.getElementById('video-preview');
             
             if (url && url.trim() !== '') {
                 videoBackground.innerHTML = `<source src="${url}" type="video/mp4">`;
                 videoBackground.style.display = 'block';
                 document.body.classList.add('video-bg');
+                
+                // 更新视频预览区域
+                videoPreview.innerHTML = `
+                    <video style="width: 100%; height: 100%; object-fit: cover;" controls>
+                        <source src="${url}" type="video/mp4">
+                        您的浏览器不支持视频标签
+                    </video>
+                `;
             } else {
                 videoBackground.style.display = 'none';
                 document.body.classList.remove('video-bg');
+                videoPreview.innerHTML = '<span>视频预览区域</span>';
             }
         }
         
@@ -2078,6 +2278,15 @@
             document.getElementById('admin-panel').style.display = 'none';
         });
         
+        document.getElementById('close-admin-panel-bottom').addEventListener('click', function() {
+            document.getElementById('admin-panel').style.display = 'none';
+        });
+        
+        // 关闭二维码模态框
+        document.getElementById('close-qrcode-modal').addEventListener('click', function() {
+            document.getElementById('qrcode-modal').style.display = 'none';
+        });
+        
         // 关闭捐助模态框
         document.getElementById('close-donation-modal').addEventListener('click', function() {
             document.getElementById('donation-modal').style.display = 'none';
@@ -2093,6 +2302,9 @@
         document.getElementById('cancel-feedback').addEventListener('click', function() {
             document.getElementById('feedback-modal').style.display = 'none';
             document.getElementById('feedback-content').value = '';
+            document.getElementById('feedback-qq').value = '';
+            document.getElementById('feedback-wechat').value = '';
+            document.getElementById('feedback-phone').value = '';
         });
         
         // 登录
@@ -2137,11 +2349,20 @@
         // 提交反馈
         document.getElementById('submit-feedback').addEventListener('click', async function() {
             const content = document.getElementById('feedback-content').value;
+            const qq = document.getElementById('feedback-qq').value;
+            const wechat = document.getElementById('feedback-wechat').value;
+            const phone = document.getElementById('feedback-phone').value;
             
             if (!content.trim()) {
                 alert('请输入反馈内容');
                 return;
             }
+            
+            // 构建联系信息字符串
+            let contactInfo = '';
+            if (qq) contactInfo += `QQ: ${qq} `;
+            if (wechat) contactInfo += `微信: ${wechat} `;
+            if (phone) contactInfo += `手机: ${phone}`;
             
             try {
                 const response = await fetch(`${API_BASE}/feedback`, {
@@ -2149,13 +2370,19 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ content })
+                    body: JSON.stringify({ 
+                        content,
+                        contact: contactInfo.trim()
+                    })
                 });
                 
                 if (response.ok) {
                     alert('反馈提交成功');
                     document.getElementById('feedback-modal').style.display = 'none';
                     document.getElementById('feedback-content').value = '';
+                    document.getElementById('feedback-qq').value = '';
+                    document.getElementById('feedback-wechat').value = '';
+                    document.getElementById('feedback-phone').value = '';
                     
                     // 如果是管理员，重新加载反馈列表
                     if (isAdmin) {
@@ -2173,7 +2400,8 @@
         // 更新通知
         document.getElementById('update-notification').addEventListener('click', function() {
             const notification = document.getElementById('notification-content').value;
-            updateNotificationDisplay(notification);
+            const link = document.getElementById('notification-link').value;
+            updateNotificationDisplay(notification, link);
             saveSettings();
         });
         
@@ -2544,9 +2772,16 @@
                     feedback.forEach(item => {
                         const feedbackItem = document.createElement('div');
                         feedbackItem.className = 'feedback-item';
+                        
+                        let contactHtml = '';
+                        if (item.contact) {
+                            contactHtml = `<div class="feedback-contact">${item.contact}</div>`;
+                        }
+                        
                         feedbackItem.innerHTML = `
                             <div class="feedback-date">${new Date(item.timestamp).toLocaleString()}</div>
                             <div class="feedback-content">${item.content}</div>
+                            ${contactHtml}
                             <button class="delete-feedback" data-id="${item.id}">删除</button>
                         `;
                         feedbackList.appendChild(feedbackItem);
@@ -2932,10 +3167,38 @@
             document.getElementById('footer-info-modal').style.display = 'none';
         });
         
+        // 自动检测文本中的链接并使其可点击
+        function autoLinkify() {
+            // 获取所有文本节点并检测URL
+            const walker = document.createTreeWalker(
+                document.body,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            let node;
+            while (node = walker.nextNode()) {
+                const text = node.nodeValue;
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                
+                if (urlRegex.test(text)) {
+                    const parent = node.parentNode;
+                    if (parent && parent.nodeName !== 'A' && parent.nodeName !== 'SCRIPT' && parent.nodeName !== 'STYLE') {
+                        const newHtml = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+                        const newElement = document.createElement('span');
+                        newElement.innerHTML = newHtml;
+                        parent.replaceChild(newElement, node);
+                    }
+                }
+            }
+        }
+        
         // 初始加载设置
         document.getElementById('api-url').value = API_BASE;
         loadSettings();
         checkDbStatus();
+        autoLinkify();
         
         // 每5分钟检查一次数据库状态
         setInterval(checkDbStatus, 5 * 60 * 1000);
