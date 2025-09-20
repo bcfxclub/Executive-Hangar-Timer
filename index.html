@@ -20,6 +20,20 @@
             --bg-opacity: 0.8;
             --invite-bg: rgba(255, 215, 0, 0.2);
             --invite-border: #ffd700;
+            --notification-color: #ffffff;
+            --header-bg-color: transparent;
+            --header-text-color: white;
+            --header-font-size: 1.8rem;
+            --logo-size: 120px;
+            --window-text-color: var(--text-dark);
+            --window-comment-color: var(--text-light);
+            --calibration-text-color: var(--text-light);
+            --countdown-text-color: var(--primary-color);
+            --hangar-time-text-color: var(--text-dark);
+            --status-text-color: var(--text-dark);
+            --qrcode-caption-color: white;
+            --donation-btn-bg: #ff6b6b;
+            --window-title-color: var(--primary-color);
         }
         
         * {
@@ -42,6 +56,20 @@
             position: relative;
         }
         
+        body.video-bg {
+            background-image: none !important;
+        }
+        
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -55,15 +83,13 @@
         }
         
         .logo {
-            width: 120px;
-            height: 120px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            background-color: transparent;
+            width: var(--logo-size);
+            height: var(--logo-size);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
         
         .logo img {
@@ -101,7 +127,7 @@
         
         .qrcode-caption {
             font-size: 0.8rem;
-            color: white;
+            color: var(--qrcode-caption-color);
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
             max-width: 100px;
         }
@@ -141,16 +167,14 @@
         }
         
         header {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: var(--header-bg-color);
+            color: var(--header-text-color);
             padding: 1.2rem;
             text-align: center;
-            border-radius: 12px;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             position: relative;
+            font-size: var(--header-font-size);
         }
         
         .main-content {
@@ -178,6 +202,7 @@
             margin-bottom: 15px;
             height: 30px;
             position: relative;
+            color: var(--notification-color);
         }
         
         .notification-scroll {
@@ -232,7 +257,7 @@
             font-size: 3.5rem;
             font-weight: bold;
             margin: 20px 0;
-            color: var(--primary-color);
+            color: var(--countdown-text-color);
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 100%;
@@ -277,7 +302,7 @@
         .hangar-open-time {
             font-size: 1.1rem;
             margin: 15px 0;
-            color: var(--text-dark);
+            color: var(--hangar-time-text-color);
         }
         
         .card-windows {
@@ -290,8 +315,7 @@
         
         .card-windows h2 {
             margin-bottom: 20px;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
+            color: var(--window-title-color);
             padding-bottom: 12px;
             display: flex;
             align-items: center;
@@ -306,19 +330,27 @@
         }
         
         .window-list li {
-            background-color: var(--panel-bg);
+            background-color: transparent;
             padding: 12px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--card-color);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: var(--window-text-color);
         }
         
         .window-list li i {
             color: var(--card-color);
             font-size: 1.1rem;
+        }
+        
+        .window-status {
+            font-size: 0.85rem;
+            color: var(--window-comment-color);
+            margin-top: 8px;
+            text-align: center;
         }
         
         .info-text {
@@ -334,6 +366,7 @@
             gap: 15px;
             margin-top: 15px;
             flex-wrap: wrap;
+            color: var(--status-text-color);
         }
         
         .status-item {
@@ -359,6 +392,16 @@
         
         .status-gray {
             background-color: var(--poweroff-color);
+        }
+        
+        .calibration-time {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            font-size: 0.8rem;
+            color: var(--calibration-text-color);
+            padding: 4px 8px;
+            border-radius: 4px;
         }
         
         .admin-login-btn {
@@ -469,6 +512,43 @@
         }
         
         .admin-panel-btn:hover span {
+            display: inline;
+        }
+        
+        .donation-btn {
+            position: fixed;
+            bottom: 200px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--donation-btn-bg);
+            z-index: 1000;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .donation-btn:hover {
+            width: 160px;
+            border-radius: 25px;
+            background: var(--donation-btn-bg);
+        }
+        
+        .donation-btn span {
+            display: none;
+            white-space: nowrap;
+            padding-left: 5px;
+        }
+        
+        .donation-btn:hover span {
             display: inline;
         }
         
@@ -616,7 +696,7 @@
             font-size: 0.9rem;
         }
         
-        input[type="datetime-local"], select, input[type="password"], input[type="text"], input[type="range"], textarea, input[type="url"], input[type="file"] {
+        input[type="datetime-local"], select, input[type="password"], input[type="text"], input[type="range"], textarea, input[type="url"], input[type="file"], input[type="color"] {
             width: 100%;
             padding: 10px 12px;
             border: 2px solid #ddd;
@@ -625,7 +705,7 @@
             transition: border-color 0.3s;
         }
         
-        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="range"]:focus, textarea:focus, input[type="url"]:focus {
+        input[type="datetime-local"]:focus, select:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="range"]:focus, textarea:focus, input[type="url"]:focus, input[type="color"]:focus {
             border-color: var(--secondary-color);
             outline: none;
         }
@@ -735,24 +815,6 @@
             margin-top: 5px;
         }
         
-        .calibration-time {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.8);
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        
-        .window-status {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-top: 8px;
-            text-align: center;
-        }
-        
         .api-test-result {
             margin-top: 10px;
             padding: 10px;
@@ -858,6 +920,59 @@
             overflow-y: auto;
         }
         
+        .donation-modal-content {
+            max-width: 500px;
+        }
+        
+        .donation-qrcodes {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .donation-qrcode {
+            text-align: center;
+        }
+        
+        .donation-qrcode img {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .donation-records {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 15px;
+        }
+        
+        .donation-record {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .donation-record:last-child {
+            border-bottom: none;
+        }
+        
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -865,6 +980,7 @@
             
             header {
                 padding: 1rem;
+                font-size: 1.4rem;
             }
             
             .timer-display, .card-windows, .admin-panel {
@@ -894,12 +1010,12 @@
                 grid-template-columns: 1fr;
             }
             
-            .admin-login-btn:hover, .feedback-btn:hover, .admin-panel-btn:hover {
+            .admin-login-btn:hover, .feedback-btn:hover, .admin-panel-btn:hover, .donation-btn:hover {
                 width: 50px;
                 border-radius: 50%;
             }
             
-            .admin-login-btn:hover span, .feedback-btn:hover span, .admin-panel-btn:hover span {
+            .admin-login-btn:hover span, .feedback-btn:hover span, .admin-panel-btn:hover span, .donation-btn:hover span {
                 display: none;
             }
             
@@ -929,10 +1045,21 @@
                 font-size: 0.75rem;
                 padding: 6px 10px;
             }
+            
+            .donation-qrcodes {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body id="body">
+    <video id="video-background" autoplay muted loop playsinline style="display: none;">
+        <source src="" type="video/mp4">
+        您的浏览器不支持视频标签。
+    </video>
+
     <div class="invite-code-container" id="invite-code-container" style="display: none;">
         <a href="#" id="invite-link">
             <i class="fas fa-gift"></i>
@@ -1046,6 +1173,11 @@
         <span>后台管理</span>
     </button>
 
+    <button class="donation-btn" id="donation-btn" style="display: none;">
+        <i class="fas fa-donate"></i>
+        <span>捐助我们</span>
+    </button>
+
     <div class="db-status" id="db-status">
         <i class="fas fa-database"></i> <span>数据库状态: 检查中...</span>
     </div>
@@ -1074,6 +1206,35 @@
             <div class="modal-buttons">
                 <button id="submit-feedback">提交</button>
                 <button class="cancel-btn" id="cancel-feedback">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="donation-modal">
+        <div class="modal-content donation-modal-content">
+            <h2><i class="fas fa-donate"></i> 支持我们</h2>
+            <p>您的捐助将帮助我们持续维护和改进系统</p>
+            
+            <div class="donation-qrcodes" id="donation-qrcodes">
+                <div class="donation-qrcode">
+                    <img src="" alt="微信支付" id="wechat-qrcode">
+                    <p>微信支付</p>
+                </div>
+                <div class="donation-qrcode">
+                    <img src="" alt="支付宝" id="alipay-qrcode">
+                    <p>支付宝</p>
+                </div>
+            </div>
+            
+            <div class="donation-records" id="donation-records">
+                <h3>最近捐助记录</h3>
+                <div id="donation-list">
+                    <div class="donation-record">暂无捐助记录</div>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="cancel-btn" id="close-donation-modal">关闭</button>
             </div>
         </div>
     </div>
@@ -1136,6 +1297,11 @@
                     <label for="notification-content">通知内容</label>
                     <textarea id="notification-content" placeholder="输入通知内容"></textarea>
                 </div>
+                <div class="form-group color-picker-container">
+                    <label for="notification-color">通知文字颜色</label>
+                    <input type="color" id="notification-color" value="#ffffff">
+                    <div class="color-preview" id="notification-color-preview" style="background-color: #ffffff;"></div>
+                </div>
                 <button id="update-notification">
                     <i class="fas fa-save"></i> 更新通知
                 </button>
@@ -1147,6 +1313,16 @@
                     <label for="custom-title">系统标题</label>
                     <input type="text" id="custom-title" placeholder="输入系统标题">
                 </div>
+                <div class="form-group color-picker-container">
+                    <label for="header-text-color">标题文字颜色</label>
+                    <input type="color" id="header-text-color" value="#ffffff">
+                    <div class="color-preview" id="header-text-color-preview"></div>
+                </div>
+                <div class="form-group">
+                    <label for="header-font-size">标题字体大小</label>
+                    <input type="range" id="header-font-size" min="1" max="3" step="0.1" value="1.8">
+                    <span id="header-font-size-value">1.8rem</span>
+                </div>
                 <div class="form-group">
                     <label for="logo-url">Logo URL</label>
                     <input type="url" id="logo-url" placeholder="输入Logo URL">
@@ -1155,6 +1331,11 @@
                         <button id="upload-logo"><i class="fas fa-upload"></i></button>
                     </div>
                     <div class="logo-preview" id="logo-preview"></div>
+                </div>
+                <div class="form-group">
+                    <label for="logo-size">Logo大小</label>
+                    <input type="range" id="logo-size" min="80" max="200" value="120">
+                    <span id="logo-size-value">120px</span>
                 </div>
                 <div class="form-group">
                     <label for="qrcode-url">二维码URL</label>
@@ -1169,8 +1350,13 @@
                     </button>
                 </div>
                 <div class="form-group">
-                    <label for="qrcode-caption">二维码注释</label>
+                    <label for="qrcode-caption-input">二维码注释</label>
                     <input type="text" id="qrcode-caption-input" placeholder="输入二维码注释">
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="qrcode-caption-color">二维码注释颜色</label>
+                    <input type="color" id="qrcode-caption-color" value="#ffffff">
+                    <div class="color-preview" id="qrcode-caption-color-preview"></div>
                 </div>
                 <div class="form-group">
                     <label for="invite-code-input">邀请码</label>
@@ -1181,8 +1367,15 @@
                     <input type="url" id="invite-link-input" placeholder="输入邀请链接URL">
                 </div>
                 <div class="form-group">
-                    <label for="bg-image">背景图片URL</label>
-                    <input type="url" id="bg-image" placeholder="输入背景图片URL">
+                    <label for="bg-type">背景类型</label>
+                    <select id="bg-type">
+                        <option value="image">图片</option>
+                        <option value="video">视频</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bg-image">图片背景URL</label>
+                    <input type="url" id="bg-image" placeholder="输入图片背景URL">
                     <div class="upload-group">
                         <input type="file" id="bg-upload" accept="image/*">
                         <button id="upload-bg"><i class="fas fa-upload"></i></button>
@@ -1190,11 +1383,89 @@
                     <div class="bg-preview" id="bg-preview"></div>
                 </div>
                 <div class="form-group">
+                    <label for="video-url">视频背景URL</label>
+                    <input type="url" id="video-url" placeholder="输入视频背景URL">
+                    <div class="upload-group">
+                        <input type="file" id="video-upload" accept="video/*">
+                        <button id="upload-video"><i class="fas fa-upload"></i></button>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="bg-opacity">背景透明度: <span id="opacity-value">80</span>%</label>
                     <input type="range" id="bg-opacity" min="10" max="100" value="80">
                 </div>
+                <div class="form-group color-picker-container">
+                    <label for="window-text-color">机库开启时间窗口文字颜色</label>
+                    <input type="color" id="window-text-color" value="#2d3748">
+                    <div class="color-preview" id="window-text-color-preview"></div>
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="window-comment-color">机库开启时间窗口注释颜色</label>
+                    <input type="color" id="window-comment-color" value="#718096">
+                    <div class="color-preview" id="window-comment-color-preview"></div>
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="window-title-color">机库开启时间标题颜色</label>
+                    <input type="color" id="window-title-color" value="#2c3e50">
+                    <div class="color-preview" id="window-title-color-preview"></div>
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="calibration-text-color">倒计时校准时间文字颜色</label>
+                    <input type="color" id="calibration-text-color" value="#718096">
+                    <div class="color-preview" id="calibration-text-color-preview"></div>
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="countdown-text-color">倒计时文字颜色</label>
+                    <input type="color" id="countdown-text-color" value="#2c3e50">
+                    <div class="color-preview" id="countdown-text-color-preview"></div>
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="hangar-time-text-color">倒计时机库开启时间文字颜色</label>
+                    <input type="color" id="hangar-time-text-color" value="#2d3748">
+                    <div class="color-preview" id="hangar-time-text-color-preview"></div>
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="status-text-color">倒计时指示灯状态文字颜色</label>
+                    <input type="color" id="status-text-color" value="#2d3748">
+                    <div class="color-preview" id="status-text-color-preview"></div>
+                </div>
                 <button id="save-appearance">
                     <i class="fas fa-save"></i> 保存所有设置
+                </button>
+            </div>
+            
+            <div class="admin-card">
+                <h3><i class="fas fa-donate"></i> 捐助设置</h3>
+                <div class="form-group">
+                    <label for="donation-enabled">捐助功能</label>
+                    <select id="donation-enabled">
+                        <option value="true">开启</option>
+                        <option value="false">关闭</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="wechat-qrcode-url">微信支付二维码URL</label>
+                    <input type="url" id="wechat-qrcode-url" placeholder="输入微信支付二维码URL">
+                    <div class="upload-group">
+                        <input type="file" id="wechat-qrcode-upload" accept="image/*">
+                        <button id="upload-wechat-qrcode"><i class="fas fa-upload"></i></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="alipay-qrcode-url">支付宝二维码URL</label>
+                    <input type="url" id="alipay-qrcode-url" placeholder="输入支付宝二维码URL">
+                    <div class="upload-group">
+                        <input type="file" id="alipay-qrcode-upload" accept="image/*">
+                        <button id="upload-alipay-qrcode"><i class="fas fa-upload"></i></button>
+                    </div>
+                </div>
+                <div class="form-group color-picker-container">
+                    <label for="donation-btn-color">捐助按钮颜色</label>
+                    <input type="color" id="donation-btn-color" value="#ff6b6b">
+                    <div class="color-preview" id="donation-btn-color-preview"></div>
+                </div>
+                <button id="save-donation-settings">
+                    <i class="fas fa-save"></i> 保存捐助设置
                 </button>
             </div>
             
@@ -1206,7 +1477,7 @@
                 </div>
                 <div class="form-group">
                     <label for="api-url">API地址</label>
-                    <input type="url" id="api-url" placeholder="输入API地址" value="/api">
+                    <input type="url" id="api-url" placeholder="输入API地址" value="https://time.bcfx.dpdns.org/api">
                     <button id="test-api" style="margin-top: 10px;">
                         <i class="fas fa-plug"></i> 测试API连接
                     </button>
@@ -1249,13 +1520,14 @@
                 </div>
                 <div class="form-group">
                     <label for="version-input">版本更新（详细内容）</label>
-                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v2.1.1
-更新日期：2025-09-16
+                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v2.1.2
+更新日期：2025-09-20
 更新内容：
-- 在上一版基础上，在网页最右上角增加显示邀请码的信息，邀请码前面增加“使用我的推荐代码：”的文字提示，点击可以跳转到邀请链接网址
-- 后台管理界面可以输入邀请码信息及邀请注册网址链接
-- 修复数据库无连接问题
-- 修复已知问题</textarea>
+在上一版基础上，做出如下修改：
+1、标题栏样式改进：标题栏背景默认全局背景透明。标题栏去掉背景外框和底框，去掉毛玻璃处理，支持全局背景透明度设置，自适应调整标题大小。
+2、所有标题、通知、注释可以修改文字颜色。所有调整素材大小、文字颜色、更换视频背景或图片等操作都是实时可见的，不需要保存设置以后才能看到效果。
+3、视频背景增加单独地址输入框，可以实时预览
+4、修复已知问题</textarea>
                 </div>
                 <div class="form-group">
                     <label for="about-input">关于本网站（详细内容）</label>
@@ -1269,8 +1541,8 @@
     </div>
 
     <script>
-        // API地址设置 - 使用相对路径，适应Cloudflare部署
-        let API_BASE = localStorage.getItem('apiBase') || "/api";
+        // API地址设置 - 修复默认API地址
+        let API_BASE = localStorage.getItem('apiBase') || "https://time.bcfx.dpdns.org/api";
         
         // 初始化状态
         let startTime = new Date();
@@ -1279,6 +1551,7 @@
         let countdownInterval;
         let isAdmin = localStorage.getItem('isAdmin') === 'true';
         let timerEnabled = true;
+        let donationEnabled = false;
         
         // 从API加载设置
         async function loadSettings() {
@@ -1315,14 +1588,38 @@
                         updateNotificationDisplay(config.notification);
                     }
                     
+                    if (config.notificationColor) {
+                        document.getElementById('notification-color').value = config.notificationColor;
+                        document.getElementById('notification-color-preview').style.backgroundColor = config.notificationColor;
+                        document.documentElement.style.setProperty('--notification-color', config.notificationColor);
+                    }
+                    
                     if (config.customTitle) {
                         document.getElementById('custom-title').value = config.customTitle;
                         document.getElementById('title').textContent = config.customTitle;
                     }
                     
+                    if (config.headerTextColor) {
+                        document.getElementById('header-text-color').value = config.headerTextColor;
+                        document.getElementById('header-text-color-preview').style.backgroundColor = config.headerTextColor;
+                        document.documentElement.style.setProperty('--header-text-color', config.headerTextColor);
+                    }
+                    
+                    if (config.headerFontSize) {
+                        document.getElementById('header-font-size').value = config.headerFontSize;
+                        document.getElementById('header-font-size-value').textContent = config.headerFontSize + 'rem';
+                        document.documentElement.style.setProperty('--header-font-size', config.headerFontSize + 'rem');
+                    }
+                    
                     if (config.logoUrl) {
                         document.getElementById('logo-url').value = config.logoUrl;
                         updateLogoPreview(config.logoUrl);
+                    }
+                    
+                    if (config.logoSize) {
+                        document.getElementById('logo-size').value = config.logoSize;
+                        document.getElementById('logo-size-value').textContent = config.logoSize + 'px';
+                        document.documentElement.style.setProperty('--logo-size', config.logoSize + 'px');
                     }
                     
                     if (config.qrcodeUrl) {
@@ -1333,6 +1630,12 @@
                     if (config.qrcodeCaption) {
                         document.getElementById('qrcode-caption-input').value = config.qrcodeCaption;
                         document.getElementById('qrcode-caption').textContent = config.qrcodeCaption;
+                    }
+                    
+                    if (config.qrcodeCaptionColor) {
+                        document.getElementById('qrcode-caption-color').value = config.qrcodeCaptionColor;
+                        document.getElementById('qrcode-caption-color-preview').style.backgroundColor = config.qrcodeCaptionColor;
+                        document.documentElement.style.setProperty('--qrcode-caption-color', config.qrcodeCaptionColor);
                     }
                     
                     if (config.inviteCode) {
@@ -1346,15 +1649,66 @@
                         document.getElementById('invite-link').href = config.inviteLink;
                     }
                     
+                    if (config.bgType) {
+                        document.getElementById('bg-type').value = config.bgType;
+                    }
+                    
                     if (config.bgImage) {
                         document.getElementById('bg-image').value = config.bgImage;
-                        updateBgPreview(config.bgImage);
+                        updateBgPreview(config.bgImage, config.bgType);
+                    }
+                    
+                    if (config.videoUrl) {
+                        document.getElementById('video-url').value = config.videoUrl;
+                        updateVideoPreview(config.videoUrl);
                     }
                     
                     if (config.bgOpacity) {
                         document.getElementById('bg-opacity').value = config.bgOpacity;
                         document.getElementById('opacity-value').textContent = config.bgOpacity;
                         document.documentElement.style.setProperty('--bg-opacity', config.bgOpacity / 100);
+                    }
+                    
+                    if (config.windowTextColor) {
+                        document.getElementById('window-text-color').value = config.windowTextColor;
+                        document.getElementById('window-text-color-preview').style.backgroundColor = config.windowTextColor;
+                        document.documentElement.style.setProperty('--window-text-color', config.windowTextColor);
+                    }
+                    
+                    if (config.windowCommentColor) {
+                        document.getElementById('window-comment-color').value = config.windowCommentColor;
+                        document.getElementById('window-comment-color-preview').style.backgroundColor = config.windowCommentColor;
+                        document.documentElement.style.setProperty('--window-comment-color', config.windowCommentColor);
+                    }
+                    
+                    if (config.windowTitleColor) {
+                        document.getElementById('window-title-color').value = config.windowTitleColor;
+                        document.getElementById('window-title-color-preview').style.backgroundColor = config.windowTitleColor;
+                        document.documentElement.style.setProperty('--window-title-color', config.windowTitleColor);
+                    }
+                    
+                    if (config.calibrationTextColor) {
+                        document.getElementById('calibration-text-color').value = config.calibrationTextColor;
+                        document.getElementById('calibration-text-color-preview').style.backgroundColor = config.calibrationTextColor;
+                        document.documentElement.style.setProperty('--calibration-text-color', config.calibrationTextColor);
+                    }
+                    
+                    if (config.countdownTextColor) {
+                        document.getElementById('countdown-text-color').value = config.countdownTextColor;
+                        document.getElementById('countdown-text-color-preview').style.backgroundColor = config.countdownTextColor;
+                        document.documentElement.style.setProperty('--countdown-text-color', config.countdownTextColor);
+                    }
+                    
+                    if (config.hangarTimeTextColor) {
+                        document.getElementById('hangar-time-text-color').value = config.hangarTimeTextColor;
+                        document.getElementById('hangar-time-text-color-preview').style.backgroundColor = config.hangarTimeTextColor;
+                        document.documentElement.style.setProperty('--hangar-time-text-color', config.hangarTimeTextColor);
+                    }
+                    
+                    if (config.statusTextColor) {
+                        document.getElementById('status-text-color').value = config.statusTextColor;
+                        document.getElementById('status-text-color-preview').style.backgroundColor = config.statusTextColor;
+                        document.documentElement.style.setProperty('--status-text-color', config.statusTextColor);
                     }
                     
                     if (config.calibrationTime) {
@@ -1365,6 +1719,28 @@
                         API_BASE = config.apiUrl;
                         localStorage.setItem('apiBase', API_BASE);
                         document.getElementById('api-url').value = config.apiUrl;
+                    }
+                    
+                    if (config.donationEnabled !== undefined) {
+                        donationEnabled = config.donationEnabled;
+                        document.getElementById('donation-enabled').value = donationEnabled.toString();
+                        updateDonationButtonDisplay();
+                    }
+                    
+                    if (config.wechatQrcodeUrl) {
+                        document.getElementById('wechat-qrcode-url').value = config.wechatQrcodeUrl;
+                        document.getElementById('wechat-qrcode').src = config.wechatQrcodeUrl;
+                    }
+                    
+                    if (config.alipayQrcodeUrl) {
+                        document.getElementById('alipay-qrcode-url').value = config.alipayQrcodeUrl;
+                        document.getElementById('alipay-qrcode').src = config.alipayQrcodeUrl;
+                    }
+                    
+                    if (config.donationBtnColor) {
+                        document.getElementById('donation-btn-color').value = config.donationBtnColor;
+                        document.getElementById('donation-btn-color-preview').style.backgroundColor = config.donationBtnColor;
+                        document.documentElement.style.setProperty('--donation-btn-bg', config.donationBtnColor);
                     }
                     
                     // 加载页脚信息
@@ -1431,16 +1807,34 @@
                 initialPhase: document.getElementById('initial-phase').value,
                 timerEnabled: document.getElementById('timer-enabled').value === 'true',
                 notification: document.getElementById('notification-content').value,
+                notificationColor: document.getElementById('notification-color').value,
                 customTitle: document.getElementById('custom-title').value,
+                headerTextColor: document.getElementById('header-text-color').value,
+                headerFontSize: parseFloat(document.getElementById('header-font-size').value),
                 logoUrl: document.getElementById('logo-url').value,
+                logoSize: parseInt(document.getElementById('logo-size').value),
                 qrcodeUrl: document.getElementById('qrcode-url').value,
                 qrcodeCaption: document.getElementById('qrcode-caption-input').value,
+                qrcodeCaptionColor: document.getElementById('qrcode-caption-color').value,
                 inviteCode: document.getElementById('invite-code-input').value,
                 inviteLink: document.getElementById('invite-link-input').value,
+                bgType: document.getElementById('bg-type').value,
                 bgImage: document.getElementById('bg-image').value,
+                videoUrl: document.getElementById('video-url').value,
                 bgOpacity: document.getElementById('bg-opacity').value,
+                windowTextColor: document.getElementById('window-text-color').value,
+                windowCommentColor: document.getElementById('window-comment-color').value,
+                windowTitleColor: document.getElementById('window-title-color').value,
+                calibrationTextColor: document.getElementById('calibration-text-color').value,
+                countdownTextColor: document.getElementById('countdown-text-color').value,
+                hangarTimeTextColor: document.getElementById('hangar-time-text-color').value,
+                statusTextColor: document.getElementById('status-text-color').value,
                 calibrationTime: document.getElementById('calibration-time').textContent.replace('校准时间: ', ''),
                 apiUrl: document.getElementById('api-url').value,
+                donationEnabled: document.getElementById('donation-enabled').value === 'true',
+                wechatQrcodeUrl: document.getElementById('wechat-qrcode-url').value,
+                alipayQrcodeUrl: document.getElementById('alipay-qrcode-url').value,
+                donationBtnColor: document.getElementById('donation-btn-color').value,
                 footerNotice: document.getElementById('footer-notice-input').value,
                 recordInfo: document.getElementById('record-info-input').value,
                 organizationName: document.getElementById('organization-name-input').value,
@@ -1466,6 +1860,8 @@
                     updateInviteDisplay(config);
                     // 更新页脚显示
                     updateFooterDisplay(config);
+                    // 更新捐助按钮显示
+                    updateDonationButtonDisplay();
                     return true;
                 } else {
                     alert('保存失败');
@@ -1495,6 +1891,16 @@
                 }
             } else {
                 inviteContainer.style.display = 'none';
+            }
+        }
+        
+        // 更新捐助按钮显示
+        function updateDonationButtonDisplay() {
+            const donationBtn = document.getElementById('donation-btn');
+            if (donationEnabled) {
+                donationBtn.style.display = 'flex';
+            } else {
+                donationBtn.style.display = 'none';
             }
         }
         
@@ -1553,16 +1959,38 @@
         }
         
         // 更新背景预览
-        function updateBgPreview(url) {
+        function updateBgPreview(url, type) {
             const bgPreview = document.getElementById('bg-preview');
+            const videoBackground = document.getElementById('video-background');
             
             if (url && url.trim() !== '') {
-                bgPreview.style.backgroundImage = `url(${url})`;
-                document.body.style.backgroundImage = `url(${url})`;
+                if (type === 'video') {
+                    // 视频背景
+                    bgPreview.innerHTML = '<span>视频背景预览</span>';
+                } else {
+                    // 图片背景
+                    bgPreview.style.backgroundImage = `url(${url})`;
+                    bgPreview.innerHTML = '';
+                    document.body.style.backgroundImage = `url(${url})`;
+                }
             } else {
                 bgPreview.style.backgroundImage = 'none';
-                bgPreview.innerHTML = '<span>无背景图片</span>';
+                bgPreview.innerHTML = '<span>无背景</span>';
                 document.body.style.backgroundImage = 'none';
+            }
+        }
+        
+        // 更新视频预览
+        function updateVideoPreview(url) {
+            const videoBackground = document.getElementById('video-background');
+            
+            if (url && url.trim() !== '') {
+                videoBackground.innerHTML = `<source src="${url}" type="video/mp4">`;
+                videoBackground.style.display = 'block';
+                document.body.classList.add('video-bg');
+            } else {
+                videoBackground.style.display = 'none';
+                document.body.classList.remove('video-bg');
             }
         }
         
@@ -1643,9 +2071,20 @@
             initDraggablePanel();
         });
         
+        // 捐助按钮
+        document.getElementById('donation-btn').addEventListener('click', function() {
+            document.getElementById('donation-modal').style.display = 'flex';
+            loadDonationRecords();
+        });
+        
         // 关闭后台管理面板
         document.getElementById('close-admin-panel').addEventListener('click', function() {
             document.getElementById('admin-panel').style.display = 'none';
+        });
+        
+        // 关闭捐助模态框
+        document.getElementById('close-donation-modal').addEventListener('click', function() {
+            document.getElementById('donation-modal').style.display = 'none';
         });
         
         // 取消登录
@@ -1745,33 +2184,73 @@
         // 保存外观设置
         document.getElementById('save-appearance').addEventListener('click', function() {
             const customTitle = document.getElementById('custom-title').value;
+            const headerTextColor = document.getElementById('header-text-color').value;
+            const headerFontSize = document.getElementById('header-font-size').value;
             const logoUrl = document.getElementById('logo-url').value;
+            const logoSize = document.getElementById('logo-size').value;
             const qrcodeUrl = document.getElementById('qrcode-url').value;
             const qrcodeCaption = document.getElementById('qrcode-caption-input').value;
+            const qrcodeCaptionColor = document.getElementById('qrcode-caption-color').value;
             const inviteCode = document.getElementById('invite-code-input').value;
             const inviteLink = document.getElementById('invite-link-input').value;
+            const bgType = document.getElementById('bg-type').value;
             const bgImage = document.getElementById('bg-image').value;
+            const videoUrl = document.getElementById('video-url').value;
             const bgOpacity = document.getElementById('bg-opacity').value;
+            const windowTextColor = document.getElementById('window-text-color').value;
+            const windowCommentColor = document.getElementById('window-comment-color').value;
+            const windowTitleColor = document.getElementById('window-title-color').value;
+            const calibrationTextColor = document.getElementById('calibration-text-color').value;
+            const countdownTextColor = document.getElementById('countdown-text-color').value;
+            const hangarTimeTextColor = document.getElementById('hangar-time-text-color').value;
+            const statusTextColor = document.getElementById('status-text-color').value;
             
             if (customTitle) {
                 document.getElementById('title').textContent = customTitle;
             }
             
+            document.documentElement.style.setProperty('--header-text-color', headerTextColor);
+            document.documentElement.style.setProperty('--header-font-size', headerFontSize + 'rem');
+            
             updateLogoPreview(logoUrl);
+            document.documentElement.style.setProperty('--logo-size', logoSize + 'px');
+            
             updateQrcodePreview(qrcodeUrl);
             
             if (qrcodeCaption) {
                 document.getElementById('qrcode-caption').textContent = qrcodeCaption;
             }
             
+            document.documentElement.style.setProperty('--qrcode-caption-color', qrcodeCaptionColor);
+            
             updateInviteDisplay({inviteCode, inviteLink});
             
-            if (bgImage) {
-                document.body.style.backgroundImage = `url(${bgImage})`;
-            }
+            updateBgPreview(bgImage, bgType);
+            updateVideoPreview(videoUrl);
             
             document.documentElement.style.setProperty('--bg-opacity', bgOpacity / 100);
             document.getElementById('opacity-value').textContent = bgOpacity;
+            
+            document.documentElement.style.setProperty('--window-text-color', windowTextColor);
+            document.documentElement.style.setProperty('--window-comment-color', windowCommentColor);
+            document.documentElement.style.setProperty('--window-title-color', windowTitleColor);
+            document.documentElement.style.setProperty('--calibration-text-color', calibrationTextColor);
+            document.documentElement.style.setProperty('--countdown-text-color', countdownTextColor);
+            document.documentElement.style.setProperty('--hangar-time-text-color', hangarTimeTextColor);
+            document.documentElement.style.setProperty('--status-text-color', statusTextColor);
+            
+            saveSettings();
+        });
+        
+        // 保存捐助设置
+        document.getElementById('save-donation-settings').addEventListener('click', function() {
+            const donationEnabled = document.getElementById('donation-enabled').value === 'true';
+            const wechatQrcodeUrl = document.getElementById('wechat-qrcode-url').value;
+            const alipayQrcodeUrl = document.getElementById('alipay-qrcode-url').value;
+            const donationBtnColor = document.getElementById('donation-btn-color').value;
+            
+            document.documentElement.style.setProperty('--donation-btn-bg', donationBtnColor);
+            updateDonationButtonDisplay();
             
             saveSettings();
         });
@@ -1796,6 +2275,34 @@
             document.getElementById('opacity-value').textContent = this.value;
         });
         
+        // 标题字体大小调整
+        document.getElementById('header-font-size').addEventListener('input', function() {
+            document.getElementById('header-font-size-value').textContent = this.value + 'rem';
+            document.documentElement.style.setProperty('--header-font-size', this.value + 'rem');
+        });
+        
+        // Logo大小调整
+        document.getElementById('logo-size').addEventListener('input', function() {
+            document.getElementById('logo-size-value').textContent = this.value + 'px';
+            document.documentElement.style.setProperty('--logo-size', this.value + 'px');
+        });
+        
+        // 颜色选择器预览
+        const colorInputs = document.querySelectorAll('input[type="color"]');
+        colorInputs.forEach(input => {
+            const previewId = input.id + '-preview';
+            const preview = document.getElementById(previewId);
+            if (preview) {
+                preview.style.backgroundColor = input.value;
+                input.addEventListener('input', function() {
+                    preview.style.backgroundColor = this.value;
+                    // 实时更新CSS变量
+                    const cssVarName = '--' + this.id.replace(/-/g, '-');
+                    document.documentElement.style.setProperty(cssVarName, this.value);
+                });
+            }
+        });
+        
         // 预览Logo
         document.getElementById('logo-url').addEventListener('change', function() {
             updateLogoPreview(this.value);
@@ -1808,7 +2315,26 @@
         
         // 预览背景
         document.getElementById('bg-image').addEventListener('change', function() {
-            updateBgPreview(this.value);
+            const bgType = document.getElementById('bg-type').value;
+            updateBgPreview(this.value, bgType);
+        });
+        
+        // 预览视频
+        document.getElementById('video-url').addEventListener('change', function() {
+            updateVideoPreview(this.value);
+        });
+        
+        // 背景类型切换
+        document.getElementById('bg-type').addEventListener('change', function() {
+            const bgImage = document.getElementById('bg-image').value;
+            const videoUrl = document.getElementById('video-url').value;
+            updateBgPreview(bgImage, this.value);
+            if (this.value === 'video') {
+                updateVideoPreview(videoUrl);
+            } else {
+                document.getElementById('video-background').style.display = 'none';
+                document.body.classList.remove('video-bg');
+            }
         });
         
         // 测试API连接
@@ -1943,7 +2469,7 @@
         document.getElementById('upload-bg').addEventListener('click', function() {
             const fileInput = document.getElementById('bg-upload');
             if (fileInput.files.length === 0) {
-                alert('请选择要上传的图片');
+                alert('请选择要上传的文件');
                 return;
             }
             
@@ -1951,7 +2477,56 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('bg-image').value = e.target.result;
-                updateBgPreview(e.target.result);
+                const bgType = document.getElementById('bg-type').value;
+                updateBgPreview(e.target.result, bgType);
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        document.getElementById('upload-video').addEventListener('click', function() {
+            const fileInput = document.getElementById('video-upload');
+            if (fileInput.files.length === 0) {
+                alert('请选择要上传的视频');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('video-url').value = e.target.result;
+                updateVideoPreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        document.getElementById('upload-wechat-qrcode').addEventListener('click', function() {
+            const fileInput = document.getElementById('wechat-qrcode-upload');
+            if (fileInput.files.length === 0) {
+                alert('请选择要上传的图片');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('wechat-qrcode-url').value = e.target.result;
+                document.getElementById('wechat-qrcode').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        document.getElementById('upload-alipay-qrcode').addEventListener('click', function() {
+            const fileInput = document.getElementById('alipay-qrcode-upload');
+            if (fileInput.files.length === 0) {
+                alert('请选择要上传的图片');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('alipay-qrcode-url').value = e.target.result;
+                document.getElementById('alipay-qrcode').src = e.target.result;
             };
             reader.readAsDataURL(file);
         });
@@ -2007,6 +2582,36 @@
                 }
             } catch (error) {
                 console.error('Load feedback error:', error);
+            }
+        }
+        
+        // 加载捐助记录
+        async function loadDonationRecords() {
+            try {
+                const response = await fetch(`${API_BASE}/donations`);
+                if (response.ok) {
+                    const donations = await response.json();
+                    const donationList = document.getElementById('donation-list');
+                    
+                    if (donations.length === 0) {
+                        donationList.innerHTML = '<div class="donation-record">暂无捐助记录</div>';
+                        return;
+                    }
+                    
+                    donationList.innerHTML = '';
+                    donations.forEach(item => {
+                        const donationRecord = document.createElement('div');
+                        donationRecord.className = 'donation-record';
+                        donationRecord.innerHTML = `
+                            <div><strong>${item.name || '匿名用户'}</strong> 捐助了 <strong>${item.amount}元</strong></div>
+                            <div class="feedback-date">${new Date(item.timestamp).toLocaleString()}</div>
+                            ${item.message ? `<div>留言: ${item.message}</div>` : ''}
+                        `;
+                        donationList.appendChild(donationRecord);
+                    });
+                }
+            } catch (error) {
+                console.error('Load donations error:', error);
             }
         }
         
