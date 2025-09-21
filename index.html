@@ -1080,6 +1080,42 @@
         .link-input-group input {
             flex: 1;
         }
+
+        /* 访问统计样式 */
+        .visits-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        
+        .visit-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+        }
+        
+        .visit-item:last-child {
+            border-bottom: none;
+        }
+        
+        .visit-ip {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .visit-date {
+            color: var(--text-light);
+            font-size: 0.75rem;
+        }
+        
+        .visit-count {
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
         
         @media (max-width: 768px) {
             .container {
@@ -1321,10 +1357,9 @@
                 <label for="feedback-content">反馈内容</label>
                 <textarea id="feedback-content" placeholder="请输入您的反馈内容"></textarea>
             </div>
-            <div class="contact-inputs">
-                <input type="text" id="feedback-qq" placeholder="QQ号码（选填）">
-                <input type="text" id="feedback-wechat" placeholder="微信号（选填）">
-                <input type="text" id="feedback-phone" placeholder="手机号（选填）">
+            <div class="form-group">
+                <label for="feedback-contact">联系方式（选填）</label>
+                <input type="text" id="feedback-contact" placeholder="QQ、微信或手机号">
             </div>
             <div class="modal-buttons">
                 <button id="submit-feedback">提交</button>
@@ -1378,7 +1413,7 @@
     <div class="admin-panel" id="admin-panel">
         <div class="admin-panel-header" id="admin-panel-header">
             <h2><i class="fas fa-cog"></i> 后台管理系统</h2>
-            <button class="close-admin-panel" id="close-admin-panel">&times;</button>
+            <button class="cancel-btn" id="close-admin-panel">关闭管理面板</button>
         </div>
         <div class="admin-panel-grid">
             <div class="admin-card">
@@ -1632,6 +1667,15 @@
             </div>
             
             <div class="admin-card">
+                <h3><i class="fas fa-chart-line"></i> 访问统计</h3>
+                <div class="visit-count" id="visit-count">总访问次数: 加载中...</div>
+                <div class="visits-list" id="visits-list">加载中...</div>
+                <button id="refresh-visits" style="margin-top: 10px;">
+                    <i class="fas fa-sync"></i> 刷新访问统计
+                </button>
+            </div>
+            
+            <div class="admin-card">
                 <h3><i class="fas fa-info-circle"></i> 页脚信息设置</h3>
                 <div class="form-group">
                     <label for="footer-notice-input">底部公告栏</label>
@@ -1655,17 +1699,13 @@
                 </div>
                 <div class="form-group">
                     <label for="version-input">版本更新（详细内容）</label>
-                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v2.1.3
-更新日期：2025-09-20
+                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v2.1.4
+更新日期：2025-09-21
 更新内容：
 在上一版基础上，做出如下修改：
-1、机库开启时间模块标题与注释文字中间加分隔横线。
-2、二维码图片支持点击放大功能，放大后也可以显示注释信息。
-3、反馈功能增加联系方式：可以输入QQ、微信、手机号。
-4、通知栏内容增加超链接功能，可以在后台设置跳转地址。前端通知界面不要显示下划线。
-5、页脚通知公告栏内容增加超链接功能，可以在后台设置跳转地址。前端通知界面不要显示下划线。
-6、对后台管理界面布局进行合理紧凑优化。底部增加关闭按钮。后台管理透明背景。
-7、视频背景可以在后台预览。</textarea>
+1、后台管理可以查看访问人数，显示IP地址，在单独页面进行展示。
+2、反馈联系方式，只需要一个输入框。
+3、网页背景模式切换为第一优先级。</textarea>
                 </div>
                 <div class="form-group">
                     <label for="about-input">关于本网站（详细内容）</label>
@@ -1797,6 +1837,8 @@
                     
                     if (config.bgType) {
                         document.getElementById('bg-type').value = config.bgType;
+                        // 根据背景类型更新显示
+                        updateBackgroundDisplay(config.bgType, config.bgImage, config.videoUrl);
                     }
                     
                     if (config.bgImage) {
@@ -2014,6 +2056,8 @@
                     updateFooterDisplay(config);
                     // 更新捐助按钮显示
                     updateDonationButtonDisplay();
+                    // 更新背景显示
+                    updateBackgroundDisplay(config.bgType, config.bgImage, config.videoUrl);
                     return true;
                 } else {
                     alert('保存失败');
@@ -2023,6 +2067,38 @@
                 console.error('Failed to save settings:', error);
                 alert('保存失败');
                 return false;
+            }
+        }
+        
+        // 更新背景显示
+        function updateBackgroundDisplay(bgType, bgImage, videoUrl) {
+            const videoBackground = document.getElementById('video-background');
+            
+            if (bgType === 'video') {
+                // 视频背景
+                if (videoUrl && videoUrl.trim() !== '') {
+                    videoBackground.innerHTML = `<source src="${videoUrl}" type="video/mp4">`;
+                    videoBackground.style.display = 'block';
+                    document.body.classList.add('video-bg');
+                    document.body.style.backgroundImage = 'none';
+                } else {
+                    videoBackground.style.display = 'none';
+                    document.body.classList.remove('video-bg');
+                    if (bgImage && bgImage.trim() !== '') {
+                        document.body.style.backgroundImage = `url(${bgImage})`;
+                    } else {
+                        document.body.style.backgroundImage = 'none';
+                    }
+                }
+            } else {
+                // 图片背景
+                videoBackground.style.display = 'none';
+                document.body.classList.remove('video-bg');
+                if (bgImage && bgImage.trim() !== '') {
+                    document.body.style.backgroundImage = `url(${bgImage})`;
+                } else {
+                    document.body.style.backgroundImage = 'none';
+                }
             }
         }
         
@@ -2147,36 +2223,28 @@
         // 更新背景预览
         function updateBgPreview(url, type) {
             const bgPreview = document.getElementById('bg-preview');
-            const videoBackground = document.getElementById('video-background');
             
             if (url && url.trim() !== '') {
                 if (type === 'video') {
-                    // 图片背景
-                    bgPreview.innerHTML = '<span>图片背景预览</span>';
-                } else {
-                    // 图片背景
+                    // 图片背景预览
                     bgPreview.style.backgroundImage = `url(${url})`;
                     bgPreview.innerHTML = '';
-                    document.body.style.backgroundImage = `url(${url})`;
+                } else {
+                    // 图片背景预览
+                    bgPreview.style.backgroundImage = `url(${url})`;
+                    bgPreview.innerHTML = '';
                 }
             } else {
                 bgPreview.style.backgroundImage = 'none';
                 bgPreview.innerHTML = '<span>无背景</span>';
-                document.body.style.backgroundImage = 'none';
             }
         }
         
         // 更新视频预览
         function updateVideoPreview(url) {
-            const videoBackground = document.getElementById('video-background');
             const videoPreview = document.getElementById('video-preview');
             
             if (url && url.trim() !== '') {
-                videoBackground.innerHTML = `<source src="${url}" type="video/mp4">`;
-                videoBackground.style.display = 'block';
-                document.body.classList.add('video-bg');
-                
-                // 更新视频预览区域
                 videoPreview.innerHTML = `
                     <video style="width: 100%; height: 100%; object-fit: cover;" controls>
                         <source src="${url}" type="video/mp4">
@@ -2184,8 +2252,6 @@
                     </video>
                 `;
             } else {
-                videoBackground.style.display = 'none';
-                document.body.classList.remove('video-bg');
                 videoPreview.innerHTML = '<span>视频预览区域</span>';
             }
         }
@@ -2265,6 +2331,8 @@
         document.getElementById('admin-panel-btn').addEventListener('click', function() {
             document.getElementById('admin-panel').style.display = 'block';
             initDraggablePanel();
+            // 加载访问统计
+            loadVisits();
         });
         
         // 捐助按钮
@@ -2302,9 +2370,7 @@
         document.getElementById('cancel-feedback').addEventListener('click', function() {
             document.getElementById('feedback-modal').style.display = 'none';
             document.getElementById('feedback-content').value = '';
-            document.getElementById('feedback-qq').value = '';
-            document.getElementById('feedback-wechat').value = '';
-            document.getElementById('feedback-phone').value = '';
+            document.getElementById('feedback-contact').value = '';
         });
         
         // 登录
@@ -2332,8 +2398,9 @@
                         document.getElementById('admin-login-btn').innerHTML = '<i class="fas fa-sign-out-alt"></i><span>退出管理员</span>';
                         alert('管理员登录成功');
                         
-                        // 加载反馈
+                        // 加载反馈和访问统计
                         loadFeedback();
+                        loadVisits();
                     } else {
                         alert('密码错误');
                     }
@@ -2349,20 +2416,12 @@
         // 提交反馈
         document.getElementById('submit-feedback').addEventListener('click', async function() {
             const content = document.getElementById('feedback-content').value;
-            const qq = document.getElementById('feedback-qq').value;
-            const wechat = document.getElementById('feedback-wechat').value;
-            const phone = document.getElementById('feedback-phone').value;
+            const contact = document.getElementById('feedback-contact').value;
             
             if (!content.trim()) {
                 alert('请输入反馈内容');
                 return;
             }
-            
-            // 构建联系信息字符串
-            let contactInfo = '';
-            if (qq) contactInfo += `QQ: ${qq} `;
-            if (wechat) contactInfo += `微信: ${wechat} `;
-            if (phone) contactInfo += `手机: ${phone}`;
             
             try {
                 const response = await fetch(`${API_BASE}/feedback`, {
@@ -2372,7 +2431,7 @@
                     },
                     body: JSON.stringify({ 
                         content,
-                        contact: contactInfo.trim()
+                        contact
                     })
                 });
                 
@@ -2380,9 +2439,7 @@
                     alert('反馈提交成功');
                     document.getElementById('feedback-modal').style.display = 'none';
                     document.getElementById('feedback-content').value = '';
-                    document.getElementById('feedback-qq').value = '';
-                    document.getElementById('feedback-wechat').value = '';
-                    document.getElementById('feedback-phone').value = '';
+                    document.getElementById('feedback-contact').value = '';
                     
                     // 如果是管理员，重新加载反馈列表
                     if (isAdmin) {
@@ -2462,6 +2519,9 @@
             document.documentElement.style.setProperty('--countdown-text-color', countdownTextColor);
             document.documentElement.style.setProperty('--hangar-time-text-color', hangarTimeTextColor);
             document.documentElement.style.setProperty('--status-text-color', statusTextColor);
+            
+            // 更新背景显示
+            updateBackgroundDisplay(bgType, bgImage, videoUrl);
             
             saveSettings();
         });
@@ -2558,6 +2618,9 @@
             } else {
                 document.getElementById('video-background').style.display = 'none';
                 document.body.classList.remove('video-bg');
+                if (bgImage && bgImage.trim() !== '') {
+                    document.body.style.backgroundImage = `url(${bgImage})`;
+                }
             }
         });
         
@@ -2775,7 +2838,7 @@
                         
                         let contactHtml = '';
                         if (item.contact) {
-                            contactHtml = `<div class="feedback-contact">${item.contact}</div>`;
+                            contactHtml = `<div class="feedback-contact">联系方式: ${item.contact}</div>`;
                         }
                         
                         feedbackItem.innerHTML = `
@@ -2815,6 +2878,46 @@
                 console.error('Load feedback error:', error);
             }
         }
+        
+        // 加载访问统计
+        async function loadVisits() {
+            try {
+                const response = await fetch(`${API_BASE}/visits`);
+                if (response.ok) {
+                    const visits = await response.json();
+                    const visitsList = document.getElementById('visits-list');
+                    const visitCount = document.getElementById('visit-count');
+                    
+                    visitCount.textContent = `总访问次数: ${visits.length}`;
+                    
+                    if (visits.length === 0) {
+                        visitsList.innerHTML = '<div class="visit-item">暂无访问记录</div>';
+                        return;
+                    }
+                    
+                    visitsList.innerHTML = '';
+                    // 按时间倒序排列
+                    visits.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    visits.forEach(visit => {
+                        const visitItem = document.createElement('div');
+                        visitItem.className = 'visit-item';
+                        visitItem.innerHTML = `
+                            <div><span class="visit-ip">${visit.ip}</span> - <span class="visit-date">${new Date(visit.timestamp).toLocaleString()}</span></div>
+                        `;
+                        visitsList.appendChild(visitItem);
+                    });
+                }
+            } catch (error) {
+                console.error('Load visits error:', error);
+                document.getElementById('visits-list').innerHTML = '加载访问统计失败';
+            }
+        }
+        
+        // 刷新访问统计
+        document.getElementById('refresh-visits').addEventListener('click', function() {
+            loadVisits();
+        });
         
         // 加载捐助记录
         async function loadDonationRecords() {
@@ -3194,11 +3297,26 @@
             }
         }
         
+        // 记录访问
+        async function recordVisit() {
+            try {
+                await fetch(`${API_BASE}/visits`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to record visit:', error);
+            }
+        }
+        
         // 初始加载设置
         document.getElementById('api-url').value = API_BASE;
         loadSettings();
         checkDbStatus();
         autoLinkify();
+        recordVisit();
         
         // 每5分钟检查一次数据库状态
         setInterval(checkDbStatus, 5 * 60 * 1000);
