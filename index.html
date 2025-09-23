@@ -1723,8 +1723,8 @@
     </div>
 
     <script>
-        // API地址设置 - 修复默认API地址
-        let API_BASE = localStorage.getItem('apiBase') || "https://time.bcfx.dpdns.org/api";
+        // API地址设置 - 使用固定默认值，不存储在localStorage中
+        let API_BASE = "https://time.bcfx.dpdns.org/api";
         
         // 初始化状态
         let startTime = new Date();
@@ -1904,8 +1904,8 @@
                     }
                     
                     if (config.apiUrl) {
+                        // 仅更新当前会话的API_BASE，不保存到localStorage
                         API_BASE = config.apiUrl;
-                        localStorage.setItem('apiBase', API_BASE);
                         document.getElementById('api-url').value = config.apiUrl;
                     }
                     
@@ -2047,9 +2047,8 @@
                 });
                 
                 if (response.ok) {
-                    // 更新API地址
+                    // 更新当前会话的API_BASE，不保存到localStorage
                     API_BASE = config.apiUrl;
-                    localStorage.setItem('apiBase', API_BASE);
                     // 更新邀请码显示
                     updateInviteDisplay(config);
                     // 更新页脚显示
@@ -2634,9 +2633,8 @@
                 if (response.ok) {
                     resultDiv.textContent = 'API连接成功！';
                     resultDiv.className = 'api-test-result success';
-                    // 更新全局API_BASE
+                    // 更新当前会话的API_BASE，不保存到localStorage
                     API_BASE = apiUrl;
-                    localStorage.setItem('apiBase', API_BASE);
                 } else {
                     resultDiv.textContent = 'API连接失败：服务器返回错误';
                     resultDiv.className = 'api-test-result error';
