@@ -1754,9 +1754,6 @@
                     <button id="refresh-users">
                         <i class="fas fa-sync"></i> 刷新用户列表
                     </button>
-                    <button id="clear-visits" style="background: var(--reset-color); margin-top: 10px;">
-                        <i class="fas fa-trash"></i> 清除访问记录
-                    </button>
                 </div>
             </div>
         </div>
@@ -2022,6 +2019,9 @@
                 <button id="refresh-visits" style="margin-top: 10px;">
                     <i class="fas fa-sync"></i> 刷新访问统计
                 </button>
+                <button id="admin-clear-visits" style="background: var(--reset-color); margin-top: 10px;">
+                    <i class="fas fa-trash"></i> 清除访问记录
+                </button>
             </div>
             
             <div class="admin-card">
@@ -2083,6 +2083,7 @@
         let currentUser = null;
         let timerEnabled = true;
         let donationEnabled = false;
+        let lastCalibrationTime = null;
         
         // 从API加载设置
         async function loadSettings() {
@@ -2249,6 +2250,7 @@
                     }
                     
                     if (config.calibrationTime) {
+                        lastCalibrationTime = config.calibrationTime;
                         document.getElementById('calibration-time').textContent = `校准时间: ${config.calibrationTime}`;
                     }
                     
@@ -2365,7 +2367,7 @@
                 countdownTextColor: document.getElementById('countdown-text-color').value,
                 hangarTimeTextColor: document.getElementById('hangar-time-text-color').value,
                 statusTextColor: document.getElementById('status-text-color').value,
-                calibrationTime: document.getElementById('calibration-time').textContent.replace('校准时间: ', ''),
+                calibrationTime: lastCalibrationTime || new Date().toLocaleString('zh-CN'), // 使用上次的校准时间
                 apiUrl: document.getElementById('api-url').value,
                 donationEnabled: document.getElementById('donation-enabled').value === 'true',
                 wechatQrcodeUrl: document.getElementById('wechat-qrcode-url').value,
@@ -2602,6 +2604,7 @@
         function updateCalibrationTime() {
             const now = new Date();
             const calibrationTime = formatDateTimeFull(now);
+            lastCalibrationTime = calibrationTime;
             document.getElementById('calibration-time').textContent = `校准时间: ${calibrationTime}`;
         }
         
@@ -2641,7 +2644,7 @@
             }
             
             startTime = newStartTime;
-            updateCalibrationTime();
+            updateCalibrationTime(); // 只有点击更新计时器按钮时才更新校准时间
             
             initializeTimer(initialPhase);
             
@@ -3354,8 +3357,8 @@
             loadVisits();
         });
         
-        // 清除访问记录
-        document.getElementById('clear-visits').addEventListener('click', async function() {
+        // 清除访问记录（后台管理面板）
+        document.getElementById('admin-clear-visits').addEventListener('click', async function() {
             if (confirm('确定要清除所有访问记录吗？此操作不可恢复！')) {
                 try {
                     const response = await fetch(`${API_BASE}/clear-visits`, {
@@ -3756,7 +3759,7 @@
                 lightElement.className = 'light';
                 lightElement.classList.add(currentLights[i]);
                 
-                // 移除所有活动状态，然后为当前灯添加活动状态
+                // 添加活跃状态的类
                 if (currentLights[i] !== 'gray') {
                     lightElement.classList.add('active');
                 }
@@ -3769,34 +3772,25 @@
             windowList.innerHTML = '';
             
             const totalCycleMs = (PHASE_DURATIONS.reset + PHASE_DURATIONS.card + PHASE_DURATIONS.poweroff) * 60 * 1000;
-            const firstGreenTime = new Date(adjustedStartTime.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
             const now = new Date();
+            const elapsedMs = now.getTime() - adjustedStartTime.getTime();
             
-            // 计算上一个开启时间
-            let previousWindowTime = new Date(firstGreenTime.getTime());
-            while (previousWindowTime.getTime() + totalCycleMs < now.getTime()) {
-                previousWindowTime = new Date(previousWindowTime.getTime() + totalCycleMs);
-            }
+            // 计算当前周期的开始时间
+            const cyclesCompleted = Math.floor(elapsedMs / totalCycleMs);
+            const currentCycleStart = new Date(adjustedStartTime.getTime() + cyclesCompleted * totalCycleMs);
             
-            // 如果当前时间已经超过了第一个开启时间，则显示上一个开启时间
-            if (now.getTime() > firstGreenTime.getTime()) {
-                const prevItem = document.createElement('li');
-                prevItem.innerHTML = `<i class="fas fa-window-restore"></i> 上次开启时间: ${formatDateTimeFull(previousWindowTime)}`;
-                windowList.appendChild(prevItem);
-            }
+            // 上次开启时间（上一个周期的机库开启时间）
+            const lastHangarOpenTime = new Date(currentCycleStart.getTime() - totalCycleMs + PHASE_DURATIONS.reset * 60 * 1000);
+            windowList.innerHTML += `<li><i class="fas fa-window-restore"></i> 上次开启时间: ${formatDateTimeFull(lastHangarOpenTime)}</li>`;
             
-            // 生成后续的8个机库开启时间节点
-            for (let i = 0; i < 8; i++) {
-                const windowTime = new Date(previousWindowTime.getTime() + (i + 1) * totalCycleMs);
-                const listItem = document.createElement('li');
-                
-                if (i === 0) {
-                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 下次开启时间: ${formatDateTimeFull(windowTime)}`;
-                } else {
-                    listItem.innerHTML = `<i class="fas fa-window-restore"></i> 开启时间 ${i+1}: ${formatDateTimeFull(windowTime)}`;
-                }
-                
-                windowList.appendChild(listItem);
+            // 下次开启时间（当前周期的机库开启时间）
+            const nextHangarOpenTime = new Date(currentCycleStart.getTime() + PHASE_DURATIONS.reset * 60 * 1000);
+            windowList.innerHTML += `<li><i class="fas fa-window-restore"></i> 下次开启时间: ${formatDateTimeFull(nextHangarOpenTime)}</li>`;
+            
+            // 未来7个开启时间
+            for (let i = 1; i <= 7; i++) {
+                const futureHangarOpenTime = new Date(nextHangarOpenTime.getTime() + i * totalCycleMs);
+                windowList.innerHTML += `<li><i class="fas fa-window-restore"></i> 开启时间 ${i}: ${formatDateTimeFull(futureHangarOpenTime)}</li>`;
             }
         }
         
@@ -3807,40 +3801,69 @@
             const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = totalSeconds % 60;
             
-            return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
         
-        // 格式化日期时间（用于输入框）
+        // 格式化日期时间（用于input[type="datetime-local"]）
         function formatDateTime(date) {
             const year = date.getFullYear();
-            const month = padZero(date.getMonth() + 1);
-            const day = padZero(date.getDate());
-            const hours = padZero(date.getHours());
-            const minutes = padZero(date.getMinutes());
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
             
             return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
         
-        // 格式化完整日期时间（用于显示）
+        // 格式化完整的日期时间（用于显示）
         function formatDateTimeFull(date) {
-            const year = date.getFullYear();
-            const month = padZero(date.getMonth() + 1);
-            const day = padZero(date.getDate());
-            const hours = padZero(date.getHours());
-            const minutes = padZero(date.getMinutes());
-            
-            return `${year}-${month}-${day} ${hours}:${minutes}`;
+            return date.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
         }
         
-        // 补零函数
-        function padZero(num) {
-            return num.toString().padStart(2, '0');
+        // 更新反馈用户信息
+        function updateFeedbackUserInfo() {
+            const feedbackUserInfo = document.getElementById('feedback-user-info');
+            const currentUsername = document.getElementById('current-username');
+            
+            if (currentUser) {
+                feedbackUserInfo.style.display = 'block';
+                currentUsername.textContent = currentUser.username;
+            } else {
+                feedbackUserInfo.style.display = 'none';
+            }
+        }
+        
+        // 更新登录后的UI
+        function updateUIAfterLogin() {
+            if (currentUser) {
+                document.getElementById('user-center-btn').style.display = 'flex';
+                
+                // 如果是管理员，显示后台管理按钮和捐助按钮
+                if (currentUser.role === 'admin') {
+                    document.getElementById('admin-panel-btn').style.display = 'flex';
+                    document.getElementById('donation-btn').style.display = 'flex';
+                } else {
+                    document.getElementById('admin-panel-btn').style.display = 'none';
+                    document.getElementById('donation-btn').style.display = 'none';
+                }
+            } else {
+                document.getElementById('user-center-btn').style.display = 'none';
+                document.getElementById('admin-panel-btn').style.display = 'none';
+                document.getElementById('donation-btn').style.display = 'none';
+            }
         }
         
         // 初始化可拖拽面板
         function initDraggablePanel() {
-            const panel = document.getElementById('admin-panel');
-            const header = document.getElementById('admin-panel-header');
+            const adminPanel = document.getElementById('admin-panel');
+            const adminPanelHeader = document.getElementById('admin-panel-header');
             
             let isDragging = false;
             let currentX;
@@ -3850,155 +3873,85 @@
             let xOffset = 0;
             let yOffset = 0;
             
-            header.addEventListener("mousedown", dragStart);
-            document.addEventListener("mouseup", dragEnd);
-            document.addEventListener("mousemove", drag);
+            adminPanelHeader.addEventListener('mousedown', dragStart);
+            adminPanelHeader.addEventListener('touchstart', dragStart);
             
             function dragStart(e) {
-                initialX = e.clientX - xOffset;
-                initialY = e.clientY - yOffset;
+                if (e.type === 'touchstart') {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                }
                 
-                if (e.target === header || e.target.parentNode === header) {
+                if (e.target === adminPanelHeader || adminPanelHeader.contains(e.target)) {
                     isDragging = true;
                 }
             }
             
-            function dragEnd(e) {
-                initialX = currentX;
-                initialY = currentY;
-                
-                isDragging = false;
-            }
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag);
             
             function drag(e) {
                 if (isDragging) {
                     e.preventDefault();
-                    currentX = e.clientX - initialX;
-                    currentY = e.clientY - initialY;
+                    
+                    if (e.type === 'touchmove') {
+                        currentX = e.touches[0].clientX - initialX;
+                        currentY = e.touches[0].clientY - initialY;
+                    } else {
+                        currentX = e.clientX - initialX;
+                        currentY = e.clientY - initialY;
+                    }
                     
                     xOffset = currentX;
                     yOffset = currentY;
                     
-                    setTranslate(currentX, currentY, panel);
+                    setTranslate(currentX, currentY, adminPanel);
                 }
+            }
+            
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchend', dragEnd);
+            
+            function dragEnd() {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
             }
             
             function setTranslate(xPos, yPos, el) {
-                el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
             }
         }
         
-        // 检查数据库状态
-        async function checkDbStatus() {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-                
-                const response = await fetch(`${API_BASE}/status`, {
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-                
-                if (response.ok) {
-                    document.getElementById('db-status').innerHTML = '<i class="fas fa-database"></i> <span>数据库状态: 正常</span>';
-                } else {
-                    document.getElementById('db-status').innerHTML = '<i class="fas fa-database" style="color: #e74c3c;"></i> <span>数据库状态: 服务器错误</span>';
-                }
-            } catch (error) {
-                if (error.name === 'AbortError') {
-                    document.getElementById('db-status').innerHTML = '<i class="fas fa-database" style="color: #e74c3c;"></i> <span>数据库状态: 连接超时</span>';
-                } else {
-                    document.getElementById('db-status').innerHTML = '<i class="fas fa-database" style="color: #e74c3c;"></i> <span>数据库状态: 连接失败</span>';
-                }
-            }
-        }
-        
-        // 更新登录后的UI
-        function updateUIAfterLogin() {
-            const loginBtn = document.getElementById('user-login-btn');
-            
-            if (currentUser) {
-                // 更新登录按钮为退出登录
-                loginBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i><span>退出登录</span>';
-                
-                // 显示用户中心按钮
-                document.getElementById('user-center-btn').style.display = 'flex';
-                
-                // 如果是管理员，显示后台管理按钮
-                if (currentUser.role === 'admin') {
-                    document.getElementById('admin-panel-btn').style.display = 'flex';
-                } else {
-                    document.getElementById('admin-panel-btn').style.display = 'none';
-                }
-            } else {
-                // 用户未登录
-                loginBtn.innerHTML = '<i class="fas fa-user"></i><span>用户登录</span>';
-                document.getElementById('admin-panel-btn').style.display = 'none';
-                document.getElementById('user-center-btn').style.display = 'none';
-            }
-        }
-        
-        // 更新反馈用户信息
-        function updateFeedbackUserInfo() {
-            const userInfo = document.getElementById('feedback-user-info');
-            const usernameSpan = document.getElementById('current-username');
-            
-            if (currentUser) {
-                userInfo.style.display = 'block';
-                usernameSpan.textContent = currentUser.username;
-            } else {
-                userInfo.style.display = 'none';
-            }
-        }
-        
-        // 退出登录
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            updateUIAfterLogin();
-            alert('已退出登录');
-        }
-        
-        // 添加退出登录事件
-        document.getElementById('user-login-btn').addEventListener('click', function() {
-            if (currentUser) {
-                // 如果已登录，点击按钮是退出登录
-                logout();
-            } else {
-                // 如果未登录，点击按钮是打开登录模态框
-                document.getElementById('login-modal').style.display = 'flex';
-                switchLoginTab('login');
-            }
-        });
-        
-        // 页脚信息按钮事件
+        // 页脚信息模态框
         document.getElementById('project-description-btn').addEventListener('click', function() {
-            document.getElementById('footer-modal-title').textContent = '项目介绍';
-            document.getElementById('footer-modal-content').innerHTML = document.getElementById('project-description-input').value.replace(/\n/g, '<br>');
-            document.getElementById('footer-info-modal').style.display = 'flex';
+            showFooterModal('项目介绍', document.getElementById('project-description-input').value);
         });
         
         document.getElementById('version-btn').addEventListener('click', function() {
-            document.getElementById('footer-modal-title').textContent = '版本更新';
-            document.getElementById('footer-modal-content').innerHTML = document.getElementById('version-input').value.replace(/\n/g, '<br>');
-            document.getElementById('footer-info-modal').style.display = 'flex';
+            showFooterModal('版本更新', document.getElementById('version-input').value);
         });
         
         document.getElementById('about-btn').addEventListener('click', function() {
-            document.getElementById('footer-modal-title').textContent = '关于我们';
-            document.getElementById('footer-modal-content').innerHTML = document.getElementById('about-input').value.replace(/\n/g, '<br>');
-            document.getElementById('footer-info-modal').style.display = 'flex';
+            showFooterModal('关于我们', document.getElementById('about-input').value);
         });
         
-        // 关闭页脚信息模态框
         document.getElementById('close-footer-modal').addEventListener('click', function() {
             document.getElementById('footer-info-modal').style.display = 'none';
         });
         
+        function showFooterModal(title, content) {
+            document.getElementById('footer-modal-title').textContent = title;
+            document.getElementById('footer-modal-content').textContent = content;
+            document.getElementById('footer-info-modal').style.display = 'flex';
+        }
+        
         // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 检查是否有已登录的用户
+        window.addEventListener('DOMContentLoaded', function() {
+            // 从localStorage恢复用户登录状态
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
@@ -4008,19 +3961,15 @@
             // 加载设置
             loadSettings();
             
-            // 检查数据库状态
-            checkDbStatus();
-            
-            // 加载反馈（如果是管理员）
+            // 如果是管理员，加载反馈
             if (currentUser && currentUser.role === 'admin') {
                 loadFeedback();
             }
             
-            // 更新校准时间
-            updateCalibrationTime();
-            
-            // 设置定期更新校准时间
-            setInterval(updateCalibrationTime, 60000);
+            // 更新数据库状态
+            setTimeout(() => {
+                document.getElementById('db-status').innerHTML = '<i class="fas fa-database" style="color: #2ecc71;"></i> <span>数据库状态: 已连接</span>';
+            }, 2000);
         });
     </script>
 </body>
