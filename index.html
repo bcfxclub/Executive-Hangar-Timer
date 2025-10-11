@@ -2247,6 +2247,14 @@
                         <button id="set-auto-clean" style="margin-top: 10px;">
                             <i class="fas fa-cog"></i> 设置自动清理间隔
                         </button>
+<!-- 在现有的自动清理间隔设置后面添加 -->
+<div class="form-group">
+    <label for="token-expiration-days">令牌过期时间（天）</label>
+    <input type="number" id="token-expiration-days" min="1" max="365" value="30">
+    <button id="set-token-expiration" style="margin-top: 10px;">
+        <i class="fas fa-clock"></i> 设置令牌过期时间
+    </button>
+</div>
                     </div>
                     
                     <div class="token-actions">
@@ -2334,11 +2342,11 @@
                 </div>
                 <div class="form-group">
                     <label for="version-input">版本更新（详细内容）</label>
-                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v3.2.4
-更新日期：2025-10-11
+                    <textarea id="version-input" placeholder="输入版本号" rows="4">当前版本：v3.2.5
+更新日期：2025-10-09
 更新内容：
 在上一版基础上，做出如下修改：
-1、修复用户退出登录后令牌不过期的问题。
+1、后台管理添加令牌过期时间设置。
 </textarea>
                 </div>
                 <div class="form-group">
@@ -2840,7 +2848,43 @@
                     }
                     
                     initializeTimer(config.initialPhase || '5-green');
-                    
+// 在 loadSettings 函数中添加
+if (config.tokenExpirationDays) {
+    document.getElementById('token-expiration-days').value = config.tokenExpirationDays;
+}
+
+// 添加设置令牌过期时间的事件监听器
+document.getElementById('set-token-expiration').addEventListener('click', async function() {
+    const days = parseInt(document.getElementById('token-expiration-days').value);
+    
+    if (isNaN(days) || days < 1 || days > 365) {
+        alert('请输入1-365之间的有效天数');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE}/tokens/expiration`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({ expirationDays: days })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            alert(result.message);
+            // 重新加载令牌统计以更新显示
+            loadTokenStats();
+        } else {
+            if (!checkAuthResponse(response)) {
+                return;
+            }
+            alert('设置失败');
+        }
+    } catch (error) {
+        console.error('Set token expiration error:', error);
+        alert('设置失败');
+    }
+});                    
                     // 更新用户界面状态
                     updateUserInterface();
 
